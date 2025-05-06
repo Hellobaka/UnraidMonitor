@@ -111,19 +111,26 @@
                         Margin="0,0,0,8"
                         Content="需要参数"
                         IsChecked="{Binding HasParameters}" />
-                    <StackPanel Margin="0,0,0,8" HorizontalAlignment="Left">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
                         <TextBlock Margin="0,5">最小参数数</TextBlock>
                         <hc:NumericUpDown
-                            Width="120"
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
                             Minimum="0"
                             Value="{Binding MinParameters}" />
-                        <TextBlock Margin="0,5">最大参数数</TextBlock>
+                        <TextBlock Grid.Row="2" Margin="0,5">最大参数数</TextBlock>
                         <hc:NumericUpDown
-                            Width="120"
+                            Grid.Row="3"
                             hc:InfoElement.Title="最大参数数"
                             Minimum="0"
                             Value="{Binding MaxParameters}" />
-                    </StackPanel>
+                    </Grid>
                     <hc:TextBox
                         Margin="0,0,0,8"
                         hc:InfoElement.Title="参数正则"
@@ -131,7 +138,6 @@
                     <TextBlock FontWeight="Bold" Text="参数校验规则：" />
                     <DataGrid
                         AutoGenerateColumns="False"
-                        HeadersVisibility="All"
                         ItemsSource="{Binding ValidationRules}"
                         RowHeaderWidth="60">
                         <DataGrid.Columns>
@@ -186,13 +192,19 @@
             <!--  响应 Tab  -->
             <hc:TabItem Header="响应">
                 <StackPanel Margin="10" DataContext="{Binding CurrentConfig.Responses}">
-                    <TextBlock FontWeight="Bold" Text="成功响应：" />
-                    <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
-                        <hc:TextBox
-                            Width="200"
-                            hc:InfoElement.Title="消息"
-                            Text="{Binding Success.Message}" />
+                    <TextBlock
+                        Margin="0,5"
+                        FontWeight="Bold"
+                        Text="成功响应：" />
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <hc:TextBox hc:InfoElement.Title="消息" Text="{Binding Success.Message}" />
                         <hc:ComboBox
+                            Grid.Column="1"
                             Width="100"
                             Margin="8,0,0,0"
                             hc:InfoElement.Title="格式"
@@ -201,21 +213,28 @@
                             <ComboBoxItem Content="json" />
                         </hc:ComboBox>
                         <CheckBox
-                            Margin="8,0,0,0"
+                            Grid.Column="2"
+                            Margin="8,0,8,0"
                             Content="包含命令输出"
                             IsChecked="{Binding Success.IncludeCommandOutput}" />
-                    </StackPanel>
+                    </Grid>
                     <hc:TextBox
                         Margin="0,0,0,8"
                         hc:InfoElement.Title="输出过滤正则"
                         Text="{Binding Success.OutputFilterRegex}" />
-                    <TextBlock FontWeight="Bold" Text="失败响应：" />
-                    <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
-                        <hc:TextBox
-                            Width="200"
-                            hc:InfoElement.Title="消息"
-                            Text="{Binding Failure.Message}" />
+                    <TextBlock
+                        Margin="0,5"
+                        FontWeight="Bold"
+                        Text="失败响应：" />
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+                        <hc:TextBox hc:InfoElement.Title="消息" Text="{Binding Failure.Message}" />
                         <hc:ComboBox
+                            Grid.Column="1"
                             Width="100"
                             Margin="8,0,0,0"
                             hc:InfoElement.Title="格式"
@@ -224,10 +243,11 @@
                             <ComboBoxItem Content="json" />
                         </hc:ComboBox>
                         <CheckBox
-                            Margin="8,0,0,0"
+                            Grid.Column="2"
+                            Margin="8,0,8,0"
                             Content="包含命令输出"
                             IsChecked="{Binding Failure.IncludeCommandOutput}" />
-                    </StackPanel>
+                    </Grid>
                     <hc:TextBox
                         Margin="0,0,0,8"
                         hc:InfoElement.Title="输出过滤正则"
@@ -246,8 +266,8 @@
                         Content="启用日志"
                         IsChecked="{Binding Enabled}" />
                     <hc:ComboBox
-                        Width="120"
                         Margin="0,0,0,8"
+                        HorizontalAlignment="Stretch"
                         hc:InfoElement.Title="日志等级"
                         SelectedValue="{Binding LogLevel}">
                         <ComboBoxItem Content="Info" />
