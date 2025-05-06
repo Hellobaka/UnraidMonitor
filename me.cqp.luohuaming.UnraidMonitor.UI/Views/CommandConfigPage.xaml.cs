@@ -1,12 +1,14 @@
-using System.Windows.Controls;
 using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
+using System.Windows.Controls;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.Views
 {
     public partial class CommandConfigPage : UserControl
     {
         private CommandListViewModel _listVM;
+
         private CommandDetailViewModel _detailVM;
+
         public CommandConfigPage()
         {
             InitializeComponent();
@@ -25,7 +27,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Views
             // 绑定到子控件
             this.DataContext = new { ListVM = _listVM, DetailVM = _detailVM };
         }
+
         public CommandListViewModel ListVM => _listVM;
+
         public CommandDetailViewModel DetailVM => _detailVM;
     }
 }

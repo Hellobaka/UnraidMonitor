@@ -1,40 +1,41 @@
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
+using me.cqp.luohuaming.UnraidMonitor.UI.Helpers;
+using Microsoft.Win32;
+using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
-using me.cqp.luohuaming.UnraidMonitor.UI.Helpers;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 {
+    [AddINotifyPropertyChangedInterface]
     public class CommandListViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<UnraidCommandConfig> CommandList { get; set; } = new ObservableCollection<UnraidCommandConfig>();
 
-        private UnraidCommandConfig _selectedCommand;
-        public UnraidCommandConfig SelectedCommand
-        {
-            get => _selectedCommand;
-            set { _selectedCommand = value; OnPropertyChanged(nameof(SelectedCommand)); }
-        }
+        public UnraidCommandConfig SelectedCommand { get; set; }
 
-        private string _searchText;
-        public string SearchText
-        {
-            get => _searchText;
-            set { _searchText = value; OnPropertyChanged(nameof(SearchText)); FilterCommandList(); }
-        }
+        [OnChangedMethod(nameof(FilterCommandList))]
+        public string SearchText { get; set; }
 
         public ICommand AddCommand { get; }
+
         public ICommand RemoveCommand { get; }
+
         public ICommand ImportCommand { get; }
+
         public ICommand ExportCommand { get; }
+
         public ICommand EditCommand { get; }
+
         public ICommand CopyCommand { get; }
+
         public ICommand MoveUpCommand { get; }
+
         public ICommand MoveDownCommand { get; }
+
         public ICommand SaveAllCommand { get; }
 
         private ObservableCollection<UnraidCommandConfig> _allCommands = new ObservableCollection<UnraidCommandConfig>();
@@ -109,7 +110,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             });
             EditCommand = new RelayCommand(() =>
             {
-                MessageBox.Show("请在右侧编辑详细内容。","编辑");
+                MessageBox.Show("请在右侧编辑详细内容。", "编辑");
             });
             CopyCommand = new RelayCommand(() =>
             {
@@ -166,6 +167,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

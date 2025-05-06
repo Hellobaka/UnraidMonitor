@@ -1,5 +1,5 @@
-using System.IO;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.Helpers
 {
@@ -11,6 +11,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Helpers
             var json = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<T>(json);
         }
+
         public static void SaveToFile<T>(string path, T obj)
         {
             var json = JsonConvert.SerializeObject(obj, Formatting.Indented);

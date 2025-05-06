@@ -1,14 +1,15 @@
-using System;
-using System.Threading;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp.EventArgs;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp.Interface;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
+using System;
+using System.Threading;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI
 {
     public class Event_MenuCall : IMenuCall
     {
         private MainWindow window = null;
+
         public void MenuCall(object sender, CQMenuCallEventArgs e)
         {
             try
