@@ -142,6 +142,8 @@
     <Compile Include="Models\NetworkInterfaceInfo.cs" />
     <Compile Include="Models\NetworkTrafficInfo.cs" />
     <Compile Include="Models\TemperatureInfo.cs" />
+    <Compile Include="Models\SystemInfo.cs" />
+    <Compile Include="Models\UpTime.cs" />
     <Compile Include="Models\VirtualMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SSH.cs" />

@@ -82,6 +82,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static int DiskInfo { get; set; } = 10000;
 
+        public static int SystemInfo { get; set; } = 0;
+
+        public static int Uptime { get; set; } = 1000;
+
         public override void LoadConfig()
         {
             DisableAutoReload();
@@ -98,6 +102,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             TemperatureInfo = GetConfig("TemperatureInfo", 5000);
             VirtualMachine = GetConfig("VirtualMachine", 10000);
             DiskInfo = GetConfig("DiskInfo", 10000);
+            Uptime = GetConfig("Uptime", 1000);
+            SystemInfo = GetConfig("SystemInfo", 0);
 
             EnableAutoReload();
             HandlerBase.Instance?.StopMonitor();

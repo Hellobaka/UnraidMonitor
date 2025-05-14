@@ -235,5 +235,31 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
             return result;
         }
+
+        public override SystemInfo GetSystemInfo()
+        {
+            string command = "cat /var/local/emhttp/var.ini";
+            var (error, output) = SshCommand.EnqueueCommand(command).Result;
+            if (string.IsNullOrEmpty(output))
+            {
+                MainSave.CQLog?.Error("获取SystemInfo", $"指令执行失败：{error}");
+                return null;
+            }
+
+            return SystemInfo.ParseFromUnraidIni(output);
+        }
+
+        public override TimeSpan GetUptime()
+        {
+            string command = "uptime";
+            var (error, output) = SshCommand.EnqueueCommand(command).Result;
+            if (string.IsNullOrEmpty(output))
+            {
+                MainSave.CQLog?.Error("获取SystemInfo", $"指令执行失败：{error}");
+                return TimeSpan.Zero;
+            }
+
+            return SystemUptime.ParseFromUptime(output);
+        }
     }
 }

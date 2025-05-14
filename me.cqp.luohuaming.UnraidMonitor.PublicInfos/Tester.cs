@@ -21,6 +21,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
             var handler = new Linux();
 
+            // -1. 系统启动时间
+            var uptime = handler.GetUptime();
+            Console.WriteLine("[Uptime]");
+            PrintProperties(uptime);
+            handler.InsertData(uptime);
+
+            // 0. 系统信息
+            var systemInfo = handler.GetSystemInfo();
+            Console.WriteLine("[SystemInfo]");
+            PrintProperties(systemInfo);
+            handler.InsertData(systemInfo);
+
             // 1. CPU信息
             var cpuInfo = handler.GetCpuInfo();
             Console.WriteLine("[CPUInfo]");

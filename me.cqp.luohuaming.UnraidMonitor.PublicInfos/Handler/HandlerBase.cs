@@ -45,6 +45,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         private Timer DiskInfoTimer { get; set; }
 
+        private Timer SystemInfoTimer { get; set; }
+
+        private Timer SystemUptimeTimer { get; set; }
+
         public void StopMonitor()
         {
             CPUInfoTimer?.Dispose();
@@ -59,6 +63,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             NetworkTrafficInfoTimer?.Dispose();
             TemperatureInfoTimer?.Dispose();
             DiskInfoTimer?.Dispose();
+            SystemInfoTimer?.Dispose();
+            SystemUptimeTimer?.Dispose();
         }
 
         public void StartMonitor()
@@ -75,6 +81,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             NetworkTrafficInfoTimer = new(_ => InsertData(GetNetworkTrafficInfos()) , null, 0, CommandIntervalConfig.NetworkTrafficInfo);
             TemperatureInfoTimer = new(_ => InsertData(GetTemperatureInfos()) , null, 0, CommandIntervalConfig.TemperatureInfo);
             DiskInfoTimer = new(_ => InsertData(GetDiskInfos()) , null, 0, CommandIntervalConfig.DiskInfo);
+            SystemInfoTimer = new(_ => InsertData(GetSystemInfo()) , null, 0, CommandIntervalConfig.SystemInfo);
+            SystemUptimeTimer = new(_ => InsertData(GetUptime()) , null, 0, CommandIntervalConfig.Uptime);
         }
 
         public virtual CpuInfo GetCpuInfo()
@@ -133,6 +141,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         }
 
         public virtual DiskInfo[] GetDiskInfos()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual SystemInfo GetSystemInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual TimeSpan GetUptime()
         {
             throw new NotImplementedException();
         }
