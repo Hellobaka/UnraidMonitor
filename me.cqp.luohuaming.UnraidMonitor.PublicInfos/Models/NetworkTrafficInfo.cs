@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
@@ -11,13 +12,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public string TxBytes { get; set; } = "";
 
+        public DateTime DateTime { get; set; }
+
         private static Regex InterfaceBlockRegex { get; } = new(@"^\d+:\s*([^\s:]+):.*?(?=^\d+:|\z)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex RxBytesRegex { get; } = new(@"RX:\s+[^\n]*\n\s*([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex TxBytesRegex { get; } = new(@"TX:\s+[^\n]*\n\s*([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static List<NetworkTrafficInfo> ParseInterfaces(string input)
+        public static NetworkTrafficInfo[] ParseFromIPS(string input)
         {
             var list = new List<NetworkTrafficInfo>();
             foreach (Match m in InterfaceBlockRegex.Matches(input))
@@ -38,7 +41,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     TxBytes = tx
                 });
             }
-            return list;
+            return list.ToArray();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
@@ -13,6 +14,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public string Name { get; set; } = "";
 
+        public DateTime DateTime { get; set; }
+
         private static Regex InterfaceRegex { get; } = new(@"^\d+:\s+([^:]+):", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex IPv4Regex { get; } = new(@"inet\s+([0-9.]+)(?:/\d+)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -21,7 +24,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         private static Regex MACRegex { get; } = new(@"link/(?:ether|loopback)\s+([0-9a-fA-F:]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static List<NetworkInterfaceInfo> ParseNetworkInterfaces(string input)
+        public static NetworkInterfaceInfo[] ParseFromIPA(string input)
         {
             var interfaces = new List<NetworkInterfaceInfo>();
             NetworkInterfaceInfo currentInterface = null;
@@ -65,7 +68,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 }
             }
 
-            return interfaces;
+            return interfaces.ToArray();
         }
     }
 }

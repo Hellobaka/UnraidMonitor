@@ -7,6 +7,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class CpuUsage
     {
+        public string CPUId { get; set; }
+
         public double HardwareInterrupt { get; set; }
 
         public double Idle { get; set; }
@@ -25,6 +27,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public double Wait { get; set; }
 
+        public DateTime DateTime { get; set; }
+
         private static Regex CPUParseRegex { get; } = new(@"%Cpu(\d+)\s*:\s*([\d.]+)\s*us,\s*([\d.]+)\s*sy,\s*([\d.]+)\s*ni,\s*([\d.]+)\s*id,\s*([\d.]+)\s*wa,\s*([\d.]+)\s*hi,\s*([\d.]+)\s*si,\s*([\d.]+)\s*st", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static double GetTotalUsage(CpuUsage[] cpus)
@@ -37,9 +41,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
             return cpus.Sum(x => x.TotalUsage) / cpus.Length;
         }
 
-        public static Dictionary<int, CpuUsage> ParseCpuUsage(string input)
+        public static CpuUsage[] ParseFromTop(string input)
         {
-            var cpuUsages = new Dictionary<int, CpuUsage>();
+            var cpuUsages = new List<CpuUsage>();
             var regex = CPUParseRegex;
 
             foreach (var line in input.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries))
@@ -53,6 +57,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                         int cpuId = int.Parse(match.Groups[1].Value);
                         var usage = new CpuUsage
                         {
+                            CPUId = $"CPU{cpuId}",
                             User = double.Parse(match.Groups[2].Value),
                             System = double.Parse(match.Groups[3].Value),
                             Nice = double.Parse(match.Groups[4].Value),
@@ -63,12 +68,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                             Steal = double.Parse(match.Groups[9].Value)
                         };
 
-                        cpuUsages[cpuId] = usage;
+                        cpuUsages.Add(usage);
                     }
                 }
             }
 
-            return cpuUsages;
+            return cpuUsages.ToArray();
         }
 
         public override string ToString()

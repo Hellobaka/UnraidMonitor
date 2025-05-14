@@ -1,4 +1,5 @@
 ﻿using Renci.SshNet;
+using Renci.SshNet.Common;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -8,7 +9,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 {
     public class SshCommandQueue : IDisposable
     {
-       
         private ConcurrentQueue<(string cmd, TaskCompletionSource<(string error, string output)> task)> CommandQueue { get; set; } = new();
        
         private AutoResetEvent QueueHandleSignal { get; set; } = new(false);
@@ -53,6 +53,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         command.CommandTimeout = TimeSpan.FromSeconds(AppConfig.SSHCommandTimeout);
                         command.Execute();
                         item.task.SetResult((command.Error, command.Result));
+                    }
+                    catch (SshOperationTimeoutException ex)
+                    {
+                        item.task.SetResult(("Timeout", null));
+                        SSHClient.Dispose();
+                        SSHClient = null;
+                        MainSave.CQLog.Error("SSH连接", $"指令 {item.cmd} 执行超时：{ex}");
                     }
                     catch (Exception ex)
                     {

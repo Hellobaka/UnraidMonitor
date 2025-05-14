@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
@@ -13,48 +14,33 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public string Image { get; set; }
 
-        public string? Icon { get; set; }
-
         public bool Running { get; set; }
+
+        public DateTime DateTime { get; set; }
 
         public static Dockers[] ParseFromDockerPs(string input)
         {
             List<Dockers> containers = [];
-            var lines = input.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var line in lines)
+            try
             {
-                // 跳过表头行
-                if (line.StartsWith("CONTAINER ID"))
-                {
-                    continue;
-                }
-
-                // 分割列（处理两个以上空格作为分隔符）
-                var parts = Regex.Split(line.Trim(), @"\s{2,}");
-
-                if (parts.Length >= 7)
+                JArray json = JArray.Parse(input);
+                foreach (var item in json)
                 {
                     containers.Add(new Dockers
                     {
-                        ID = parts[0],
-                        Image = parts[1],
-                        Running = !parts[4].Contains("Exit"),
-                        Name = parts[6]
+                        ID = item["ID"].ToString(),
+                        Name = item["Names"][0].ToString().TrimStart('/'),
+                        Image = item["Labels"].ToString()?.Split(',').FirstOrDefault(x => x.Split('=')[0] == "net.unraid.docker.icon")?.Split('=').Last(),
+                        Running = item["State"].ToString() == "running",
+                        DateTime = DateTime.Now
                     });
                 }
             }
-
-            return containers.ToArray();
-        }
-
-        public void ParseIcon(string input)
-        {
-            try
+            catch (Exception)
             {
-                Icon = JArray.Parse(input)[0]["Config"]["Labels"]["net.unraid.docker.icon"]?.ToString();
+                MainSave.CQLog.Error("获取Docker", $"Json解析失败: {input}");
             }
-            catch { }
+            return containers.ToArray();
         }
     }
 }

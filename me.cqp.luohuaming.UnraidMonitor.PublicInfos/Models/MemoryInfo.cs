@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
@@ -16,9 +17,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public long Used { get; set; }
 
+        public DateTime DateTime { get; set; }
+
         private static Regex MemoryRegex { get; } = new(@"Mem:\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static MemoryInfo ParseMemInfo(string input)
+        public static MemoryInfo ParseFromFree(string input)
         {
             var info = new MemoryInfo();
 

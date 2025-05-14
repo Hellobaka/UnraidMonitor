@@ -9,6 +9,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
     {
         public string MountPoint { get; set; } = "";
 
+        public string Type { get; set; } = "";
+
         public string Name { get; set; } = "";
 
         public string Size { get; set; } = "";
@@ -19,11 +21,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public long AvaliableBytes { get; set; }
 
+        public DateTime DateTime { get; set; }
+
         public double UsedPercent => TotalBytes == 0 ? 0 : Math.Round((double)UsedBytes / TotalBytes * 100, 2);
 
-        private static Regex DiskRegex { get; } = new(@"^\s*([\w\-]+)\s+\d+:\d+\s+\d+\s+([\d.]+[TGMK]?)\s+\d+\s+\w+\s+(\S+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex DiskRegex { get; } = new(@"^\s*([\w\-]+)\s+\d+:\d+\s+\d+\s+([\d.]+[TGMK]?)\s+\d+\s+(\w+)\s+(\S+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static List<DiskMountInfo> ParseDiskInfo(string input)
+        public static DiskMountInfo[] ParseFromLsblk(string input)
         {
             var disks = new List<DiskMountInfo>();
             var regex = DiskRegex;
@@ -43,15 +47,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     {
                         Name = match.Groups[1].Value.Trim(),
                         Size = match.Groups[2].Value.Trim(),
-                        MountPoint = match.Groups[3].Value.Trim()
+                        Type = match.Groups[3].Value.Trim(),
+                        MountPoint = match.Groups[4].Value.Trim()
                     });
                 }
             }
 
-            return disks;
+            return disks.ToArray();
         }
 
-        public void ParseDiskFree(string input)
+        public void ParseDiskFree(string input, string name)
         {
             if (string.IsNullOrWhiteSpace(MountPoint))
             {
@@ -60,7 +65,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
             foreach (var item in input.Split('\n'))
             {
                 var splits = item.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (splits.Length >= 6 && splits[5] == MountPoint)
+                if (splits.Length >= 6 && splits[0] == name)
                 {
                     AvaliableBytes = long.Parse(splits[3]);
                     UsedBytes = long.Parse(splits[2]);

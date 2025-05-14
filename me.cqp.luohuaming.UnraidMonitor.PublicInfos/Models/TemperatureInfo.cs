@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
@@ -9,6 +10,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public string Name { get; set; } = "";
 
         public double Temperature { get; set; }
+
+        public DateTime DateTime { get; set; }
 
         public static TemperatureInfo[] ParseFromSensor(string input)
         {

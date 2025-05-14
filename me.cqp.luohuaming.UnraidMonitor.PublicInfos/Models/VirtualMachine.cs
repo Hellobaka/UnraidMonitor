@@ -20,6 +20,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public string? Icon { get; set; }
 
+        public DateTime DateTime { get; set; }
+
         public static VirtualMachine[] ParseFromVirsh(string input)
         {
             var lines = input.Split('\n');

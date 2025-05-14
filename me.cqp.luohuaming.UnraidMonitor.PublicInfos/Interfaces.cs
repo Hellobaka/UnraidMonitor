@@ -1,3 +1,4 @@
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp.EventArgs;
 using Newtonsoft.Json;
 using PropertyChanged;
