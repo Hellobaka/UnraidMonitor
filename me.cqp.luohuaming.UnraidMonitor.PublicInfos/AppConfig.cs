@@ -15,11 +15,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static AppConfig Instance { get; private set; }
 
-        public static string CommandMenu { get; set; } = "";
+        public static string CommandStatus { get; set; } = "";
+
+        public static string SSHHost { get; set; } = "";
+      
+        public static int SSHPort { get; set; } = 22;
+      
+        public static string SSHUserName { get; set; } = "";
+      
+        public static string SSHPassword { get; set; } = "";
+      
+        public static int SSHCommandTimeout { get; set; } = 10;
 
         public override void LoadConfig()
         {
-            CommandMenu = GetConfig("CommandMenu", "#菜单");
+            CommandStatus = GetConfig("CommandStatus", "系统状态");
+            SSHHost = GetConfig("SSHHost", "");
+            SSHPort = GetConfig("SSHPort", 22);
+            SSHUserName = GetConfig("SSHUserName", "");
+            SSHCommandTimeout = GetConfig("SSHCommandTimeout", 10);
         }
     }
 }
