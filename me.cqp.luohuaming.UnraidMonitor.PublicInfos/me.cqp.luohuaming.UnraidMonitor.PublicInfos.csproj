@@ -71,16 +71,21 @@
     <Compile Include="CommonHelper.cs" />
     <Compile Include="ConfigBase.cs" />
     <Compile Include="AppConfig.cs" />
+    <Compile Include="DiskInfo.cs" />
     <Compile Include="FunctionResult.cs" />
     <Compile Include="MainSave.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Models\CPUInfo.cs" />
     <Compile Include="Models\CPUUsage.cs" />
-    <Compile Include="Models\DiskInfo.cs" />
+    <Compile Include="Models\DiskMountInfo.cs" />
+    <Compile Include="Models\Dockers.cs" />
+    <Compile Include="Models\FanInfo.cs" />
     <Compile Include="Models\MemoryInfo.cs" />
     <Compile Include="Models\MotherboardInfo.cs" />
     <Compile Include="Models\NetworkInterfaceInfo.cs" />
     <Compile Include="Models\NetworkTrafficInfo.cs" />
+    <Compile Include="Models\TemperatureInfo.cs" />
+    <Compile Include="Models\VirtualMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
