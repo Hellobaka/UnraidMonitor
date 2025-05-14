@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
@@ -13,6 +14,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public DateTime DateTime { get; set; }
 
+        private static Regex TemperatureRegex { get; } = new Regex(@"^([A-Za-z0-9 _\-]+):?\s*([+-]?\d+\.\d)\s*C", RegexOptions.Compiled | RegexOptions.Singleline);
+
         public static TemperatureInfo[] ParseFromSensor(string input)
         {
             List<TemperatureInfo> list = new();
@@ -24,15 +27,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     parent = item.Trim();
                 }
 
-                if (item.Contains("°C") || item.Contains("°F"))
+                if (TemperatureRegex.IsMatch(item))
                 {
-                    var name = item.Split(':')[0].Trim();
-                    var temp = item.Split(':')[1].Trim().Split(' ')[0];
+                    var match = TemperatureRegex.Match(item);
                     list.Add(new TemperatureInfo()
                     {
                         ParentName = parent,
-                        Name = name,
-                        Temperature = double.TryParse(temp, out double value) ? value : -1
+                        Name = match.Groups[1].Value.Trim(),
+                        Temperature = double.TryParse(match.Groups[2].Value.Trim(), out double value) ? value : -1
                     });
                 }
             }

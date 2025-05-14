@@ -38,7 +38,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
             }
             catch (Exception)
             {
-                MainSave.CQLog.Error("获取Docker", $"Json解析失败: {input}");
+                MainSave.CQLog?.Error("获取Docker", $"Json解析失败: {input}");
             }
             return containers.ToArray();
         }

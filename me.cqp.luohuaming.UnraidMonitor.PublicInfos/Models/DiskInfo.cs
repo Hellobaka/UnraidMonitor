@@ -100,23 +100,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public SmartInfo Smart { get; set; }
 
         private static Regex ModelFamilyRegex { get; } =
-            new(@"Model Family:\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            new(@"(?:Model Family|Model Number):\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex DeviceModelRegex { get; } =
-            new(@"Device Model:\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
+            new(@"(?:Device Model|Model Number):\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static Regex SerialNumberRegex { get; } =
             new(@"Serial Number:\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex CapacityRegex { get; } =
-            new(@"User Capacity:\s+([\d,]+) bytes \[(.+)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
+            new(@"(?:User Capacity|Total NVM Capacity):\s+([\d,]+) bytes? \[([^\]]+)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static Regex SectorSizeRegex { get; } =
-            new(@"Sector Sizes:\s+(\d+) bytes logical, (\d+) bytes physical", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
+            new(@"(?:Sector Sizes:\s+(\d+) bytes logical, (\d+) bytes physical|Namespace 1 Formatted LBA Size:\s+(\d+))", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static Regex RotationRateRegex { get; } =
             new(@"Rotation Rate:\s+(.+ rpm|Solid State Device)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         private static Regex FormFactorRegex { get; } =
             new(@"Form Factor:\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -149,8 +145,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     SmartEnabled = SmartEnabledRegex.IsMatch(input),
                     CapacityBytes = ParseCapacity(CapacityRegex.Match(input)),
                     FormattedCapacity = CapacityRegex.Match(input).Groups[2].Value.Trim(),
-                    LogicalSectorSize = int.Parse(SectorSizeRegex.Match(input).Groups[1].Value),
-                    PhysicalSectorSize = int.Parse(SectorSizeRegex.Match(input).Groups[2].Value),
+                    LogicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[1].Value, out int value) ? value : 0,
+                    PhysicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[2].Value, out value) ? value :0,
                     Smart = SmartInfo.Parse(input)
                 };
         }

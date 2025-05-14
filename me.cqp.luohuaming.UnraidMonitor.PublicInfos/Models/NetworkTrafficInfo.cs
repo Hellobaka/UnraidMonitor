@@ -14,7 +14,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public DateTime DateTime { get; set; }
 
-        private static Regex InterfaceBlockRegex { get; } = new(@"^\d+:\s*([^\s:]+):.*?(?=^\d+:|\z)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex InterfaceBlockRegex { get; } = new(@"^\d+:\s*([^\s:]+):.*?(?=^\d+:|\z)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 
         private static Regex RxBytesRegex { get; } = new(@"RX:\s+[^\n]*\n\s*([0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

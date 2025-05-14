@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
@@ -24,31 +26,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public static VirtualMachine[] ParseFromVirsh(string input)
         {
-            var lines = input.Split('\n');
-            var vms = new List<VirtualMachine>();
+            var result = new List<VirtualMachine>();
+            var lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+
             foreach (var line in lines)
             {
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("---"))
-                {
+                // 跳过表头和分隔线
+                if (line.Trim().StartsWith("Id") || line.Trim().StartsWith("---"))
                     continue;
-                }
-                var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length < 2)
+
+                // 用2个及以上空格分割
+                var parts = Regex.Split(line.Trim(), @"\s{2,}");
+                if (parts.Length == 3)
                 {
-                    continue;
+                    result.Add(new VirtualMachine
+                    {
+                        Name = parts[1].Trim(),
+                        Running = parts[2].Trim() == "running"
+                    });
                 }
-                if (parts[0] == "Id")
-                {
-                    continue;
-                }
-                var vm = new VirtualMachine
-                {
-                    Name = parts[1],
-                    Running = parts[2].Equals("running", StringComparison.OrdinalIgnoreCase),
-                };
-                vms.Add(vm);
             }
-            return vms.ToArray();
+            return result.ToArray();
         }
 
         public void ParseIPs(string input)
@@ -58,14 +56,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 return;
             }
             Networks = [];
-            foreach (var line in input.Split('\n'))
+            var lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
             {
                 if (string.IsNullOrWhiteSpace(line) || line.StartsWith("---"))
                 {
                     continue;
                 }
-                var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length < 2)
+                var parts = Regex.Split(line.Trim(), @"\s{2,}");
+                if (parts.Length != 4)
                 {
                     continue;
                 }
@@ -73,7 +72,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 {
                     continue;
                 }
-                if (IPAddress.TryParse(parts[3], out var ip))
+                if (IPAddress.TryParse(parts[3].Split('/').First(), out var ip))
                 {
                     Networks.Add((parts[0], parts[1], ip));
                 }

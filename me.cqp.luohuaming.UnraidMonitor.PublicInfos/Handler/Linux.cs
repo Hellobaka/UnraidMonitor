@@ -13,13 +13,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         private DiskMountInfo[] CacheDiskMountInfo { get; set; } = null;
 
+        public Linux()
+            :base()
+        {
+        }
+
         public override CpuInfo GetCpuInfo()
         {
             string command = "dmidecode -t processor";
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取CPUInfo", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取CPUInfo", $"指令执行失败：{error}");
                 return null;
             }
             return CpuInfo.ParseDmidecode(output);
@@ -31,7 +36,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取CpuUsage", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取CpuUsage", $"指令执行失败：{error}");
                 return null;
             }
             return CpuUsage.ParseFromTop(output);
@@ -43,7 +48,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取DiskMountInfo", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取DiskMountInfo", $"指令执行失败：{error}");
                 return null;
             }
             var array = DiskMountInfo.ParseFromLsblk(output);
@@ -53,22 +58,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Warning("获取磁盘空间", $"指令执行失败：{error}");
+                MainSave.CQLog?.Warning("获取磁盘空间", $"指令执行失败：{error}");
                 return array;
             }
             int i = 1;
             foreach (var item in array)
             {
-                if (item.Type != "disk" && item.MountPoint != "/boot")
+                if (item.Type != "disk" || item.MountPoint == "/boot")
                 {
                     continue;
                 }
                 string diskName = $"/dev/{item.Name}";
                 if (item.Name.StartsWith("sd"))
                 {
-                    diskName = $"/dev/sd{i}1";
+                    diskName = $"/dev/md{i}p1";
                     i++;
                 }
+                item.ParseDiskFree(output, diskName);
             }
 
             return array;
@@ -80,7 +86,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取Dockers", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取Dockers", $"指令执行失败：{error}");
                 return null;
             }
             return Dockers.ParseFromDockerPs(output);
@@ -92,7 +98,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取FanInfos", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取FanInfos", $"指令执行失败：{error}");
                 return null;
             }
             return FanInfo.ParseFromSensor(output);
@@ -104,7 +110,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取MemoryInfo", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取MemoryInfo", $"指令执行失败：{error}");
                 return null;
             }
             return MemoryInfo.ParseFromFree(output);
@@ -116,7 +122,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取MotherboardInfo", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取MotherboardInfo", $"指令执行失败：{error}");
                 return null;
             }
             return MotherboardInfo.ParseDmidecode(output);
@@ -128,7 +134,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取NetworkInterfaceInfos", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取NetworkInterfaceInfos", $"指令执行失败：{error}");
                 return null;
             }
             return NetworkInterfaceInfo.ParseFromIPA(output);
@@ -140,7 +146,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取NetworkTrafficInfos", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取NetworkTrafficInfos", $"指令执行失败：{error}");
                 return null;
             }
             return NetworkTrafficInfo.ParseFromIPS(output);
@@ -152,7 +158,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取TemperatureInfos", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取TemperatureInfos", $"指令执行失败：{error}");
                 return null;
             }
 
@@ -173,7 +179,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             List<DiskInfo> list = [];
             foreach(var item in CacheDiskMountInfo)
             {
-                if (item.Type != "disk" && item.MountPoint != "/boot")
+                if (item.Type != "disk" || item.MountPoint == "/boot")
                 {
                     continue;
                 }
@@ -182,7 +188,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 var (error, output) = SshCommand.EnqueueCommand(command).Result;
                 if (string.IsNullOrEmpty(output))
                 {
-                    MainSave.CQLog.Error("获取SMART", $"指令执行失败：{error}");
+                    MainSave.CQLog?.Error("获取SMART", $"指令执行失败：{error}");
                     continue;
                 }
 
@@ -202,7 +208,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
-                MainSave.CQLog.Error("获取VirtualMachines", $"指令执行失败：{error}");
+                MainSave.CQLog?.Error("获取VirtualMachines", $"指令执行失败：{error}");
                 return null;
             }
             var result = VirtualMachine.ParseFromVirsh(output);
@@ -212,7 +218,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 (error, output) = SshCommand.EnqueueCommand(command).Result;
                 if (string.IsNullOrEmpty(output))
                 {
-                    MainSave.CQLog.Warning("获取VirtualMachines IP", $"指令执行失败：{error}");
+                    MainSave.CQLog?.Warning("获取VirtualMachines IP", $"指令执行失败：{error}");
                     continue;
                 }
                 item.ParseIPs(output);
@@ -221,7 +227,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 (error, output) = SshCommand.EnqueueCommand(command).Result;
                 if (string.IsNullOrEmpty(output))
                 {
-                    MainSave.CQLog.Warning("获取VirtualMachines Icon", $"指令执行失败：{error}");
+                    MainSave.CQLog?.Warning("获取VirtualMachines Icon", $"指令执行失败：{error}");
                     continue;
                 }
                 item.ParseIcon(output);

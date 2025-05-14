@@ -25,7 +25,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public double UsedPercent => TotalBytes == 0 ? 0 : Math.Round((double)UsedBytes / TotalBytes * 100, 2);
 
-        private static Regex DiskRegex { get; } = new(@"^\s*([\w\-]+)\s+\d+:\d+\s+\d+\s+([\d.]+[TGMK]?)\s+\d+\s+(\w+)\s+(\S+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static Regex DiskRegex { get; } = new(@"^\s*([\w\-]+)\s+\d+:\d+\s+\d+\s+([\d.]+[TGMK]?)\s+\d+\s+(\w+)\s+(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static DiskMountInfo[] ParseFromLsblk(string input)
         {
@@ -58,10 +58,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public void ParseDiskFree(string input, string name)
         {
-            if (string.IsNullOrWhiteSpace(MountPoint))
-            {
-                return;
-            }
             foreach (var item in input.Split('\n'))
             {
                 var splits = item.Split([' '], StringSplitOptions.RemoveEmptyEntries);
