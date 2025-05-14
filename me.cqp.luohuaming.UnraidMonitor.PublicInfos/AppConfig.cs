@@ -39,6 +39,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             SSHHost = GetConfig("SSHHost", "");
             SSHPort = GetConfig("SSHPort", 22);
             SSHUserName = GetConfig("SSHUserName", "");
+            SSHPassword = GetConfig("SSHPassword", "");
             SSHCommandTimeout = GetConfig("SSHCommandTimeout", 10);
             CustomFont = GetConfig("CustomFont", "");
             CustomFontPath = GetConfig("CustomFontPath", "");
@@ -99,8 +100,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             DiskInfo = GetConfig("DiskInfo", 10000);
 
             EnableAutoReload();
-            HandlerBase.Instance.StopMonitor();
-            HandlerBase.Instance.StartMonitor();
+            HandlerBase.Instance?.StopMonitor();
+            HandlerBase.Instance?.StartMonitor();
         }
     }
 }

@@ -35,6 +35,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             AppConfig appConfig = new(Path.Combine(MainSave.AppDirectory, "Config.json"));
             appConfig.LoadConfig();
             appConfig.EnableAutoReload();
+            CommandIntervalConfig intervalConfig = new(Path.Combine(MainSave.AppDirectory, "Interval.json"));
+            intervalConfig.LoadConfig();
+            intervalConfig.EnableAutoReload();
         }
     }
 }
