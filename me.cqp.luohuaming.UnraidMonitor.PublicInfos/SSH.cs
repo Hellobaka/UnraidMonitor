@@ -19,11 +19,24 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
        
         private Thread Worker { get; set; }
 
+        private string Host { get; set; }
+       
+        private int Port { get; set; }
+       
+        private string User { get; set; }
+       
+        private string Pwd { get; set; }
+
         public SshCommandQueue(string host, int port, string user, string pwd)
         {
-            SSHClient = new SshClient(host, port, user, pwd);
+            Host = host;
+            Port = port;
+            User = user;
+            Pwd = pwd;
+
+            SSHClient = new SshClient(Host, Port, User, Pwd);
             SSHClient.Connect();
-            MainSave.CQLog.Info("SSH连接", $"连接到 {AppConfig.SSHHost}:{AppConfig.SSHPort} 成功");
+            MainSave.CQLog?.Info("SSH连接", $"连接到 {AppConfig.SSHHost}:{AppConfig.SSHPort} 成功");
             Worker = new Thread(ProcessQueue) { IsBackground = true };
             Worker.Start();
         }
@@ -44,12 +57,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 {
                     try
                     {
-                        if (!SSHClient.IsConnected)
+                        if (SSHClient == null || !SSHClient.IsConnected)
                         {
-                            MainSave.CQLog.Info("SSH连接", $"连接到 {AppConfig.SSHHost}:{AppConfig.SSHPort} 成功");
+                            MainSave.CQLog?.Info("SSH连接", $"连接到 {AppConfig.SSHHost}:{AppConfig.SSHPort} 成功");
+                            SSHClient = new SshClient(Host, Port, User, Pwd);
                             SSHClient.Connect();
                         }
                         var command = SSHClient.CreateCommand(item.cmd);
+                        Console.WriteLine($"Executing {item.cmd}");
                         command.CommandTimeout = TimeSpan.FromSeconds(AppConfig.SSHCommandTimeout);
                         command.Execute();
                         item.task.SetResult((command.Error, command.Result));
@@ -59,14 +74,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         item.task.SetResult(("Timeout", null));
                         SSHClient.Dispose();
                         SSHClient = null;
-                        MainSave.CQLog.Error("SSH连接", $"指令 {item.cmd} 执行超时：{ex}");
+                        MainSave.CQLog?.Error("SSH连接", $"指令 {item.cmd} 执行超时：{ex}");
                     }
                     catch (Exception ex)
                     {
                         item.task.SetResult((ex.Message, null));
                         SSHClient.Dispose();
                         SSHClient = null;
-                        MainSave.CQLog.Error("SSH连接", $"连接发生异常：{ex}");
+                        MainSave.CQLog?.Error("SSH连接", $"连接发生异常：{ex}");
                     }
                 }
                 QueueHandleSignal.WaitOne();
