@@ -25,12 +25,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             var cpuInfo = handler.GetCpuInfo();
             Console.WriteLine("[CPUInfo]");
             PrintProperties(cpuInfo);
+            handler.InsertData(cpuInfo);
 
             // 2. CPU使用率
             var cpuUsages = handler.GetCpuUsages();
             Console.WriteLine("[CPUUsage]");
             foreach (var item in cpuUsages ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.CpuUsage>())
                 PrintProperties(item);
+            handler.InsertData(cpuUsages);
 
             // 3. 内存信息
             var memoryInfo = handler.GetMemoryInfo();

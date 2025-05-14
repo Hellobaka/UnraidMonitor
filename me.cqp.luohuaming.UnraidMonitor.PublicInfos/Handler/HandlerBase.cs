@@ -2,6 +2,7 @@
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,7 +15,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
     {
         public HandlerBase()
         {
-            StartMonitor();
+            //StartMonitor();
             Instance = this;
         }
 
@@ -138,16 +139,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         public void InsertData(object data)
         {
-            if (data == null || data is not Array arr || arr.Length == 0)
+            Array array = data as Array;
+            if (data == null || (array != null && array.Length == 0))
             {
                 return;
             }
             var entityType = data.GetType();
-            if (data is Array)
+            if (array != null)
             {
-                foreach(var item in arr)
+                foreach (var item in array)
                 {
-                    entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                    item.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
                         .FirstOrDefault(x => x.Name == "DateTime")?
                         .SetValue(item, DateTime.Now);
                 }
@@ -158,14 +160,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     .FirstOrDefault(x => x.Name == "DateTime")?
                     .SetValue(data, DateTime.Now);
             }
+            Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType; 
             using var db = DBHelper.GetInstance();
-            MethodInfo method = typeof(LiteDatabase).GetMethod("GetCollection", [typeof(string)]);
-            MethodInfo generic = method.MakeGenericMethod(entityType);
-            object collection = generic.Invoke(db, [entityType.Name]);
-            var insertMethod = collection.GetType().GetMethod("Insert");
+            MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "GetCollection" && x.IsGenericMethod && x.GetParameters().Length == 0);
+            MethodInfo generic = method.MakeGenericMethod(itemType);
+            object collection = generic.Invoke(db, []);
+            var insertMethod = collection.GetType().GetMethods().FirstOrDefault(x => x.Name == "Insert" && x.ReturnType.Name == "BsonValue");
             if (insertMethod != null)
             {
-                insertMethod.Invoke(collection, [data]);
+                if (!entityType.IsArray)
+                {
+                    insertMethod.Invoke(collection, [data]);
+                }
+                else
+                {
+                    foreach(var item in array)
+                    {
+                        insertMethod.Invoke(collection, [item]);
+                    }
+                }
             }
             else
             {
