@@ -87,19 +87,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ViewModels\CommandConfigPageViewModel.cs" />
-    <Compile Include="ViewModels\CommandDetailViewModel.cs" />
-    <Compile Include="ViewModels\CommandListViewModel.cs" />
-    <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="Views\CommandConfigPage.xaml.cs">
-      <DependentUpon>CommandConfigPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\CommandDetailControl.xaml.cs">
-      <DependentUpon>CommandDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\CommandListControl.xaml.cs">
-      <DependentUpon>CommandListControl.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,24 +96,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Event_MenuCall.cs" />
-    <Compile Include="Helpers\JsonHelper.cs" />
-    <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\CommandConfigPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Controls\CommandDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Controls\CommandListControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
