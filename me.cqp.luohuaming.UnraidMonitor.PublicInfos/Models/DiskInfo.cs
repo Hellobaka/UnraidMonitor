@@ -104,15 +104,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         private static Regex DeviceModelRegex { get; } =
             new(@"(?:Device Model|Model Number):\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static Regex SerialNumberRegex { get; } =
             new(@"Serial Number:\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex CapacityRegex { get; } =
             new(@"(?:User Capacity|Total NVM Capacity):\s+([\d,]+) bytes? \[([^\]]+)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static Regex SectorSizeRegex { get; } =
             new(@"(?:Sector Sizes:\s+(\d+) bytes logical, (\d+) bytes physical|Namespace 1 Formatted LBA Size:\s+(\d+))", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static Regex RotationRateRegex { get; } =
             new(@"Rotation Rate:\s+(.+ rpm|Solid State Device)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private static Regex FormFactorRegex { get; } =
             new(@"Form Factor:\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -146,7 +150,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     CapacityBytes = ParseCapacity(CapacityRegex.Match(input)),
                     FormattedCapacity = CapacityRegex.Match(input).Groups[2].Value.Trim(),
                     LogicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[1].Value, out int value) ? value : 0,
-                    PhysicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[2].Value, out value) ? value :0,
+                    PhysicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[2].Value, out value) ? value : 0,
                     Smart = SmartInfo.Parse(input)
                 };
         }
