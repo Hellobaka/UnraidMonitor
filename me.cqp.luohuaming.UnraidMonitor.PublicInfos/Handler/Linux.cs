@@ -249,14 +249,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             return SystemInfo.ParseFromUnraidIni(output);
         }
 
-        public override TimeSpan GetSystemUptime()
+        public override SystemUptime GetSystemUptime()
         {
             string command = "uptime";
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {
                 MainSave.CQLog?.Error("获取SystemInfo", $"指令执行失败：{error}");
-                return TimeSpan.Zero;
+                return new();
             }
 
             return SystemUptime.ParseFromUptime(output);
@@ -264,7 +264,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         public override DiskInfo[] GetDiskInfos()
         {
-            string command = "cat /var/local/emhttps/disks.ini";
+            string command = "cat /var/local/emhttp/disks.ini";
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
             if (string.IsNullOrEmpty(output))
             {

@@ -71,7 +71,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             // 5.1. 磁盘信息
             var disks = handler.GetDiskInfos();
             Console.WriteLine("[DiskInfo]");
-            foreach (var item in diskMounts ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.DiskMountInfo>())
+            foreach (var item in disks ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.DiskInfo>())
                 PrintProperties(item);
 
             // 6. Docker容器

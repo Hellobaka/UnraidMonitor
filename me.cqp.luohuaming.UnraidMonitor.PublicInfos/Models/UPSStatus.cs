@@ -27,6 +27,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public double CurrentPower => MaxPower * (CurrentLoad / 100);
 
+        public DateTime DateTime { get; set; }
+
         public static UPSStatus ParseFromApcAccess(string input)
         {
             var lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
@@ -48,23 +50,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                         break;
 
                     case "LOADPCT":
-                        status.CurrentLoad = double.TryParse(value, out double d) ? d : 0;
+                        status.CurrentLoad = double.TryParse(value.Split(' ').First(), out double d) ? d : 0;
                         break;
 
                     case "BCHARGE":
-                        status.BatteryLevel = double.TryParse(value, out d) ? d : 0;
+                        status.BatteryLevel = double.TryParse(value.Split(' ').First(), out d) ? d : 0;
                         break;
 
                     case "TIMELEFT":
-                        status.TimeLeft = double.TryParse(value, out d) ? d : 0;
+                        status.TimeLeft = double.TryParse(value.Split(' ').First(), out d) ? d : 0;
                         break;
 
                     case "LINEV":
-                        status.CurrentVoltage = double.TryParse(value, out d) ? d : 0;
+                        status.CurrentVoltage = double.TryParse(value.Split(' ').First(), out d) ? d : 0;
                         break;
 
                     case "NOMPOWER":
-                        status.MaxPower = double.TryParse(value, out d) ? d : 0;
+                        status.MaxPower = double.TryParse(value.Split(' ').First(), out d) ? d : 0;
                         break;
 
                     default:

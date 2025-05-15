@@ -5,11 +5,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class SystemUptime
     {
+        public TimeSpan UpTime { get; set; } = TimeSpan.Zero;
+
         private static Regex UptimeRegexA { get; } = new(@"up\s+(\d+)\s+days?,\s+(\d+):(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static Regex UptimeRegexB { get; } = new(@"up\s+(\d+):(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static TimeSpan ParseFromUptime(string input)
+        public static SystemUptime ParseFromUptime(string input)
         {
             var matchA = UptimeRegexA.Match(input);
             var matchB = UptimeRegexB.Match(input);
@@ -19,17 +21,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 int hours = int.Parse(matchA.Groups[2].Value);
                 int minutes = int.Parse(matchA.Groups[3].Value);
 
-                return new TimeSpan(days, hours, minutes, 0);
+                return new() { UpTime = new TimeSpan(days, hours, minutes, 0) };
             }
             else if(matchB.Success)
             {
                 int hours = int.Parse(matchB.Groups[1].Value);
                 int minutes = int.Parse(matchB.Groups[2].Value);
 
-                return new TimeSpan(0, hours, minutes, 0);
+                return new() { UpTime = new TimeSpan(0, hours, minutes, 0) };
             }
 
-            return TimeSpan.Zero;
+            return new() { UpTime = TimeSpan.Zero };
         }
     }
 }

@@ -29,7 +29,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     containers.Add(new Dockers
                     {
                         ID = item["ID"].ToString(),
-                        Name = item["Names"][0].ToString().TrimStart('/'),
+                        Name = item["Names"].ToString().TrimStart('/'),
                         Image = item["Labels"].ToString()?.Split(',').FirstOrDefault(x => x.Split('=')[0] == "net.unraid.docker.icon")?.Split('=').Last(),
                         Running = item["State"].ToString() == "running",
                         DateTime = DateTime.Now

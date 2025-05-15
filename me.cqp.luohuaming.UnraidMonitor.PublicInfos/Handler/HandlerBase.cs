@@ -189,7 +189,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             throw new NotImplementedException();
         }
 
-        public virtual TimeSpan GetSystemUptime()
+        public virtual SystemUptime GetSystemUptime()
         {
             throw new NotImplementedException();
         }
