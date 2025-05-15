@@ -40,6 +40,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public bool Running => PowerMode.Contains("-on");
 
+        public DateTime DateTime { get; set; }
+
         public double UsedPercent => Total == 0 ? 0 : Math.Round((double)Used / Total * 100, 2);
 
         public static DiskInfo[] ParseFromDiskIni(string input)
