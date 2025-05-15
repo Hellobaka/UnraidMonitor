@@ -22,7 +22,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             var handler = new Linux();
 
             // -1. 系统启动时间
-            var uptime = handler.GetUptime();
+            var uptime = handler.GetSystemUptime();
             Console.WriteLine("[Uptime]");
             PrintProperties(uptime);
             handler.InsertData(uptime);
@@ -38,6 +38,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             Console.WriteLine("[CPUInfo]");
             PrintProperties(cpuInfo);
             handler.InsertData(cpuInfo);
+
+            // 2.1. UPS信息
+            var ups = handler.GetUPS();
+            Console.WriteLine("[UPS]");
+            PrintProperties(ups);
+            handler.InsertData(ups);
 
             // 2. CPU使用率
             var cpuUsages = handler.GetCpuUsages();
@@ -59,6 +65,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             // 5. 磁盘挂载信息
             var diskMounts = handler.GetDiskMountInfo();
             Console.WriteLine("[DiskMountInfo]");
+            foreach (var item in diskMounts ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.DiskMountInfo>())
+                PrintProperties(item);
+
+            // 5.1. 磁盘信息
+            var disks = handler.GetDiskInfos();
+            Console.WriteLine("[DiskInfo]");
             foreach (var item in diskMounts ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.DiskMountInfo>())
                 PrintProperties(item);
 
@@ -99,9 +111,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 PrintProperties(item);
 
             // 12. 磁盘SMART信息
-            var disks = handler.GetDiskInfos();
-            Console.WriteLine("[DiskInfo]");
-            foreach (var item in disks ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.DiskInfo>())
+            var diskSmart = handler.GetDiskSmartInfos();
+            Console.WriteLine("[DiskSmartInfo]");
+            foreach (var item in diskSmart ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.DiskSmartInfo>())
             {
                 PrintProperties(item);
                 PrintProperties(item.Smart);

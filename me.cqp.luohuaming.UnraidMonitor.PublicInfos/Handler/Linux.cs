@@ -165,7 +165,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             return TemperatureInfo.ParseFromSensor(output);
         }
 
-        public override DiskInfo[] GetDiskInfos()
+        public override DiskSmartInfo[] GetDiskSmartInfos()
         {
             if (CacheDiskMountInfo == null || CacheDiskMountInfo.Length == 0)
             {
@@ -176,7 +176,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             {
                 return [];
             }
-            List<DiskInfo> list = [];
+            List<DiskSmartInfo> list = [];
             foreach(var item in CacheDiskMountInfo)
             {
                 if (item.Type != "disk" || item.MountPoint == "/boot")
@@ -192,7 +192,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     continue;
                 }
 
-                var info = DiskInfo.ParseSmartctl(output);
+                var info = DiskSmartInfo.ParseSmartctl(output);
                 if (info != null)
                 {
                     list.Add(info);
@@ -249,7 +249,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             return SystemInfo.ParseFromUnraidIni(output);
         }
 
-        public override TimeSpan GetUptime()
+        public override TimeSpan GetSystemUptime()
         {
             string command = "uptime";
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
@@ -260,6 +260,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             }
 
             return SystemUptime.ParseFromUptime(output);
+        }
+
+        public override DiskInfo[] GetDiskInfos()
+        {
+            string command = "cat /var/local/emhttps/disks.ini";
+            var (error, output) = SshCommand.EnqueueCommand(command).Result;
+            if (string.IsNullOrEmpty(output))
+            {
+                MainSave.CQLog?.Error("获取DiskInfo", $"指令执行失败：{error}");
+                return [];
+            }
+
+            return DiskInfo.ParseFromDiskIni(output);
+        }
+
+        public override UPSStatus GetUPS()
+        {
+            string command = "/sbin/apcaccess";
+            var (error, output) = SshCommand.EnqueueCommand(command).Result;
+            if (string.IsNullOrEmpty(output))
+            {
+                MainSave.CQLog?.Error("获取UPSStatus", $"指令执行失败：{error}");
+                return null;
+            }
+
+            return UPSStatus.ParseFromApcAccess(output);
         }
     }
 }

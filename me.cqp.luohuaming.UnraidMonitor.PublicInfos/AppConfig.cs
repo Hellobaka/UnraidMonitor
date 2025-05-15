@@ -18,6 +18,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static string CommandStatus { get; set; } = "";
 
+        public static string MonitorOSType { get; set; } = "";
+
         public static string SSHHost { get; set; } = "";
       
         public static int SSHPort { get; set; } = 22;
@@ -36,6 +38,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         {
             DisableAutoReload();
             CommandStatus = GetConfig("CommandStatus", "系统状态");
+            MonitorOSType = GetConfig("MonitorOSType", "Linux");
             SSHHost = GetConfig("SSHHost", "");
             SSHPort = GetConfig("SSHPort", 22);
             SSHUserName = GetConfig("SSHUserName", "");
@@ -80,11 +83,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static int VirtualMachine { get; set; } = 10000;
 
+        public static int DiskSmartInfo { get; set; } = 10000;
+
         public static int DiskInfo { get; set; } = 10000;
 
         public static int SystemInfo { get; set; } = 0;
 
         public static int Uptime { get; set; } = 1000;
+
+        public static int UPS { get; set; } = 5000;
 
         public override void LoadConfig()
         {
@@ -102,8 +109,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             TemperatureInfo = GetConfig("TemperatureInfo", 5000);
             VirtualMachine = GetConfig("VirtualMachine", 10000);
             DiskInfo = GetConfig("DiskInfo", 10000);
+            DiskSmartInfo = GetConfig("DiskSmartInfo", -1);
             Uptime = GetConfig("Uptime", 1000);
             SystemInfo = GetConfig("SystemInfo", 0);
+            UPS = GetConfig("UPS", 5000);
 
             EnableAutoReload();
             HandlerBase.Instance?.StopMonitor();

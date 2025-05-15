@@ -1,13 +1,10 @@
 ﻿using LiteDB;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 {
@@ -15,15 +12,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
     {
         public HandlerBase()
         {
-            //StartMonitor();
             Instance = this;
         }
 
         public static HandlerBase Instance { get; set; }
 
-        private Timer CPUInfoTimer { get; set; }
+        private Timer CpuInfoTimer { get; set; }
 
-        private Timer CPUUsageTimer { get; set; }
+        private Timer CpuUsagesTimer { get; set; }
 
         private Timer MemoryInfoTimer { get; set; }
 
@@ -35,54 +31,97 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         private Timer VirtualMachinesTimer { get; set; }
 
-        private Timer FanInfoTimer { get; set; }
+        private Timer FanInfosTimer { get; set; }
 
-        private Timer NetworkInterfaceInfoTimer { get; set; }
+        private Timer NetworkInterfaceInfosTimer { get; set; }
 
-        private Timer NetworkTrafficInfoTimer { get; set; }
+        private Timer NetworkTrafficInfoTsimer { get; set; }
 
-        private Timer TemperatureInfoTimer { get; set; }
+        private Timer TemperatureInfosTimer { get; set; }
 
         private Timer DiskInfoTimer { get; set; }
 
-        private Timer SystemInfoTimer { get; set; }
+        private Timer DiskSmartInfoTimer { get; set; }
+
+        private Timer SystemInfosTimer { get; set; }
 
         private Timer SystemUptimeTimer { get; set; }
 
+        private Timer UPSTimer { get; set; }
+
         public void StopMonitor()
         {
-            CPUInfoTimer?.Dispose();
-            CPUUsageTimer?.Dispose();
-            MemoryInfoTimer?.Dispose();
-            MotherboardInfoTimer?.Dispose();
-            DiskMountInfoTimer?.Dispose();
-            DockersTimer?.Dispose();
-            VirtualMachinesTimer?.Dispose();
-            FanInfoTimer?.Dispose();
-            NetworkInterfaceInfoTimer?.Dispose();
-            NetworkTrafficInfoTimer?.Dispose();
-            TemperatureInfoTimer?.Dispose();
-            DiskInfoTimer?.Dispose();
-            SystemInfoTimer?.Dispose();
-            SystemUptimeTimer?.Dispose();
+            var configType = typeof(CommandIntervalConfig);
+            var fields = configType.GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            var instanceType = this.GetType();
+
+            foreach (var field in fields)
+            {
+                string key = field.Name;
+                string timerFieldName = key + "Timer";
+
+                var timerField = instanceType.GetField(timerFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+
+                if (timerField != null)
+                {
+                    (timerField.GetValue(this) as Timer)?.Dispose();
+                    timerField.SetValue(this, null);
+                }
+            }
         }
 
         public void StartMonitor()
         {
-            CPUInfoTimer = new(_ => InsertData(GetCpuInfo()) , null, 0, CommandIntervalConfig.CPUInfo);
-            CPUUsageTimer = new(_ => InsertData(GetCpuUsages()) , null, 0, CommandIntervalConfig.CPUUsage);
-            MemoryInfoTimer = new(_ => InsertData(GetMemoryInfo()) , null, 0, CommandIntervalConfig.MemoryInfo);
-            MotherboardInfoTimer = new(_ => InsertData(GetMotherboardInfo()) , null, 0, CommandIntervalConfig.MotherboardInfo);
-            DiskMountInfoTimer = new(_ => InsertData(GetDiskMountInfo()) , null, 0, CommandIntervalConfig.DiskMountInfo);
-            DockersTimer = new(_ => InsertData(GetDockers()) , null, 0, CommandIntervalConfig.Dockers);
-            VirtualMachinesTimer = new(_ => InsertData(GetVirtualMachines()) , null, 0, CommandIntervalConfig.VirtualMachine);
-            FanInfoTimer = new(_ => InsertData(GetFanInfos()) , null, 0, CommandIntervalConfig.FanInfo);
-            NetworkInterfaceInfoTimer = new(_ => InsertData(GetNetworkInterfaceInfos()) , null, 0, CommandIntervalConfig.NetworkInterfaceInfo);
-            NetworkTrafficInfoTimer = new(_ => InsertData(GetNetworkTrafficInfos()) , null, 0, CommandIntervalConfig.NetworkTrafficInfo);
-            TemperatureInfoTimer = new(_ => InsertData(GetTemperatureInfos()) , null, 0, CommandIntervalConfig.TemperatureInfo);
-            DiskInfoTimer = new(_ => InsertData(GetDiskInfos()) , null, 0, CommandIntervalConfig.DiskInfo);
-            SystemInfoTimer = new(_ => InsertData(GetSystemInfo()) , null, 0, CommandIntervalConfig.SystemInfo);
-            SystemUptimeTimer = new(_ => InsertData(GetUptime()) , null, 0, CommandIntervalConfig.Uptime);
+            var configType = typeof(CommandIntervalConfig);
+            var fields = configType.GetFields(BindingFlags.Public | BindingFlags.Static);
+
+            var instanceType = this.GetType();
+
+            foreach (var field in fields)
+            {
+                string key = field.Name; // 例如 "CPUInfo"
+                int interval = (int)field.GetValue(null);
+
+                string timerFieldName = key + "Timer";       // 例如 "CPUInfoTimer"
+                string methodName = "Get" + key;             // 例如 "GetCPUInfo"
+
+                var timerField = instanceType.GetField(timerFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+                var collectMethod = instanceType.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+
+                if (timerField == null || collectMethod == null)
+                {
+                    Debugger.Break();
+                    continue;
+                }
+
+                (timerField.GetValue(this) as Timer)?.Dispose();
+
+                if (interval > 0)
+                {
+                    Timer timer = new(_ =>
+                    {
+                        var data = collectMethod.Invoke(this, null);
+                        this.InsertData(data);
+                    }, null, 0, interval);
+
+                    timerField.SetValue(this, timer);
+                }
+                else
+                {
+                    timerField.SetValue(this, null);
+                }
+            }
+        }
+
+        public virtual UPSStatus GetUPS()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual DiskInfo[] GetDiskInfos()
+        {
+            throw new NotImplementedException();
         }
 
         public virtual CpuInfo GetCpuInfo()
@@ -140,7 +179,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             throw new NotImplementedException();
         }
 
-        public virtual DiskInfo[] GetDiskInfos()
+        public virtual DiskSmartInfo[] GetDiskSmartInfos()
         {
             throw new NotImplementedException();
         }
@@ -150,7 +189,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             throw new NotImplementedException();
         }
 
-        public virtual TimeSpan GetUptime()
+        public virtual TimeSpan GetSystemUptime()
         {
             throw new NotImplementedException();
         }
@@ -178,7 +217,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     .FirstOrDefault(x => x.Name == "DateTime")?
                     .SetValue(data, DateTime.Now);
             }
-            Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType; 
+            Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType;
             using var db = DBHelper.GetInstance();
             MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "GetCollection" && x.IsGenericMethod && x.GetParameters().Length == 0);
             MethodInfo generic = method.MakeGenericMethod(itemType);
@@ -192,7 +231,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 }
                 else
                 {
-                    foreach(var item in array)
+                    foreach (var item in array)
                     {
                         insertMethod.Invoke(collection, [item]);
                     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 {
-    internal class Windows
+    public class Windows : HandlerBase
     {
     }
 }
