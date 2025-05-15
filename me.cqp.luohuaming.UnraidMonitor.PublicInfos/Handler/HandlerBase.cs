@@ -17,56 +17,49 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         public static HandlerBase Instance { get; set; }
 
-        private Timer CpuInfoTimer { get; set; }
+        public Timer CpuInfoTimer { get; set; }
 
-        private Timer CpuUsagesTimer { get; set; }
+        public Timer CpuUsagesTimer { get; set; }
 
-        private Timer MemoryInfoTimer { get; set; }
+        public Timer MemoryInfoTimer { get; set; }
 
-        private Timer MotherboardInfoTimer { get; set; }
+        public Timer MotherboardInfoTimer { get; set; }
 
-        private Timer DiskMountInfoTimer { get; set; }
+        public Timer DiskMountInfosTimer { get; set; }
 
-        private Timer DockersTimer { get; set; }
+        public Timer DockersTimer { get; set; }
 
-        private Timer VirtualMachinesTimer { get; set; }
+        public Timer VirtualMachinesTimer { get; set; }
 
-        private Timer FanInfosTimer { get; set; }
+        public Timer FanInfosTimer { get; set; }
 
-        private Timer NetworkInterfaceInfosTimer { get; set; }
+        public Timer NetworkInterfaceInfosTimer { get; set; }
 
-        private Timer NetworkTrafficInfoTsimer { get; set; }
+        public Timer NetworkTrafficInfosTimer { get; set; }
 
-        private Timer TemperatureInfosTimer { get; set; }
+        public Timer TemperatureInfosTimer { get; set; }
 
-        private Timer DiskInfoTimer { get; set; }
+        public Timer DiskInfosTimer { get; set; }
 
-        private Timer DiskSmartInfoTimer { get; set; }
+        public Timer DiskSmartInfosTimer { get; set; }
 
-        private Timer SystemInfosTimer { get; set; }
+        public Timer SystemInfoTimer { get; set; }
 
-        private Timer SystemUptimeTimer { get; set; }
+        public Timer SystemUptimeTimer { get; set; }
 
-        private Timer UPSTimer { get; set; }
+        public Timer UPSTimer { get; set; }
 
         public void StopMonitor()
         {
-            var configType = typeof(CommandIntervalConfig);
-            var fields = configType.GetFields(BindingFlags.Public | BindingFlags.Static);
-
             var instanceType = this.GetType();
 
-            foreach (var field in fields)
+            foreach (var property in instanceType.GetProperties())
             {
-                string key = field.Name;
-                string timerFieldName = key + "Timer";
-
-                var timerField = instanceType.GetField(timerFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-
-                if (timerField != null)
+                if (property.PropertyType.Name == "Timer")
                 {
-                    (timerField.GetValue(this) as Timer)?.Dispose();
-                    timerField.SetValue(this, null);
+                    var timer = property.GetValue(this) as Timer;
+                    timer?.Dispose();
+                    property.SetValue(this, null);
                 }
             }
         }
@@ -74,28 +67,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         public void StartMonitor()
         {
             var configType = typeof(CommandIntervalConfig);
-            var fields = configType.GetFields(BindingFlags.Public | BindingFlags.Static);
+            var properties = configType.GetProperties(BindingFlags.Public | BindingFlags.Static);
 
             var instanceType = this.GetType();
 
-            foreach (var field in fields)
+            foreach (var property in properties)
             {
-                string key = field.Name; // 例如 "CPUInfo"
-                int interval = (int)field.GetValue(null);
+                string key = property.Name; // 例如 "CPUInfo"
+                if (key == "Instance")
+                {
+                    continue;
+                }
+                int interval = (int)property.GetValue(null);
 
                 string timerFieldName = key + "Timer";       // 例如 "CPUInfoTimer"
                 string methodName = "Get" + key;             // 例如 "GetCPUInfo"
 
-                var timerField = instanceType.GetField(timerFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-                var collectMethod = instanceType.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
+                var t = instanceType.GetProperty(timerFieldName);
+                var collectMethod = instanceType.GetMethod(methodName);
 
-                if (timerField == null || collectMethod == null)
+                if (t == null || collectMethod == null)
                 {
                     Debugger.Break();
                     continue;
                 }
 
-                (timerField.GetValue(this) as Timer)?.Dispose();
+                (t.GetValue(this) as Timer)?.Dispose();
 
                 if (interval > 0)
                 {
@@ -105,11 +102,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                         this.InsertData(data);
                     }, null, 0, interval);
 
-                    timerField.SetValue(this, timer);
+                    t.SetValue(this, timer);
                 }
                 else
                 {
-                    timerField.SetValue(this, null);
+                    t.SetValue(this, null);
                 }
             }
         }
@@ -144,7 +141,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             throw new NotImplementedException();
         }
 
-        public virtual DiskMountInfo[] GetDiskMountInfo()
+        public virtual DiskMountInfo[] GetDiskMountInfos()
         {
             throw new NotImplementedException();
         }
@@ -218,7 +215,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     .SetValue(data, DateTime.Now);
             }
             Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType;
-            using var db = DBHelper.GetInstance();
+            var db = DBHelper.Instance;
             MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "GetCollection" && x.IsGenericMethod && x.GetParameters().Length == 0);
             MethodInfo generic = method.MakeGenericMethod(itemType);
             object collection = generic.Invoke(db, []);

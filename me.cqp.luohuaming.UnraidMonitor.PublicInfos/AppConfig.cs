@@ -61,35 +61,35 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static CommandIntervalConfig Instance { get; private set; }
 
-        public static int CPUInfo { get; set; } = 0;
+        public static int CpuInfo { get; set; } = 0;
 
-        public static int CPUUsage { get; set; } = 1000;
+        public static int CpuUsages { get; set; } = 1000;
 
-        public static int DiskMountInfo { get; set; } = 0;
+        public static int DiskMountInfos { get; set; } = 0;
 
         public static int Dockers { get; set; } = 10000;
 
-        public static int FanInfo { get; set; } = 1000;
+        public static int FanInfos { get; set; } = 1000;
 
         public static int MemoryInfo { get; set; } = 1000;
 
         public static int MotherboardInfo { get; set; } = 0;
 
-        public static int NetworkInterfaceInfo { get; set; } = 0;
+        public static int NetworkInterfaceInfos { get; set; } = 0;
 
-        public static int NetworkTrafficInfo { get; set; } = 1000;
+        public static int NetworkTrafficInfos { get; set; } = 1000;
 
-        public static int TemperatureInfo { get; set; } = 5000;
+        public static int TemperatureInfos { get; set; } = 5000;
 
-        public static int VirtualMachine { get; set; } = 10000;
+        public static int VirtualMachines { get; set; } = 10000;
 
-        public static int DiskSmartInfo { get; set; } = 10000;
+        public static int DiskSmartInfos { get; set; } = -1;
 
-        public static int DiskInfo { get; set; } = 10000;
+        public static int DiskInfos { get; set; } = 10000;
 
         public static int SystemInfo { get; set; } = 0;
 
-        public static int Uptime { get; set; } = 1000;
+        public static int SystemUptime { get; set; } = 10000;
 
         public static int UPS { get; set; } = 5000;
 
@@ -97,20 +97,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         {
             DisableAutoReload();
 
-            CPUInfo = GetConfig("CPUInfo", 0);
-            CPUUsage = GetConfig("CPUUsage", 1000);
-            DiskMountInfo = GetConfig("DiskMountInfo", 0);
+            CpuInfo = GetConfig("CpuInfo", 0);
+            CpuUsages = GetConfig("CpuUsages", 1000);
+            DiskMountInfos = GetConfig("DiskMountInfos", 0);
             Dockers = GetConfig("Dockers", 10000);
-            FanInfo = GetConfig("FanInfo", 1000);
+            FanInfos = GetConfig("FanInfos", 1000);
             MemoryInfo = GetConfig("MemoryInfo", 1000);
             MotherboardInfo = GetConfig("MotherboardInfo", 0);
-            NetworkInterfaceInfo = GetConfig("NetworkInterfaceInfo", 0);
-            NetworkTrafficInfo = GetConfig("NetworkTrafficInfo", 1000);
-            TemperatureInfo = GetConfig("TemperatureInfo", 5000);
-            VirtualMachine = GetConfig("VirtualMachine", 10000);
-            DiskInfo = GetConfig("DiskInfo", 10000);
-            DiskSmartInfo = GetConfig("DiskSmartInfo", -1);
-            Uptime = GetConfig("Uptime", 1000);
+            NetworkInterfaceInfos = GetConfig("NetworkInterfaceInfos", 0);
+            NetworkTrafficInfos = GetConfig("NetworkTrafficInfos", 1000);
+            TemperatureInfos = GetConfig("TemperatureInfos", 5000);
+            VirtualMachines = GetConfig("VirtualMachines", 10000);
+            DiskInfos = GetConfig("DiskInfos", 10000);
+            DiskSmartInfos = GetConfig("DiskSmartInfos", -1);
+            SystemUptime = GetConfig("SystemUptime", 10000);
             SystemInfo = GetConfig("SystemInfo", 0);
             UPS = GetConfig("UPS", 5000);
 

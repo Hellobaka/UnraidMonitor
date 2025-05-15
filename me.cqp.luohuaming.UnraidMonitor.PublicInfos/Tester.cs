@@ -20,7 +20,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             intervalConfig.EnableAutoReload();
 
             var handler = new Linux();
-
+            handler.StartMonitor();
+            Console.ReadLine();
             // -1. 系统启动时间
             var uptime = handler.GetSystemUptime();
             Console.WriteLine("[Uptime]");
@@ -63,7 +64,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             PrintProperties(motherboardInfo);
 
             // 5. 磁盘挂载信息
-            var diskMounts = handler.GetDiskMountInfo();
+            var diskMounts = handler.GetDiskMountInfos();
             Console.WriteLine("[DiskMountInfo]");
             foreach (var item in diskMounts ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.DiskMountInfo>())
                 PrintProperties(item);

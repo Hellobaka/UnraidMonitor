@@ -42,7 +42,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             return CpuUsage.ParseFromTop(output);
         }
 
-        public override DiskMountInfo[] GetDiskMountInfo()
+        public override DiskMountInfo[] GetDiskMountInfos()
         {
             string command = "lsblk";
             var (error, output) = SshCommand.EnqueueCommand(command).Result;
@@ -169,7 +169,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         {
             if (CacheDiskMountInfo == null || CacheDiskMountInfo.Length == 0)
             {
-                GetDiskMountInfo();
+                GetDiskMountInfos();
             }
 
             if (CacheDiskMountInfo == null || CacheDiskMountInfo.Length == 0)
@@ -214,14 +214,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var result = VirtualMachine.ParseFromVirsh(output);
             foreach(var item in result)
             {
-                command = $"virsh domifaddr \"{item.Name}\" --source agent";
-                (error, output) = SshCommand.EnqueueCommand(command).Result;
-                if (string.IsNullOrEmpty(output))
+                if (item.Running)
                 {
-                    MainSave.CQLog?.Warning("获取VirtualMachines IP", $"指令执行失败：{error}");
-                    continue;
+                    command = $"virsh domifaddr \"{item.Name}\" --source agent";
+                    (error, output) = SshCommand.EnqueueCommand(command).Result;
+                    if (string.IsNullOrEmpty(output))
+                    {
+                        MainSave.CQLog?.Warning("获取VirtualMachines IP", $"指令执行失败：{error}");
+                        continue;
+                    }
+                    item.ParseIPs(output);
                 }
-                item.ParseIPs(output);
 
                 command = $"virsh dumpxml \"{item.Name}\"";
                 (error, output) = SshCommand.EnqueueCommand(command).Result;
