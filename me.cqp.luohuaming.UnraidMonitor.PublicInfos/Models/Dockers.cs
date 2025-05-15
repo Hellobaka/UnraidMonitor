@@ -8,7 +8,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class Dockers
     {
-        public string ID { get; set; } = "";
+        public string ContainerID { get; set; } = "";
 
         public string Name { get; set; }
 
@@ -28,7 +28,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 {
                     containers.Add(new Dockers
                     {
-                        ID = item["ID"].ToString(),
+                        ContainerID = item["ID"].ToString(),
                         Name = item["Names"].ToString().TrimStart('/'),
                         Image = item["Labels"].ToString()?.Split(',').FirstOrDefault(x => x.Split('=')[0] == "net.unraid.docker.icon")?.Split('=').Last(),
                         Running = item["State"].ToString() == "running",
