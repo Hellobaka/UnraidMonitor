@@ -1,3 +1,4 @@
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp;
 using System.Collections.Generic;
 using System.IO;
@@ -14,5 +15,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public static CQApi CQApi { get; set; }
         public static string AppDirectory { get; set; }
         public static string ImageDirectory { get; set; }
+
+        public static HandlerBase MonitorAPI { get; set; }
     }
 }
