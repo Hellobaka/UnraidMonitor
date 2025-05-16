@@ -31,7 +31,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Fill
         }
 
-        public SKColor BackgrdoundColor { get; set; }
+        public string BackgrdoundColor { get; set; }
 
         public string[] BackgroundImages { get; set; } = [];
 

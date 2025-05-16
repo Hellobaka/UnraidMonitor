@@ -1,4 +1,7 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 
@@ -19,6 +22,77 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             intervalConfig.LoadConfig();
             intervalConfig.EnableAutoReload();
 
+            DrawTest();
+        }
+
+        static void DrawTest()
+        {
+            DrawingStyle a = JsonConvert.DeserializeObject<DrawingStyle>(File.ReadAllText("default.style"));
+            Console.WriteLine();
+            DrawingStyle drawingStyle = new()
+            {
+                Name = "Test",
+                DrawBackgroundType = DrawingStyle.BackgroundType.Color,
+                BackgrdoundColor = "#66CCFF",
+                ContentBlur = 30,
+                ContentRadius = 50,
+                CreateTime = DateTime.Now,
+                ModifyTime = DateTime.Now,
+                Padding = Thickness.DefaultPadding,
+                Content = [
+                       new DrawingBase(){
+                           BackgroundBlur = 0,
+                           DrawingLayout = DrawingBase.Layout.Fill,
+                           DrawingTitle = new DrawingBase.Title{
+                               Bold = true,
+                               HasIcon = false,
+                               Text = "测试标题",
+                               TextSize = 20,
+                           },
+                           FillPercentage = 100,
+                           Marging = Thickness.DefaultMargin,
+                           Radius = 0,
+                           Containers = [
+                               new DrawingContainer(){
+                                   DrawCoulmns = 1,
+                                   Content = [
+                                        new DrawingItem_Text{
+                                            IsBold = false,
+                                            Layout = DrawingBase.Layout.Minimal,
+                                            Text = "CPU型号：",
+                                        },
+                                        new DrawingItem_Text{
+                                            IsBold = false,
+                                            Layout = DrawingBase.Layout.Fill,
+                                            Text = "Intel i7-13700K",
+                                        },
+                                       ]
+                               },
+                               new DrawingContainer(){
+                                   DrawCoulmns = 1,
+                                   Content = [
+                                        new DrawingItem_Text{
+                                            IsBold = false,
+                                            Layout = DrawingBase.Layout.Minimal,
+                                            Text = "CPU占用率：",
+                                        },
+                                        new DrawingItem_ProgressBar{
+                                            Layout = DrawingBase.Layout.Fill,
+                                            Value = 22,
+                                            Min = 0,
+                                            Max = 100,
+                                        },
+                                       ]
+                               },
+                               ]
+                       }
+                    ]
+            };
+            File.WriteAllText("default.style", JsonConvert.SerializeObject(drawingStyle, Formatting.Indented));
+        }
+
+        static void MonitorTest()
+        {
             var handler = new Linux();
             handler.StartMonitor();
             Console.ReadLine();
