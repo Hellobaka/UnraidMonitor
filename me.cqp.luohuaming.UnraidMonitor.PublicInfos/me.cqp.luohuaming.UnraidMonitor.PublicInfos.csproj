@@ -145,6 +145,7 @@
     <Compile Include="Models\TemperatureInfo.cs" />
     <Compile Include="Models\SystemInfo.cs" />
     <Compile Include="Models\SystemUptime.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\UPSStatus.cs" />
     <Compile Include="Models\VirtualMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

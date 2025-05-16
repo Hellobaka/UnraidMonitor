@@ -191,6 +191,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             throw new NotImplementedException();
         }
 
+        public virtual Notification[] GetNotifications()
+        {
+            throw new NotImplementedException();
+        }
+
         public void InsertData(object data)
         {
             Array array = data as Array;

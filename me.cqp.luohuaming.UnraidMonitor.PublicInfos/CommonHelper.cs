@@ -21,6 +21,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             return Convert.ToInt64(ts.TotalSeconds);
         }
 
+        public static DateTime ParseTimeStampSToDateTime(long timestamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(timestamp);
+        }
+
+        public static DateTime ParseTimeStampMsToDateTime(long timestamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0).AddMilliseconds(timestamp);
+        }
+
 
         public static string GetAppImageDirectory()
         {

@@ -14,7 +14,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         private DiskMountInfo[] CacheDiskMountInfo { get; set; } = null;
 
         public Linux()
-            :base()
+            : base()
         {
         }
 
@@ -177,7 +177,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return [];
             }
             List<DiskSmartInfo> list = [];
-            foreach(var item in CacheDiskMountInfo)
+            foreach (var item in CacheDiskMountInfo)
             {
                 if (item.Type != "disk" || item.MountPoint == "/boot")
                 {
@@ -212,7 +212,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return null;
             }
             var result = VirtualMachine.ParseFromVirsh(output);
-            foreach(var item in result)
+            foreach (var item in result)
             {
                 if (item.Running)
                 {
@@ -289,6 +289,34 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             }
 
             return UPSStatus.ParseFromApcAccess(output);
+        }
+
+        public override Notification[] GetNotifications()
+        {
+            string command = "ls /tmp/notifications/unread";
+            var (error, output) = SshCommand.EnqueueCommand(command).Result;
+            if (string.IsNullOrEmpty(output))
+            {
+                MainSave.CQLog?.Error("获取Notification", $"指令执行失败：{error}");
+                return [];
+            }
+            List<Notification> list = [];
+            foreach (var item in output.Replace("\r", " ").Replace("\n", " ").Split([' '], StringSplitOptions.RemoveEmptyEntries))
+            {
+                command = $"cat /tmp/notifications/unread/{item}";
+                (error, output) = SshCommand.EnqueueCommand(command).Result;
+                if (string.IsNullOrEmpty(output))
+                {
+                    MainSave.CQLog?.Error("获取Notification", $"指令执行失败：{error}");
+                    continue;
+                }
+                Notification notification = Notification.ParseFromUnreadFile(output);
+                if (notification != null)
+                {
+                    list.Add(notification);
+                }
+            }
+            return list.ToArray();
         }
     }
 }
