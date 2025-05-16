@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using SkiaSharp.HarfBuzz;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -28,11 +29,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 return SKTypeface.FromFile(AppConfig.CustomFontPath);
             }
 
-            if (!string.IsNullOrEmpty(AppConfig.CustomFont))
-            {
-                return SKTypeface.FromFamilyName(AppConfig.CustomFont) ?? SKTypeface.Default;
-            }
-            return SKTypeface.Default;
+            return !string.IsNullOrEmpty(AppConfig.CustomFont)
+                ? SKTypeface.FromFamilyName(AppConfig.CustomFont) ?? SKTypeface.Default
+                : SKTypeface.Default;
         }
 
         public static SKRect Anywhere { get; set; } = new SKRect { Right = int.MaxValue, Bottom = int.MaxValue };
@@ -190,11 +189,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             SKTypeface GetTypeface(SKTypeface baseFont, bool bold)
             {
-                if (baseFont != null && baseFont.IsBold == bold)
-                {
-                    return baseFont;
-                }
-                return SKTypeface.FromFamilyName(baseFont.FamilyName, bold ? SKFontStyle.Bold : SKFontStyle.Normal);
+                return baseFont != null && baseFont.IsBold == bold
+                    ? baseFont
+                    : SKTypeface.FromFamilyName(baseFont.FamilyName, bold ? SKFontStyle.Bold : SKFontStyle.Normal);
             }
 
             SKTypeface typeface = CustomFont != null ? GetTypeface(CustomFont, isBold) : null;
@@ -255,6 +252,39 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             }
 
             return new SKPoint(currentX, currentY);
+        }
+
+        public void DrawSmoothLine(List<SKPoint> points, SKPaint paint)
+        {
+            if (points.Count < 2)
+            {
+                return;
+            }
+
+            var path = new SKPath();
+            path.MoveTo(points[0]);
+
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                SKPoint p0 = i == 0 ? points[0] : points[i - 1];
+                SKPoint p1 = points[i];
+                SKPoint p2 = points[i + 1];
+                SKPoint p3 = (i + 2 < points.Count) ? points[i + 2] : p2;
+
+                // 控制点算法（可根据需要调整tension参数）
+                float tension = 0.3f;
+                SKPoint control1 = new(
+                    p1.X + ((p2.X - p0.X) * tension / 3),
+                    p1.Y + ((p2.Y - p0.Y) * tension / 3));
+
+                SKPoint control2 = new(
+                    p2.X - ((p3.X - p1.X) * tension / 3),
+                    p2.Y - ((p3.Y - p1.Y) * tension / 3));
+
+                path.CubicTo(control1, control2, p2);
+            }
+
+            MainCanvas.DrawPath(path, paint);
         }
 
         public SKImage LoadImage(string imagePath)
