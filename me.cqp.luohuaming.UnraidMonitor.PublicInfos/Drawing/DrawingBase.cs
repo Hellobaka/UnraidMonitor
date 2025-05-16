@@ -17,7 +17,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public SKSize IconSize { get; set; }
 
-            public (int left, int top, int right, int bottom) IconMarging { get; set; }
+            public Thickness IconMarging { get; set; }
 
             public string Text { get; set; }
 
@@ -43,7 +43,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual double Radius { get; set; }
 
-        public virtual bool IsBackgroundBlur { get; set; }
+        public virtual double BackgroundBlur { get; set; }
+
+        public virtual Thickness Marging { get; set; }
 
         public virtual (SKPoint endPoint, double width, double height) Draw(Painting painting, SKPoint startPoint, double width, double height)
         {

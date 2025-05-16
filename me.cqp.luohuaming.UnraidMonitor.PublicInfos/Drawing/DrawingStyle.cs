@@ -41,6 +41,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public double BackgroundBlur { get; set; } = 0;
 
+        public Thickness Padding { get; set; }
+
+        public double ContentBlur { get; set; }
+
+        public double ContentRadius { get; set; }
+
         public Painting Draw(int width, int height)
         {
             return null;

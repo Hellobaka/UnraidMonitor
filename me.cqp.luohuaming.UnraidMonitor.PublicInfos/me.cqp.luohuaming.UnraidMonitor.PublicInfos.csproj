@@ -124,6 +124,7 @@
     <Compile Include="ConfigBase.cs" />
     <Compile Include="AppConfig.cs" />
     <Compile Include="DBHelper.cs" />
+    <Compile Include="Drawing\DrawingStyle.cs" />
     <Compile Include="Drawing\DrawingBase.cs" />
     <Compile Include="Drawing\DrawingContainer.cs" />
     <Compile Include="Drawing\DrawingItemBase.cs" />

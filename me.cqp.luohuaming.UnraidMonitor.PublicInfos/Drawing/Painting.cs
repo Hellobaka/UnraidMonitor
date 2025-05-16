@@ -401,4 +401,47 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             }
         }
     }
+
+    public struct Thickness
+    {
+        public double Left { get; set; }
+
+        public double Top { get; set; }
+
+        public double Right { get; set; }
+
+        public double Bottom { get; set; }
+
+        public Thickness(double left, double top, double right, double bottom)
+        {
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+        }
+
+        public Thickness(double all)
+        {
+            Left = all;
+            Top = all;
+            Right = all;
+            Bottom = all;
+        }
+
+        public Thickness(double left, double top)
+        {
+            Left = left;
+            Top = top;
+            Right = left;
+            Bottom = top;
+        }
+
+
+        public static Thickness Empty => new(0);
+
+        public static Thickness DefaultPadding => new(5);
+
+        public static Thickness DefaultMargin => new(5);
+    }
+
 }
