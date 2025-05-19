@@ -254,22 +254,34 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             return new SKPoint(currentX, currentY);
         }
 
-        public void DrawSmoothLine(List<SKPoint> points, SKPaint paint)
+        public void DrawSmoothLine(SKPoint[] points, SKColor strokeColor, float strokeWidth, SKColor gradientStart, SKColor gradientEnd)
         {
-            if (points.Count < 2)
+            for (int i = 0; i< points.Length; i++)
+            {
+                points[i] = new SKPoint(points[i].X, Height - points[i].Y);
+            }
+
+            if (points.Length < 2)
             {
                 return;
             }
+            using var paint = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Stroke,
+                Color = strokeColor,
+                StrokeWidth = strokeWidth
+            };
 
             var path = new SKPath();
             path.MoveTo(points[0]);
 
-            for (int i = 0; i < points.Count - 1; i++)
+            for (int i = 0; i < points.Length - 1; i++)
             {
                 SKPoint p0 = i == 0 ? points[0] : points[i - 1];
                 SKPoint p1 = points[i];
                 SKPoint p2 = points[i + 1];
-                SKPoint p3 = (i + 2 < points.Count) ? points[i + 2] : p2;
+                SKPoint p3 = (i + 2 < points.Length) ? points[i + 2] : p2;
 
                 // 控制点算法（可根据需要调整tension参数）
                 float tension = 0.3f;
@@ -283,8 +295,39 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                 path.CubicTo(control1, control2, p2);
             }
+            path.LineTo(points[points.Length - 1].X, Height);
+            path.LineTo(points[0].X, Height);
+            path.Close();
+            var shader = SKShader.CreateLinearGradient(
+                new SKPoint(0, Height),
+                new SKPoint(0, 0),
+                new SKColor[] { gradientStart, gradientEnd },
+                null,
+                SKShaderTileMode.Clamp);
+
+            using var fillPaint = new SKPaint
+            {
+                Shader = shader,
+                Style = SKPaintStyle.Fill,
+                IsAntialias = true
+            };
 
             MainCanvas.DrawPath(path, paint);
+            MainCanvas.DrawPath(path, fillPaint);
+        }
+
+        public SKPoint[] ConvertDataPointToArray(List<(DateTime time, float value)> list)
+        {
+            List<SKPoint> points = [];
+            DateTime min = list.Min(x => x.time);
+            DateTime max = list.Max(x => x.time);
+            float perTickWidth = Width / (max - min).Ticks;
+            foreach (var item in list)
+            {
+                points.Add(new SKPoint(perTickWidth * (item.time - min).Ticks, item.value));
+            }
+
+            return points.ToArray();
         }
 
         public SKImage LoadImage(string imagePath)
@@ -387,6 +430,37 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public SKImage SnapShot()
         {
             return MainSurface.Snapshot();
+        }
+
+        /// <summary>
+        /// 创建一个圆角矩形路径
+        /// </summary>
+        /// <param name="rect">矩形区域</param>
+        /// <param name="radius">圆角半径</param>
+        /// <returns>SKPath</returns>
+        public static SKPath CreateRoundedRectPath(SKRect rect, float radius)
+        {
+            var path = new SKPath();
+            path.AddRoundRect(rect, radius, radius);
+            return path;
+        }
+
+        /// <summary>
+        /// 对图片的指定区域进行高斯模糊
+        /// </summary>
+        /// <param name="path">需要模糊的区域</param>
+        /// <param name="sigma">高斯模糊参数（0-3）</param>
+        public void Blur(SKPath path, float sigma)
+        {
+            using var snapShot = SnapShot();
+            using var paint = new SKPaint();
+            paint.ImageFilter = SKImageFilter.CreateBlur(sigma, sigma);
+
+            MainCanvas.Save();
+            MainCanvas.ClipPath(path, SKClipOperation.Intersect, true);
+            MainCanvas.Clear(SKColors.Transparent);
+            MainCanvas.DrawImage(snapShot, 0, 0, paint);
+            MainCanvas.Restore();
         }
 
         protected virtual void Dispose(bool disposing)
