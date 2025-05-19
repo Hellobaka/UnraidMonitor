@@ -26,25 +26,62 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public int TextSize { get; set; }
         }
 
+        public class Border
+        {
+            public bool HasBorder { get; set; } = false;
+         
+            public SKColor BorderColor { get; set; } = SKColors.Transparent;
+         
+            public double BorderWidth { get; set; } = 0;
+         
+            public double BorderRadius { get; set; } = 0;
+        }
+
         public enum Layout
         {
             Fill,
             Left,
-            Minimal
+            Minimal,
+            FixedWidth
         }
 
+        /// <summary>
+        /// 填充模式的百分比占比
+        /// </summary>
         public virtual double FillPercentage { get; set; } = 100;
 
+        /// <summary>
+        /// 固定宽度的数值
+        /// </summary>
+        public virtual double FixedWidth { get; set; } = 0;
+
+        /// <summary>
+        /// 默认标题栏
+        /// </summary>
         public virtual Title DrawingTitle { get; set; }
 
+        public virtual Border DrawingBorder { get; set; }
+
+        /// <summary>
+        /// 布局选项
+        /// </summary>
         public virtual Layout DrawingLayout { get; set; } = Layout.Fill;
 
         public virtual DrawingContainer[] Containers { get; set; } = [];
 
+        /// <summary>
+        /// 若绘制边框, 则使用的圆角
+        /// </summary>
         public virtual double Radius { get; set; }
 
+        /// <summary>
+        /// 对背景的高斯模糊
+        /// </summary>
         public virtual double BackgroundBlur { get; set; }
 
+        /// <summary>
+        /// Margin
+        /// </summary>
         public virtual Thickness Marging { get; set; }
 
         public virtual (SKPoint endPoint, double width, double height) Draw(Painting painting, SKPoint startPoint, double width, double height)
