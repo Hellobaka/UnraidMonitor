@@ -32,9 +32,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
          
             public SKColor BorderColor { get; set; } = SKColors.Transparent;
          
-            public double BorderWidth { get; set; } = 0;
+            public float BorderWidth { get; set; } = 0;
          
-            public double BorderRadius { get; set; } = 0;
+            public float BorderRadius { get; set; } = 0;
         }
 
         public enum Layout
@@ -48,12 +48,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 填充模式的百分比占比
         /// </summary>
-        public virtual double FillPercentage { get; set; } = 100;
+        public virtual float FillPercentage { get; set; } = 100;
 
         /// <summary>
         /// 固定宽度的数值
         /// </summary>
-        public virtual double FixedWidth { get; set; } = 0;
+        public virtual float FixedWidth { get; set; } = 0;
 
         /// <summary>
         /// 默认标题栏
@@ -72,19 +72,24 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 若绘制边框, 则使用的圆角
         /// </summary>
-        public virtual double Radius { get; set; }
+        public virtual float Radius { get; set; }
 
         /// <summary>
         /// 对背景的高斯模糊
         /// </summary>
-        public virtual double BackgroundBlur { get; set; }
+        public virtual float BackgroundBlur { get; set; }
+
+        /// <summary>
+        /// 强制高度
+        /// </summary>
+        public virtual float ContentHeight { get; set; }
 
         /// <summary>
         /// Margin
         /// </summary>
-        public virtual Thickness Marging { get; set; }
+        public virtual Thickness Margin { get; set; }
 
-        public virtual (SKPoint endPoint, double width, double height) Draw(Painting painting, SKPoint startPoint, double width, double height)
+        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float width)
         {
             if (painting == null)
             {

@@ -14,7 +14,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 占用的列数
         /// </summary>
-        public int DrawCoulmns { get; set; } = 1;
+        public int DrawColumns { get; set; } = 1;
 
         public (SKPoint endPoint, double height) Draw(Painting painting, SKPoint startPoint, double desireWidth)
         {

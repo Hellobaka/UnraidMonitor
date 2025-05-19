@@ -432,6 +432,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             return MainSurface.Snapshot();
         }
 
+        public void FillTileBackground(SKImage img)
+        {
+            var shader = SKShader.CreateBitmap(ConvertToBitmap(img), SKShaderTileMode.Repeat, SKShaderTileMode.Repeat);
+            using var paint = new SKPaint
+            {
+                Shader = shader,
+                IsAntialias = true,
+                FilterQuality = SKFilterQuality.High
+            };
+            MainCanvas.DrawRect(new SKRect(0, 0, Width, Height), paint);
+        }
+
         /// <summary>
         /// 创建一个圆角矩形路径
         /// </summary>
@@ -478,15 +490,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
     public struct Thickness
     {
-        public double Left { get; set; }
+        public float Left { get; set; }
 
-        public double Top { get; set; }
+        public float Top { get; set; }
 
-        public double Right { get; set; }
+        public float Right { get; set; }
 
-        public double Bottom { get; set; }
+        public float Bottom { get; set; }
 
-        public Thickness(double left, double top, double right, double bottom)
+        public Thickness(float left, float top, float right, float bottom)
         {
             Left = left;
             Top = top;
@@ -494,7 +506,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Bottom = bottom;
         }
 
-        public Thickness(double all)
+        public Thickness(float all)
         {
             Left = all;
             Top = all;
@@ -502,7 +514,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Bottom = all;
         }
 
-        public Thickness(double left, double top)
+        public Thickness(float left, float top)
         {
             Left = left;
             Top = top;
