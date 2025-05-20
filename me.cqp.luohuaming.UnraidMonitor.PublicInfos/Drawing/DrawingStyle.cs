@@ -203,6 +203,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             _ => new Colors(),
         };
 
+        public static string GetThemeDefaultFont(Theme theme) => theme switch
+        {
+            Theme.Unraid => "Nudista",
+            Theme.MaterialDesign3 => "Google Sans",
+            Theme.MaterialDesign2 => "Roboto",
+            _ => "微软雅黑",
+        };
+
         /// <summary>
         /// 注意Dispose
         /// </summary>

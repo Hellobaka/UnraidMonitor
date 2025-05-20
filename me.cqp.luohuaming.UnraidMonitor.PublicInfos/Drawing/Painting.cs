@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using HarfBuzzSharp;
+using SkiaSharp;
 using SkiaSharp.HarfBuzz;
 using System;
 using System.Collections.Generic;
@@ -22,19 +23,42 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public static SKTypeface CreateCustomFont(string fontPathOrName)
         {
+            if (FontCache.TryGetValue(fontPathOrName, out SKTypeface style))
+            {
+                return style;
+            }
             // 路径 > 名称
             if (!string.IsNullOrEmpty(fontPathOrName) && File.Exists(fontPathOrName))
             {
                 // 自定义路径不支持粗体
-                return SKTypeface.FromFile(fontPathOrName);
+                var fontFile = SKTypeface.FromFile(fontPathOrName);
+                if (fontFile != null)
+                {
+                    FontCache.Add(fontPathOrName, fontFile);
+                }
+                else
+                {
+                    return SKTypeface.Default;
+                }
             }
 
-            return !string.IsNullOrEmpty(fontPathOrName)
+            var font = !string.IsNullOrEmpty(fontPathOrName)
                 ? SKTypeface.FromFamilyName(fontPathOrName) ?? SKTypeface.Default
                 : SKTypeface.Default;
+            if (font != null)
+            {
+                FontCache.Add(fontPathOrName, font);
+                return font;
+            }
+            else
+            {
+                return SKTypeface.Default;
+            }
         }
 
         public static SKRect Anywhere { get; set; } = new SKRect { Right = int.MaxValue, Bottom = int.MaxValue };
+
+        public static Dictionary<string, SKTypeface> FontCache { get; set; } = [];
 
         public float Height { get; set; }
 

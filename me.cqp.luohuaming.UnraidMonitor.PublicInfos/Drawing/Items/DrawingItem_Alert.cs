@@ -8,7 +8,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Fill;
 
-        public override double FillPercentage { get; set; } = 100;
+        public override float FillPercentage { get; set; } = 100;
 
         public string Header { get; set; }
 
