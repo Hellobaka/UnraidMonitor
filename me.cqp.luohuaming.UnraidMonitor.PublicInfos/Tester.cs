@@ -47,7 +47,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
-                        ContentHeight = 0,
                         DrawingBorder = new(),
                         DrawingLayout = DrawingBase.Layout.Fill,
                         DrawingTitle = new()
@@ -55,7 +54,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             HasTitle = true,
                             Text = "UNRAID",
                             Bold = true,
-                            TextSize = 24,
+                            TextSize = 36,
                             HasIcon = false,
                             IconMargin = new Thickness(10, 0),
                             IconPath = @"icons\icon.ico",
@@ -80,18 +79,73 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             new DrawingItem_Text(){
                                 Text = "CPU Info:",
                                 Layout = DrawingBase.Layout.FixedWidth,
-                                FixedWidth = 100,
+                                FixedWidth = 150,
                             },
                             new DrawingItem_Text(){
                                 Text = "Intel i7-13700K",
                                 Layout = DrawingBase.Layout.Left,
                                 IsBold = true
                             },
+                            new DrawingItem_Text(){
+                                Text = "CPU0:",
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 8,
+                                Margin = new Thickness(5, 200)
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 20,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 40,
+                                OverrideHeight = 32
+                            },
+                            new DrawingItem_Text(){
+                                Text = "CPU1:",
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 8
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 55,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 40,
+                                AfterNewLine = true,
+                                OverrideHeight = 32
+                            }, 
+                            new DrawingItem_Text(){
+                                Text = "CPU2:",
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 8
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 41,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 40,
+                                OverrideHeight = 32
+                            },
+                            new DrawingItem_Text(){
+                                Text = "CPU3:",
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 8
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 74,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Fill,
+                                FillPercentage = 40,
+                                AfterNewLine = true,
+                                OverrideHeight = 32
+                            },
                         ]
                     }
                 ],
             };
-            var paint = style.Draw(500);
+            var paint = style.Draw(1000);
             paint.Save("1.bmp");
             File.WriteAllText("default.style", JsonConvert.SerializeObject(style, Formatting.Indented));
         }

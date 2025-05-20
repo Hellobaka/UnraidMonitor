@@ -161,7 +161,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainCanvas.DrawImage(image, rect, AntialiasPaint);
         }
 
-        public void DrawRectangle(SKRect rect, SKColor fillColor, SKColor strokeColor, float strokeWidth, float radius = 0)
+        public void DrawRectangle(SKRect rect, SKColor fillColor, SKColor strokeColor, float strokeWidth, SKShader shader = null, float radius = 0)
         {
             if (fillColor != SKColors.Transparent)
             {
@@ -169,10 +169,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 {
                     IsAntialias = true,
                     Style = SKPaintStyle.Fill,
-                    Color = fillColor
                 };
-
-                MainCanvas.DrawRect(rect, paint);
+                if (shader == null)
+                {
+                    paint.Color = fillColor;
+                }
+                else
+                {
+                    paint.Shader = shader;
+                }
+                if (radius > 0)
+                {
+                    MainCanvas.DrawPath(CreateRoundedRectPath(rect, radius), paint);
+                }
+                else
+                {
+                    MainCanvas.DrawRect(rect, paint);
+                }
             }
 
             if (strokeWidth == 0)
@@ -261,32 +274,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         continue;
                     }
                 }
-                SKPaint paint;
+                SKPaint paint = new()
+                {
+                    Typeface = typeface,
+                    TextSize = fontSize,
+                    IsAntialias = true,
+                    FilterQuality = SKFilterQuality.High,
+                    SubpixelText = true,
+                    LcdRenderText = true,
+                };
                 if (shader != null)
                 {
-                    paint = new()
-                    {
-                        Typeface = typeface,
-                        TextSize = fontSize,
-                        IsAntialias = true,
-                        FilterQuality = SKFilterQuality.High,
-                        SubpixelText = true,
-                        LcdRenderText = true,
-                        Shader = shader
-                    };
+                    paint.Shader = shader;
                 }
                 else
                 {
-                    paint = new()
-                    {
-                        Typeface = typeface,
-                        TextSize = fontSize,
-                        Color = color,
-                        IsAntialias = true,
-                        FilterQuality = SKFilterQuality.High,
-                        SubpixelText = true,
-                        LcdRenderText = true,
-                    };
+                    paint.Color = color;
                 }
 
                 var shaper = new SKShaper(typeface);

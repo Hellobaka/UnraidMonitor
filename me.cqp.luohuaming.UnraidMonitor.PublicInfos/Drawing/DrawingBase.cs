@@ -98,11 +98,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public float BackgroundBlur { get; set; }
 
         /// <summary>
-        /// 强制高度
-        /// </summary>
-        public virtual float ContentHeight { get; set; }
-
-        /// <summary>
         /// Margin
         /// </summary>
         public virtual Thickness Margin { get; set; } = Thickness.DefaultMargin;
@@ -157,8 +152,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 if (!string.IsNullOrEmpty(DrawingTitle.OverrideColor2))
                 {
                     shader = SKShader.CreateLinearGradient(
-                        new SKPoint(0, 0),
-                        new SKPoint(size.Width, 0),
+                        new SKPoint(currentPoint.X, currentPoint.Y),
+                        new SKPoint(currentPoint.X + size.Width, currentPoint.Y),
                         new SKColor[] { SKColor.Parse(DrawingTitle.OverrideColor), SKColor.Parse(DrawingTitle.OverrideColor2) },
                         null,
                         SKShaderTileMode.Clamp);
@@ -178,16 +173,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             SKPoint rowStartPoint = new(currentPoint.X, currentPoint.Y);
             SKPoint lastEndPoint = currentPoint;
             List<float> currentRowHeights = [];
+            // 当前行垂直对齐坐标，由第一个元素决定
+            SKPoint currentRowCenter = SKPoint.Empty;
             foreach (var item in Content)
             {
                 float desireWidth = width;
-                // 检查宽度是否溢出
+                // 计算宽度
                 if (item.Layout == Layout.Fill)
                 {
                     if (fillPercentage + item.FillPercentage > 100)
                     {
-                        item.FillPercentage = 0;
-                        // 换行
+                        item.FillPercentage = 100;
                         NewLine(item.Margin);
                     }
                     desireWidth = width / 100f * item.FillPercentage;
@@ -202,18 +198,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     desireWidth = width - currentPoint.X - item.Margin.Right;
                 }
 
-                if (item.Layout == Layout.Fill)
-                {
-                    if (fillPercentage + item.FillPercentage > 100)
-                    {
-                        item.FillPercentage = 0;
-                    }
-                    // 换行
-                    NewLine(item.Margin);
-                }
-                var (endPoint, actualWidth, actualHeight) = item.Draw(painting, currentPoint, desireWidth, ContentHeight, theme, palette);
+                var (endPoint, actualWidth, actualHeight) = item.Draw(painting, currentPoint, currentRowCenter, desireWidth, theme, palette);
                 currentRowHeights.Add(actualHeight);
                 lastEndPoint = endPoint;
+                if (currentRowCenter == SKPoint.Empty)
+                {
+                    currentRowCenter = new(currentPoint.X, currentPoint.Y + actualHeight / 2);
+                }
                 // 根据填充类型计算下一个开始坐标
                 switch (item.Layout)
                 {
@@ -226,11 +217,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     case Layout.Minimal:
                         // 填充模式为最小宽度，X加Margin
                         currentPoint = new(endPoint.X + item.Margin.Right, currentPoint.Y);
+                        if (item.AfterNewLine)
+                        {
+                            NewLine(item.Margin);
+                        }
                         break;
 
                     case Layout.FixedWidth:
                         // 填充模式为固定宽度，X为起始坐标+Margin+Width
                         currentPoint = new(currentPoint.X + item.FixedWidth + item.Margin.Right, currentPoint.Y);
+                        if (item.AfterNewLine)
+                        {
+                            NewLine(item.Margin);
+                        }
                         break;
 
                     case Layout.Fill:
@@ -243,6 +242,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         {
                             currentPoint = new(currentPoint.X + desireWidth + item.Margin.Right, currentPoint.Y);
                             fillPercentage += item.FillPercentage;
+                            if (item.AfterNewLine)
+                            {
+                                NewLine(item.Margin);
+                            }
                         }
                         break;
                 }
@@ -254,7 +257,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 {
                     Location = startPoint,
                     Size = new SKSize(width, lastEndPoint.Y + Padding.Bottom)
-                }, SKColors.Transparent, DrawingBorder.BorderColor, DrawingBorder.BorderWidth, DrawingBorder.BorderRadius);
+                }, SKColors.Transparent, DrawingBorder.BorderColor, DrawingBorder.BorderWidth, null, DrawingBorder.BorderRadius);
             }
 
             void NewLine(Thickness margin)
@@ -264,6 +267,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 fillPercentage = 0;
                 currentRowHeights = [];
                 rowStartPoint = new(currentPoint.X, currentPoint.Y);
+                currentRowCenter = SKPoint.Empty;
             }
 
             return (new(lastEndPoint.X + Padding.Right, lastEndPoint.Y + Padding.Bottom), lastEndPoint.Y - startPoint.Y + Padding.Top + Padding.Bottom);

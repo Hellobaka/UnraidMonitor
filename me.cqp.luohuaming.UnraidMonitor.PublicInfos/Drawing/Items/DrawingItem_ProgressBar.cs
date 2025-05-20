@@ -1,4 +1,6 @@
 ﻿using SkiaSharp;
+using System;
+using System.Runtime.Remoting.Messaging;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -10,15 +12,66 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public float Radius { get; set; }
 
-        public double Value { get; set; }
+        public float Value { get; set; }
 
-        public double Min { get; set; }
+        public float Min { get; set; }
 
-        public double Max { get; set; }
+        public float Max { get; set; }
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            return base.Draw(painting, startPoint, desireWidth, desireHeight, theme, palette);
+            return theme switch
+            {
+                DrawingStyle.Theme.Unraid => DrawUnraid(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
+                DrawingStyle.Theme.MaterialDesign3 => DrawMaterialDesign3(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
+                DrawingStyle.Theme.MaterialDesign2 => DrawMaterialDesign2(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
+                _ => DrawWinUI3(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
+            };
+        }
+
+        private (SKPoint endPoint, float width, float height) DrawMaterialDesign2(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        {
+            throw new NotImplementedException();
+        }
+
+        private (SKPoint endPoint, float width, float height) DrawMaterialDesign3(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        {
+            throw new NotImplementedException();
+        }
+
+        private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        {
+            SKShader shader = null;
+            float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
+            float remainWidth = (float)(desireWidth - valueWidth);
+            float barHeight = OverrideHeight > 0 ? OverrideHeight : 34;
+            //startPoint.Y = verticalCenterPoint.Y - barHeight / 2;
+            if (!string.IsNullOrEmpty(palette.Accent2Color))
+            {
+                shader = SKShader.CreateLinearGradient(
+                    new SKPoint(startPoint.X, startPoint.Y),
+                    new SKPoint(startPoint.X + valueWidth, startPoint.Y),
+                    new SKColor[] { SKColor.Parse(palette.AccentColor), SKColor.Parse(palette.Accent2Color) },
+                    null,
+                    SKShaderTileMode.Clamp);
+            }
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X, startPoint.Y),
+                Size = new(valueWidth, barHeight)
+            }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, shader, 0);
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X + valueWidth, startPoint.Y),
+                Size = new(remainWidth, barHeight)
+            }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 0);
+
+            return (new(startPoint.X + desireWidth, startPoint.Y + barHeight), desireWidth, barHeight);
+        }
+
+        private (SKPoint endPoint, float width, float height) DrawWinUI3(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -244,8 +244,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     {
                         if (fillPercentage + item.FillPercentage > 100)
                         {
-                            item.FillPercentage = 0;
-                            // 换行
+                            item.FillPercentage = 100;
                             NewLine(item.Margin);
                         }
                         desireWidth = contentPainting.Width / 100f * item.FillPercentage;

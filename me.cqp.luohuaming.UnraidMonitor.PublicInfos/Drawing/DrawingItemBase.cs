@@ -40,7 +40,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual Thickness Margin { get; set; } = Thickness.DefaultMargin;
 
-        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public virtual bool AfterNewLine { get; set; }
+
+        /// <summary>
+        /// 强制高度
+        /// </summary>
+        public virtual float OverrideHeight { get; set; }
+
+        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             // 计算实际高度
             // 计算结束点

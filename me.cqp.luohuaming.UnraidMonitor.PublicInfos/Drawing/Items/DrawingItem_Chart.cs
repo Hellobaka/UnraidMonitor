@@ -15,9 +15,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public double Max { get; set; }
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            return base.Draw(painting, startPoint, desireWidth, desireHeight, theme, palette);
+            return base.Draw(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette);
         }
     }
 }

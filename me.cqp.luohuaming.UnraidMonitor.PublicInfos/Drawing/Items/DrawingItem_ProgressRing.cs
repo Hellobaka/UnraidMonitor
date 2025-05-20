@@ -6,7 +6,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.ProgressRing;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Left;
+        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Minimal;
 
         public double Value { get; set; }
 
@@ -20,9 +20,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public DrawingBase.Position HeaderPosition { get; set; }
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override Thickness Margin { get; set; } = new Thickness(10);
+
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            return base.Draw(painting, startPoint, desireWidth, desireHeight, theme, palette);
+            return base.Draw(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette);
         }
     }
 }
