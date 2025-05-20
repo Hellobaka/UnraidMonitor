@@ -136,15 +136,26 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 if (DrawingTitle.HasIcon)
                 {
                     // 绘制Icon
-                    SKRect iconRect = new(currentPoint.X + DrawingTitle.IconMargin.Left, currentPoint.Y + DrawingTitle.IconMargin.Top, currentPoint.X + DrawingTitle.IconSize.Width, currentPoint.Y + DrawingTitle.IconSize.Height);
+                    SKRect iconRect = new()
+                    {
+                        Location = new(currentPoint.X + DrawingTitle.IconMargin.Left, currentPoint.Y + DrawingTitle.IconMargin.Top),
+                        Size = DrawingTitle.IconSize
+                    };
                     painting.DrawImage(DrawingTitle.IconPath, iconRect);
-                    currentPoint.X += DrawingTitle.IconSize.Width + DrawingTitle.IconMargin.Right;
+                    currentPoint.X += DrawingTitle.IconSize.Width + DrawingTitle.IconMargin.Left + DrawingTitle.IconMargin.Right;
+                }
+                var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(DrawingTitle.OverrideFont) ? DrawingTitle.OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
+                var size = painting.MeasureString(DrawingTitle.Text, DrawingTitle.TextSize, font);
+                if (DrawingTitle.HasIcon)
+                {
+                    // 垂直居中于图标
+                    currentPoint.Y += (DrawingTitle.IconSize.Height - size.Height) / 2 + DrawingTitle.IconMargin.Top;
                 }
                 currentPoint = painting.DrawText(DrawingTitle.Text, Painting.Anywhere
                     , currentPoint
-                    , SKColor.Parse(string.IsNullOrEmpty(DrawingTitle.OverrideColor) ? DrawingTitle.OverrideColor : palette.TextColor)
+                    , SKColor.Parse(!string.IsNullOrEmpty(DrawingTitle.OverrideColor) ? DrawingTitle.OverrideColor : palette.TextColor)
                     , DrawingTitle.TextSize
-                    , Painting.CreateCustomFont(DrawingTitle.OverrideFont)
+                    , font
                     , DrawingTitle.Bold);
                 currentPoint.X = startLeft;
                 currentPoint.Y += DrawingTitle.TitleMarginBottom;
@@ -152,7 +163,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             // 调用各个Item的绘制方法
             float fillPercentage = 0;
             SKPoint rowStartPoint = new(currentPoint.X, currentPoint.Y);
-            SKPoint lastEndPoint = SKPoint.Empty;
+            SKPoint lastEndPoint = currentPoint;
             List<float> currentRowHeights = [];
             foreach (var item in Content)
             {
@@ -163,9 +174,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     if (fillPercentage + item.FillPercentage > 100)
                     {
                         item.FillPercentage = 0;
+                        // 换行
+                        NewLine(item.Margin);
                     }
-                    // 换行
-                    NewLine(item.Margin);
                     desireWidth = width / 100f * item.FillPercentage;
                 }
                 else if (item.Layout == Layout.FixedWidth)
@@ -235,7 +246,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             void NewLine(Thickness margin)
             {
-                float maxHeight = currentRowHeights.Max();
+                float maxHeight = currentRowHeights.Count > 0 ? currentRowHeights.Max() : 0;
                 currentPoint = new(rowStartPoint.X, rowStartPoint.Y + maxHeight + margin.Bottom);
                 fillPercentage = 0;
                 currentRowHeights = [];
