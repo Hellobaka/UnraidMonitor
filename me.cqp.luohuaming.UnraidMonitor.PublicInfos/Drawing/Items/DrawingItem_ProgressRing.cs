@@ -22,9 +22,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override Thickness Margin { get; set; } = new Thickness(10);
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            return base.Draw(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette);
+            return base.Draw(painting, startPoint, desireWidth, theme, palette);
         }
     }
 }

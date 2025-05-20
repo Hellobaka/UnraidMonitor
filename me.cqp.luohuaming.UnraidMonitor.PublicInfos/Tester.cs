@@ -48,7 +48,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     new DrawingBase{
                         BackgroundBlur = 0,
                         DrawingBorder = new(),
-                        DrawingLayout = DrawingBase.Layout.Fill,
+                        DrawingLayout = DrawingBase.Layout.Percentage,
                         DrawingTitle = new()
                         {
                             HasTitle = true,
@@ -62,7 +62,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             OverrideColor = "#E22829",
                             OverrideColor2 = "#FF8C30",
                         },
-                        FillPercentage = 100,
+                        FillPercentage = 90,
                         FixedWidth = 0,
                         Margin = Thickness.DefaultMargin,
                         Padding = Thickness.DefaultPadding,
@@ -73,8 +73,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "Intel i7-13700K",
-                                Layout = DrawingBase.Layout.Left,
-                                IsBold = true
+                                Layout = DrawingBase.Layout.Remaining,
+                                IsBold = true,
+                                AfterNewLine = true,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU Info:",
@@ -83,63 +84,103 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "Intel i7-13700K",
-                                Layout = DrawingBase.Layout.Left,
-                                IsBold = true
+                                Layout = DrawingBase.Layout.Remaining,
+                                IsBold = true,
+                                AfterNewLine = true,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU0:",
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 8,
-                                Margin = new Thickness(5, 200)
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
                                 Value = 20,
                                 Min = 0,
                                 Max = 100,
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 40,
-                                OverrideHeight = 32
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 16,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU1:",
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 8
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
                                 Value = 55,
                                 Min = 0,
                                 Max = 100,
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 40,
-                                AfterNewLine = true,
-                                OverrideHeight = 32
-                            }, 
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 16,
+                            },
                             new DrawingItem_Text(){
                                 Text = "CPU2:",
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 8
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
                                 Value = 41,
                                 Min = 0,
                                 Max = 100,
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 40,
-                                OverrideHeight = 32
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 16,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU3:",
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 8
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
                                 Value = 74,
                                 Min = 0,
                                 Max = 100,
-                                Layout = DrawingBase.Layout.Fill,
-                                FillPercentage = 40,
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 16,
                                 AfterNewLine = true,
-                                OverrideHeight = 32
+                            },
+                            new DrawingItem_Text(){
+                                Text = "CPU4:",
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 63,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 41,
+                            },
+                            new DrawingItem_Text(){
+                                Text = "CPU5:",
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 5,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 41,
+                                AfterNewLine = true,
+                            },
+                            new DrawingItem_Text(){
+                                Text = "CPU6:",
+                                Layout = DrawingBase.Layout.Percentage,
+                                FillPercentage = 9,
+                                VerticalAlignment = DrawingBase.Position.Center
+                            },
+                            new DrawingItem_ProgressBar(){
+                                Value = 88,
+                                Min = 0,
+                                Max = 100,
+                                Layout = DrawingBase.Layout.Remaining,
+                                FillPercentage = 92,
+                                AfterNewLine = true,
                             },
                         ]
                     }

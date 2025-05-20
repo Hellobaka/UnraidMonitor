@@ -8,7 +8,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.ProgressBar;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Left;
+        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Remaining;
 
         public float Radius { get; set; }
 
@@ -18,33 +18,35 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public float Max { get; set; }
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override float OverrideHeight { get; set; } = 34;
+
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             return theme switch
             {
-                DrawingStyle.Theme.Unraid => DrawUnraid(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
-                DrawingStyle.Theme.MaterialDesign3 => DrawMaterialDesign3(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
-                DrawingStyle.Theme.MaterialDesign2 => DrawMaterialDesign2(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
-                _ => DrawWinUI3(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette),
+                DrawingStyle.Theme.Unraid => DrawUnraid(painting, startPoint, desireWidth, theme, palette),
+                DrawingStyle.Theme.MaterialDesign3 => DrawMaterialDesign3(painting, startPoint, desireWidth, theme, palette),
+                DrawingStyle.Theme.MaterialDesign2 => DrawMaterialDesign2(painting, startPoint, desireWidth, theme, palette),
+                _ => DrawWinUI3(painting, startPoint, desireWidth, theme, palette),
             };
         }
 
-        private (SKPoint endPoint, float width, float height) DrawMaterialDesign2(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        private (SKPoint endPoint, float width, float height) DrawMaterialDesign2(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             throw new NotImplementedException();
         }
 
-        private (SKPoint endPoint, float width, float height) DrawMaterialDesign3(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        private (SKPoint endPoint, float width, float height) DrawMaterialDesign3(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             throw new NotImplementedException();
         }
 
-        private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             SKShader shader = null;
             float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
             float remainWidth = (float)(desireWidth - valueWidth);
-            float barHeight = OverrideHeight > 0 ? OverrideHeight : 34;
+            float barHeight = OverrideHeight;
             //startPoint.Y = verticalCenterPoint.Y - barHeight / 2;
             if (!string.IsNullOrEmpty(palette.Accent2Color))
             {
@@ -69,7 +71,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             return (new(startPoint.X + desireWidth, startPoint.Y + barHeight), desireWidth, barHeight);
         }
 
-        private (SKPoint endPoint, float width, float height) DrawWinUI3(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        private (SKPoint endPoint, float width, float height) DrawWinUI3(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             throw new NotImplementedException();
         }

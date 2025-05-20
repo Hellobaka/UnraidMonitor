@@ -17,7 +17,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Width = width;
             Height = height;
             MainSurface = SKSurface.Create(new SKImageInfo(width, height));
-            MainCanvas.Clear(SKColors.White);
+            MainCanvas.Clear(SKColors.Transparent);
 
             FallbackFont = CreateCustomFont(AppConfig.FallbackFont);
         }

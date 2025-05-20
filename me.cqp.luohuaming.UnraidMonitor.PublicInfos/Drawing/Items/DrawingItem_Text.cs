@@ -18,12 +18,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public string OverrideColor { get; set; }
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
             var endPoint = painting.DrawText(Text, Painting.Anywhere, startPoint, SKColor.Parse(string.IsNullOrEmpty(OverrideColor) ? palette.TextColor : OverrideColor), null, TextSize, font, IsBold);
             
-            return (endPoint, endPoint.X - startPoint.X, endPoint.Y - startPoint.Y);
+            return (endPoint, Layout == DrawingBase.Layout.Minimal ? endPoint.X - startPoint.X : desireWidth, endPoint.Y - startPoint.Y);
         }
     }
 }

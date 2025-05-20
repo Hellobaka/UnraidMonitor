@@ -47,7 +47,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public virtual float OverrideHeight { get; set; }
 
-        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
+
+        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             // 计算实际高度
             // 计算结束点

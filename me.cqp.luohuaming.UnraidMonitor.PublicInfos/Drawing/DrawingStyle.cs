@@ -240,7 +240,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     startPoint.Y += item.Margin.Top;
                     float desireWidth = contentPainting.Width;
                     // 检查宽度是否溢出
-                    if (item.DrawingLayout == DrawingBase.Layout.Fill)
+                    if (item.DrawingLayout == DrawingBase.Layout.Percentage)
                     {
                         if (fillPercentage + item.FillPercentage > 100)
                         {
@@ -253,7 +253,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     {
                         desireWidth = item.FixedWidth;
                     }
-                    else if(item.DrawingLayout == DrawingBase.Layout.Left
+                    else if(item.DrawingLayout == DrawingBase.Layout.Remaining
                         || item.DrawingLayout == DrawingBase.Layout.Minimal)
                     {
                         desireWidth = contentPainting.Width - startPoint.X - item.Margin.Right;
@@ -272,7 +272,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     switch (item.DrawingLayout)
                     {
                         default:
-                        case DrawingBase.Layout.Left:
+                        case DrawingBase.Layout.Remaining:
                             // 填充模式为剩余所有空间，换行
                             NewLine(item.Margin);
                             break;
@@ -287,7 +287,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                             startPoint = new(startPoint.X + item.FixedWidth + item.Margin.Right, startPoint.Y);
                             break;
 
-                        case DrawingBase.Layout.Fill:
+                        case DrawingBase.Layout.Percentage:
                             // 填充模式为百分比宽度，若填充百分比+当前行宽度大于100，则换行
                             if (fillPercentage + item.FillPercentage >= 100)
                             {

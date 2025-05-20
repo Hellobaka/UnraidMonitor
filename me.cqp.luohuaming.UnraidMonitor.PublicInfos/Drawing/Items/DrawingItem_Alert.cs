@@ -6,7 +6,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.Alert;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Fill;
+        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Percentage;
 
         public override float FillPercentage { get; set; } = 100;
 
@@ -16,9 +16,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public string Content { get; set; }
 
-        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, SKPoint verticalCenterPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            return base.Draw(painting, startPoint, verticalCenterPoint, desireWidth, theme, palette);
+            return base.Draw(painting, startPoint, desireWidth, theme, palette);
         }
     }
 }

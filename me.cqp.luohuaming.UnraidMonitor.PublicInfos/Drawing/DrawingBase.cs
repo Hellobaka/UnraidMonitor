@@ -57,8 +57,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public enum Layout
         {
-            Fill,
-            Left,
+            Percentage,
+            Remaining,
             Minimal,
             FixedWidth
         }
@@ -83,7 +83,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 布局选项
         /// </summary>
-        public Layout DrawingLayout { get; set; } = Layout.Fill;
+        public Layout DrawingLayout { get; set; } = Layout.Percentage;
 
         public virtual DrawingItemBase[] Content { get; set; } = [];
 
@@ -130,147 +130,164 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             // 绘制Title
             if (DrawingTitle != null && DrawingTitle.HasTitle)
             {
-                if (DrawingTitle.HasIcon)
-                {
-                    // 绘制Icon
-                    SKRect iconRect = new()
-                    {
-                        Location = new(currentPoint.X + DrawingTitle.IconMargin.Left, currentPoint.Y + DrawingTitle.IconMargin.Top),
-                        Size = DrawingTitle.IconSize
-                    };
-                    painting.DrawImage(DrawingTitle.IconPath, iconRect);
-                    currentPoint.X += DrawingTitle.IconSize.Width + DrawingTitle.IconMargin.Left + DrawingTitle.IconMargin.Right;
-                }
-                var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(DrawingTitle.OverrideFont) ? DrawingTitle.OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
-                var size = painting.MeasureString(DrawingTitle.Text, DrawingTitle.TextSize, font);
-                if (DrawingTitle.HasIcon)
-                {
-                    // 垂直居中于图标
-                    currentPoint.Y += (DrawingTitle.IconSize.Height - size.Height) / 2 + DrawingTitle.IconMargin.Top;
-                }
-                SKShader shader = null;
-                if (!string.IsNullOrEmpty(DrawingTitle.OverrideColor2))
-                {
-                    shader = SKShader.CreateLinearGradient(
-                        new SKPoint(currentPoint.X, currentPoint.Y),
-                        new SKPoint(currentPoint.X + size.Width, currentPoint.Y),
-                        new SKColor[] { SKColor.Parse(DrawingTitle.OverrideColor), SKColor.Parse(DrawingTitle.OverrideColor2) },
-                        null,
-                        SKShaderTileMode.Clamp);
-                }
-                currentPoint = painting.DrawText(DrawingTitle.Text, Painting.Anywhere
-                    , currentPoint
-                    , SKColor.Parse(!string.IsNullOrEmpty(DrawingTitle.OverrideColor) ? DrawingTitle.OverrideColor : palette.TextColor)
-                    , shader
-                    , DrawingTitle.TextSize
-                    , font
-                    , DrawingTitle.Bold);
-                currentPoint.X = startLeft;
-                currentPoint.Y += DrawingTitle.TitleMarginBottom;
+                currentPoint = DrawTitle(painting, theme, palette, startLeft, currentPoint);
             }
             // 调用各个Item的绘制方法
-            float fillPercentage = 0;
-            SKPoint rowStartPoint = new(currentPoint.X, currentPoint.Y);
-            SKPoint lastEndPoint = currentPoint;
-            List<float> currentRowHeights = [];
-            // 当前行垂直对齐坐标，由第一个元素决定
-            SKPoint currentRowCenter = SKPoint.Empty;
+            currentPoint = DrawItems(painting, currentPoint, width, theme, palette);
+            // 绘制Border
+            if (DrawingBorder != null && DrawingBorder.HasBorder)
+            {
+                DrawBorder(painting, startPoint, currentPoint, width);
+            }
+
+            return (new(currentPoint.X + Padding.Right, currentPoint.Y + Padding.Bottom), currentPoint.Y - startPoint.Y + Padding.Top + Padding.Bottom);
+        }
+
+        private void DrawBorder(Painting painting, SKPoint startPoint, SKPoint endPoint, float width)
+        {
+            painting.DrawRectangle(new SKRect
+            {
+                Location = startPoint,
+                Size = new SKSize(width, endPoint.Y + Padding.Bottom)
+            }, SKColors.Transparent, DrawingBorder.BorderColor, DrawingBorder.BorderWidth, null, DrawingBorder.BorderRadius);
+        }
+
+        private SKPoint DrawItems(Painting painting, SKPoint currentPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        {
+            List<List<(Painting itemCanvas, DrawingItemBase item, float width, float height)>> preDraw = [];
+            List<(Painting itemCanvas, DrawingItemBase item, float width, float height)> currentLine = [];
+            preDraw.Add(currentLine);
             foreach (var item in Content)
             {
                 float desireWidth = width;
                 // 计算宽度
-                if (item.Layout == Layout.Fill)
+                if (item.Layout == Layout.Percentage)
                 {
-                    if (fillPercentage + item.FillPercentage > 100)
-                    {
-                        item.FillPercentage = 100;
-                        NewLine(item.Margin);
-                    }
                     desireWidth = width / 100f * item.FillPercentage;
                 }
                 else if (item.Layout == Layout.FixedWidth)
                 {
                     desireWidth = item.FixedWidth;
                 }
-                else if (item.Layout == Layout.Left
+                else if (item.Layout == Layout.Remaining
                     || item.Layout == Layout.Minimal)
                 {
-                    desireWidth = width - currentPoint.X - item.Margin.Right;
+                    desireWidth = width;
                 }
-
-                var (endPoint, actualWidth, actualHeight) = item.Draw(painting, currentPoint, currentRowCenter, desireWidth, theme, palette);
-                currentRowHeights.Add(actualHeight);
-                lastEndPoint = endPoint;
-                if (currentRowCenter == SKPoint.Empty)
+                desireWidth -= item.Margin.Left + item.Margin.Right;
+                if (item.Layout == Layout.Remaining)
                 {
-                    currentRowCenter = new(currentPoint.X, currentPoint.Y + actualHeight / 2);
+                    // Remaining模式需要在本行元素宽度已知之后才能绘制
+                    currentLine.Add((null, item, 0, item.OverrideHeight));
+                    if (item.AfterNewLine)
+                    {
+                        currentLine = new();
+                        preDraw.Add(currentLine);
+                    }
+                    continue;
                 }
-                // 根据填充类型计算下一个开始坐标
-                switch (item.Layout)
+                Painting itemCanvas = new((int)Math.Ceiling(desireWidth), 1000);
+                var (endPoint, actualWidth, actualHeight) = item.Draw(itemCanvas, new(), desireWidth, theme, palette);
+                itemCanvas.Resize((int)Math.Ceiling(actualWidth), (int)Math.Ceiling(actualHeight));
+                currentLine.Add((itemCanvas, item, actualWidth, actualHeight));
+                if (item.AfterNewLine)
                 {
-                    default:
-                    case Layout.Left:
-                        // 填充模式为剩余所有空间，换行
-                        NewLine(item.Margin);
-                        break;
-
-                    case Layout.Minimal:
-                        // 填充模式为最小宽度，X加Margin
-                        currentPoint = new(endPoint.X + item.Margin.Right, currentPoint.Y);
-                        if (item.AfterNewLine)
-                        {
-                            NewLine(item.Margin);
-                        }
-                        break;
-
-                    case Layout.FixedWidth:
-                        // 填充模式为固定宽度，X为起始坐标+Margin+Width
-                        currentPoint = new(currentPoint.X + item.FixedWidth + item.Margin.Right, currentPoint.Y);
-                        if (item.AfterNewLine)
-                        {
-                            NewLine(item.Margin);
-                        }
-                        break;
-
-                    case Layout.Fill:
-                        // 填充模式为百分比宽度，若填充百分比+当前行宽度大于100，则换行
-                        if (fillPercentage + item.FillPercentage >= 100)
-                        {
-                            NewLine(item.Margin);
-                        }
-                        else
-                        {
-                            currentPoint = new(currentPoint.X + desireWidth + item.Margin.Right, currentPoint.Y);
-                            fillPercentage += item.FillPercentage;
-                            if (item.AfterNewLine)
-                            {
-                                NewLine(item.Margin);
-                            }
-                        }
-                        break;
+                    currentLine = new();
+                    preDraw.Add(currentLine);
                 }
             }
-            // 绘制Border
-            if (DrawingBorder != null && DrawingBorder.HasBorder)
+            SKPoint startPoint = new(currentPoint.X, currentPoint.Y);
+            foreach(var line in preDraw)
             {
-                painting.DrawRectangle(new SKRect
+                if (line.Count == 0)
                 {
-                    Location = startPoint,
-                    Size = new SKSize(width, lastEndPoint.Y + Padding.Bottom)
-                }, SKColors.Transparent, DrawingBorder.BorderColor, DrawingBorder.BorderWidth, null, DrawingBorder.BorderRadius);
-            }
+                    continue;
+                }
+                var maxLeftMargin = line.Max(i => i.item.Margin.Left);
+                var maxRightMargin = line.Max(i => i.item.Margin.Right);
+                var maxTopMargin = line.Max(i => i.item.Margin.Top);
+                var maxBottomMargin = line.Max(i => i.item.Margin.Bottom);
+                var maxHeight = line.Max(i => i.height);
+                var maxWidth = line.Max(i => i.width);
+                var remainingCount = line.Count(i => i.item.Layout == Layout.Remaining);
+                var remainingItemWidth = (width - line.Where(i => i.item.Layout != Layout.Remaining).Sum(i => i.width + i.item.Margin.Left + i.item.Margin.Right)) / remainingCount;
 
-            void NewLine(Thickness margin)
+                currentPoint.X = startPoint.X;
+                currentPoint.Y += maxTopMargin;
+                foreach (var item in line)
+                {
+                    Painting canvas = item.itemCanvas;
+                    float drawWidth = item.width;
+                    float drawHeight = item.height;
+                    if (item.item.Layout == Layout.Remaining)
+                    {
+                        float widthWithoutMargin = remainingItemWidth - item.item.Margin.Left - item.item.Margin.Right;
+                        canvas = new((int)Math.Ceiling(widthWithoutMargin), 1000);
+                        var (_, w, h) = item.item.Draw(canvas, new(), widthWithoutMargin, theme, palette);
+                        canvas.Resize((int)Math.Ceiling(w), (int)Math.Ceiling(h));
+                        drawWidth = w;
+                        drawHeight = h;
+                    }
+                    SKPoint drawPoint = new(x: currentPoint.X + item.item.Margin.Left, y: currentPoint.Y + item.item.Margin.Top + item.item.VerticalAlignment switch
+                    {
+                        Position.Center => (maxHeight - item.height) / 2,
+                        Position.Bottom => maxHeight - item.height - item.item.Margin.Bottom,
+                        _ => item.item.Margin.Top,
+                    });
+                    painting.DrawImage(canvas.SnapShot(), new()
+                    {
+                        Location = drawPoint,
+                        Size = new(drawWidth, drawHeight)
+                    });
+                    canvas.Dispose();
+                    currentPoint.X += drawWidth + item.item.Margin.Left + item.item.Margin.Right;
+                }
+                currentPoint.Y = currentPoint.Y + maxHeight + maxBottomMargin;
+            }
+            currentPoint.X = startPoint.X;
+            return currentPoint;
+        }
+
+        private SKPoint DrawTitle(Painting painting, DrawingStyle.Theme theme, DrawingStyle.Colors palette, float startLeft, SKPoint currentPoint)
+        {
+            if (DrawingTitle.HasIcon)
             {
-                float maxHeight = currentRowHeights.Count > 0 ? currentRowHeights.Max() : 0;
-                currentPoint = new(rowStartPoint.X, rowStartPoint.Y + maxHeight + margin.Bottom);
-                fillPercentage = 0;
-                currentRowHeights = [];
-                rowStartPoint = new(currentPoint.X, currentPoint.Y);
-                currentRowCenter = SKPoint.Empty;
+                // 绘制Icon
+                SKRect iconRect = new()
+                {
+                    Location = new(currentPoint.X + DrawingTitle.IconMargin.Left, currentPoint.Y + DrawingTitle.IconMargin.Top),
+                    Size = DrawingTitle.IconSize
+                };
+                painting.DrawImage(DrawingTitle.IconPath, iconRect);
+                currentPoint.X += DrawingTitle.IconSize.Width + DrawingTitle.IconMargin.Left + DrawingTitle.IconMargin.Right;
             }
-
-            return (new(lastEndPoint.X + Padding.Right, lastEndPoint.Y + Padding.Bottom), lastEndPoint.Y - startPoint.Y + Padding.Top + Padding.Bottom);
+            var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(DrawingTitle.OverrideFont) ? DrawingTitle.OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
+            var size = painting.MeasureString(DrawingTitle.Text, DrawingTitle.TextSize, font);
+            if (DrawingTitle.HasIcon)
+            {
+                // 垂直居中于图标
+                currentPoint.Y += (DrawingTitle.IconSize.Height - size.Height) / 2 + DrawingTitle.IconMargin.Top;
+            }
+            SKShader shader = null;
+            if (!string.IsNullOrEmpty(DrawingTitle.OverrideColor2))
+            {
+                shader = SKShader.CreateLinearGradient(
+                    new SKPoint(currentPoint.X, currentPoint.Y),
+                    new SKPoint(currentPoint.X + size.Width, currentPoint.Y),
+                    new SKColor[] { SKColor.Parse(DrawingTitle.OverrideColor), SKColor.Parse(DrawingTitle.OverrideColor2) },
+                    null,
+                    SKShaderTileMode.Clamp);
+            }
+            currentPoint = painting.DrawText(DrawingTitle.Text, Painting.Anywhere
+                , currentPoint
+                , SKColor.Parse(!string.IsNullOrEmpty(DrawingTitle.OverrideColor) ? DrawingTitle.OverrideColor : palette.TextColor)
+                , shader
+                , DrawingTitle.TextSize
+                , font
+                , DrawingTitle.Bold);
+            currentPoint.X = startLeft;
+            currentPoint.Y += DrawingTitle.TitleMarginBottom;
+            return currentPoint;
         }
     }
 }
