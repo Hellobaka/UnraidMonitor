@@ -18,12 +18,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainSurface = SKSurface.Create(new SKImageInfo(width, height));
             MainCanvas.Clear(SKColors.White);
 
-            CustomFont = CreateCustomFont(AppConfig.CustomFont);
+            FallbackFont = CreateCustomFont(AppConfig.FallbackFont);
         }
 
         public static SKTypeface CreateCustomFont(string fontPathOrName)
         {
-            if (FontCache.TryGetValue(fontPathOrName, out SKTypeface style))
+            if (!string.IsNullOrEmpty(fontPathOrName) && FontCache.TryGetValue(fontPathOrName, out SKTypeface style))
             {
                 return style;
             }
@@ -72,7 +72,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         private static SKFontManager FontManager { get; set; } = SKFontManager.CreateDefault();
 
-        private SKTypeface CustomFont { get; set; }
+        private SKTypeface FallbackFont { get; set; }
 
         private bool Disposing { get; set; }
 
@@ -228,7 +228,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     : SKTypeface.FromFamilyName(baseFont.FamilyName, bold ? SKFontStyle.Bold : SKFontStyle.Normal);
             }
 
-            SKTypeface typeface = CustomFont != null ? GetTypeface(CustomFont, isBold) : null;
+            SKTypeface typeface = customFont != null ? GetTypeface(customFont, isBold) : null;
+            SKTypeface fallbackTypeface = GetTypeface(FallbackFont, isBold) ?? FallbackFont;
 
             while (textElementEnumerator.MoveNext())
             {
@@ -247,7 +248,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 {
                     typeface = customFont;
                 }
-                else if (typeface == null || !typeface.ContainsGlyph(codepoint))
+                else if (typeface == null || !typeface.ContainsGlyph(codepoint) && fallbackTypeface.ContainsGlyph(codepoint))
+                {
+                    typeface = fallbackTypeface;
+                }
+                else
                 {
                     typeface = FontManager.MatchCharacter(codepoint);
                     if (typeface == null)
@@ -372,12 +377,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             return SKImage.FromBitmap(bitmap);
         }
 
-        public SKSize MeasureString(string text, float fontSize)
+        public SKSize MeasureString(string text, float fontSize, SKTypeface customFont)
         {
             SKTypeface typeface;
-            if (CustomFont != null && CustomFont.ContainsGlyphs(text))
+            if (customFont != null && customFont.ContainsGlyphs(text))
             {
-                typeface = CustomFont;
+                typeface = customFont;
+            }
+            else if (FallbackFont != null && FallbackFont.ContainsGlyphs(text))
+            {
+                typeface = FallbackFont;
             }
             else
             {
