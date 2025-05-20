@@ -420,7 +420,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         {
             var newSurface = SKSurface.Create(new SKImageInfo(width, height));
             SKCanvas canvas = newSurface.Canvas;
-            canvas.Clear(SKColors.White);
+            canvas.Clear(SKColors.Transparent);
 
             MainSurface.Draw(canvas, 0, 0, AntialiasPaint);
             MainCanvas.Dispose();

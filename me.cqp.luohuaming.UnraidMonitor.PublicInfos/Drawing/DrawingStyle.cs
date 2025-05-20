@@ -109,7 +109,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 主内容的Padding
         /// </summary>
-        public Thickness Padding { get; set; }
+        public Thickness Padding { get; set; } = Thickness.DefaultPadding;
 
         public Theme ItemTheme { get; set; } = Theme.WinUI3;
 
@@ -221,7 +221,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             // 创建内容画布
             using Painting contentPainting = new((int)(width - Padding.Left - Padding.Right), 10000);
             contentPainting.Clear(SKColors.Transparent);
-            float drawHeight = 0;
+            float drawHeight = 1;
             // 记录模糊区域
             List<(SKPath path, float blur)> blurAreas = [];
             List<float> currentRowHeights = [];
