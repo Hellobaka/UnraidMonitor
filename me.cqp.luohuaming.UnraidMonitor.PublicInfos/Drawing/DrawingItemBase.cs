@@ -37,7 +37,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public virtual double FixedWidth { get; set; } = 0;
 
-        public virtual (SKPoint endPoint, double width, double height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight)
+        public virtual (SKPoint endPoint, double width, double height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             // 计算实际高度
             // 计算结束点

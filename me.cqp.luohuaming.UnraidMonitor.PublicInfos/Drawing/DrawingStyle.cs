@@ -27,10 +27,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Image
         }
 
+        public enum Theme
+        {
+            WinUI3,
+            Unraid,
+            MaterialDesign3,
+            MaterialDesign2,
+        }
+
+        public class Colors
+        {
+            public string AccentColor { get; set; } = "#945FD7";
+          
+            public string TextColor { get; set; } = "#FFFFFF";
+          
+            public string BackgroundColor { get; set; } = "#373737";
+        }
+
         /// <summary>
         /// 纯色背景色
         /// </summary>
-        public string BackgrdoundColor { get; set; }
+        public string BackgroundColor { get; set; }
 
         /// <summary>
         /// 图片默认应用的高斯模糊
@@ -75,6 +92,39 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public Thickness Padding { get; set; }
 
+        public Theme ItemTheme { get; set; } = Theme.WinUI3;
+
+        public Colors Palette { get; set; } = new();
+
+        public static Colors GetThemeDefaultColor(Theme theme) => theme switch
+        {
+            Theme.WinUI3 => new Colors
+            {
+                AccentColor = "#945FD7",
+                TextColor = "#000000",
+                BackgroundColor = "#CCCCCC"
+            },
+            Theme.Unraid => new Colors
+            {
+                AccentColor = "#FA7C2F",
+                TextColor = "#FFFFFF",
+                BackgroundColor = "#2B2A29"
+            },
+            Theme.MaterialDesign3 => new Colors
+            {
+                AccentColor = "#675496",
+                TextColor = "#000000",
+                BackgroundColor = "#E2E0F9"
+            },
+            Theme.MaterialDesign2 => new Colors
+            {
+                AccentColor = "#5411F5",
+                TextColor = "#000000",
+                BackgroundColor = "#E5E5E5"
+            },
+            _ => new Colors()
+        };
+
         /// <summary>
         /// 注意Dispose
         /// </summary>
@@ -110,10 +160,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         // 换行
                         NewLine(item.Margin);
                     }
-                    var (endPoint, actualWidth, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth);
+                    var (endPoint, actualWidth, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
                     currentRowWidths.Add(actualWidth);
-                    // 记录本子项的模糊区域
+                    // 记录子项的模糊区域
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
                         Location = new(startPoint.X + item.Margin.Left, startPoint.Y + item.Margin.Top),
@@ -172,7 +222,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             switch (DrawBackgroundType)
             {
                 case BackgroundType.Color:
-                    SKColor color = SKColor.Parse(BackgrdoundColor);
+                    SKColor color = SKColor.Parse(BackgroundColor);
                     painting.Clear(color);
                     break;
 

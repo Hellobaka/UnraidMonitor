@@ -17,7 +17,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public SKSize IconSize { get; set; }
 
-            public Thickness IconMarging { get; set; }
+            public Thickness IconMargin { get; set; }
 
             public string Text { get; set; }
 
@@ -35,6 +35,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public float BorderWidth { get; set; } = 0;
          
             public float BorderRadius { get; set; } = 0;
+        }
+
+        public enum Position
+        {
+            Top,
+            Center,
+            Bottom,
+            Left
         }
 
         public enum Layout
@@ -89,7 +97,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public virtual Thickness Margin { get; set; }
 
-        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float width)
+        /// <summary>
+        /// Padding
+        /// </summary>
+        public virtual Thickness Padding { get; set; }
+
+        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             if (painting == null)
             {

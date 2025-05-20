@@ -16,7 +16,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public int DrawColumns { get; set; } = 1;
 
-        public (SKPoint endPoint, double height) Draw(Painting painting, SKPoint startPoint, double desireWidth)
+        public (SKPoint endPoint, double height) Draw(Painting painting, SKPoint startPoint, double desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             // 调用各Item的绘制方法
             // 计算每个Item的高度
