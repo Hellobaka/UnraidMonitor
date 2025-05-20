@@ -39,11 +39,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 CreateTime = DateTime.Now,
                 DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
                 DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                ItemTheme = DrawingStyle.Theme.MaterialDesign2,
+                ItemTheme = DrawingStyle.Theme.Unraid,
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.MaterialDesign2, true),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.Unraid, true),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
@@ -53,13 +53,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         DrawingTitle = new()
                         {
                             HasTitle = true,
-                            Text = "测试",
+                            Text = "UNRAID",
                             Bold = true,
                             TextSize = 24,
                             HasIcon = false,
                             IconMargin = new Thickness(10, 0),
                             IconPath = @"icons\icon.ico",
                             IconSize = new(40, 40),
+                            OverrideColor = "#E22829",
+                            OverrideColor2 = "#FF8C30",
                         },
                         FillPercentage = 100,
                         FixedWidth = 0,

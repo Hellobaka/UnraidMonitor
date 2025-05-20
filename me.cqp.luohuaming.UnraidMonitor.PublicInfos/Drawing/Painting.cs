@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using static me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.DrawingStyle;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
@@ -200,7 +201,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public SKPoint DrawRelativeText(string text, SKRect area, SKPoint startPoint, SKColor color, float fontSize = 26, SKTypeface customFont = null, bool isBold = false)
         {
-            return DrawText(text, area, new SKPoint { X = startPoint.X + area.Left, Y = startPoint.Y + area.Top }, color, fontSize, customFont, isBold);
+            return DrawText(text, area, new SKPoint { X = startPoint.X + area.Left, Y = startPoint.Y + area.Top }, color, null, fontSize, customFont, isBold);
         }
 
         /// <summary>
@@ -210,10 +211,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <param name="area">可绘制的区域</param>
         /// <param name="startPoint">起始绝对坐标</param>
         /// <param name="color">文本颜色</param>
+        /// <param name="shader">渐变颜色</param>
         /// <param name="customFont">自定义字体</param>
         /// <param name="fontSize">字体大小</param>
         /// <returns>最后一个字符的右下角坐标</returns>
-        public SKPoint DrawText(string text, SKRect area, SKPoint startPoint, SKColor color, float fontSize = 26, SKTypeface customFont = null, bool isBold = false)
+        public SKPoint DrawText(string text, SKRect area, SKPoint startPoint, SKColor color, SKShader shader = null, float fontSize = 26, SKTypeface customFont = null, bool isBold = false)
         {
             var textElementEnumerator = StringInfo.GetTextElementEnumerator(text);
             float currentX = startPoint.X;
@@ -259,17 +261,33 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         continue;
                     }
                 }
-
-                var paint = new SKPaint
+                SKPaint paint;
+                if (shader != null)
                 {
-                    Typeface = typeface,
-                    TextSize = fontSize,
-                    Color = color,
-                    IsAntialias = true,
-                    FilterQuality = SKFilterQuality.High,
-                    SubpixelText = true,
-                    LcdRenderText = true,
-                };
+                    paint = new()
+                    {
+                        Typeface = typeface,
+                        TextSize = fontSize,
+                        IsAntialias = true,
+                        FilterQuality = SKFilterQuality.High,
+                        SubpixelText = true,
+                        LcdRenderText = true,
+                        Shader = shader
+                    };
+                }
+                else
+                {
+                    paint = new()
+                    {
+                        Typeface = typeface,
+                        TextSize = fontSize,
+                        Color = color,
+                        IsAntialias = true,
+                        FilterQuality = SKFilterQuality.High,
+                        SubpixelText = true,
+                        LcdRenderText = true,
+                    };
+                }
 
                 var shaper = new SKShaper(typeface);
 

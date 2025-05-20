@@ -25,6 +25,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public string OverrideColor { get; set; }
 
+            public string OverrideColor2 { get; set; }
+
             public string OverrideFont { get; set; }
 
             public bool Bold { get; set; }
@@ -151,9 +153,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     // 垂直居中于图标
                     currentPoint.Y += (DrawingTitle.IconSize.Height - size.Height) / 2 + DrawingTitle.IconMargin.Top;
                 }
+                SKShader shader = null;
+                if (!string.IsNullOrEmpty(DrawingTitle.OverrideColor2))
+                {
+                    shader = SKShader.CreateLinearGradient(
+                        new SKPoint(0, 0),
+                        new SKPoint(size.Width, 0),
+                        new SKColor[] { SKColor.Parse(DrawingTitle.OverrideColor), SKColor.Parse(DrawingTitle.OverrideColor2) },
+                        null,
+                        SKShaderTileMode.Clamp);
+                }
                 currentPoint = painting.DrawText(DrawingTitle.Text, Painting.Anywhere
                     , currentPoint
                     , SKColor.Parse(!string.IsNullOrEmpty(DrawingTitle.OverrideColor) ? DrawingTitle.OverrideColor : palette.TextColor)
+                    , shader
                     , DrawingTitle.TextSize
                     , font
                     , DrawingTitle.Bold);

@@ -42,6 +42,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         {
             public string AccentColor { get; set; } = "#945FD7";
           
+            public string Accent2Color { get; set; }
+          
             public string TextColor { get; set; } = "#FFFFFF";
           
             public string BackgroundColor { get; set; } = "#373737";
@@ -134,13 +136,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             },
             (Theme.Unraid, false) => new Colors
             {
-                AccentColor = "#FA7C2F",
+                Accent2Color = "#FF8C30",
+                AccentColor = "#E22829",
                 TextColor = "#000000",
                 BackgroundColor = "#2B2A29"
             },
             (Theme.Unraid, true) => new Colors
             {
-                AccentColor = "#FA7C2F",
+                Accent2Color = "#FF8C30",
+                AccentColor = "#E22829",
                 TextColor = "#FFFFFF",
                 BackgroundColor = "#2B2A29"
             },
