@@ -131,6 +131,7 @@
     <Compile Include="Drawing\Items\DrawingItem_Chart.cs" />
     <Compile Include="Drawing\Items\DrawingItem_ProgressRing.cs" />
     <Compile Include="Drawing\Items\DrawingItem_ProgressBar.cs" />
+    <Compile Include="Drawing\Items\DrawingItem_Alert.cs" />
     <Compile Include="Drawing\Items\DrawingItem_Text.cs" />
     <Compile Include="Drawing\Models\CpuInfo.cs" />
     <Compile Include="Drawing\Painting.cs" />

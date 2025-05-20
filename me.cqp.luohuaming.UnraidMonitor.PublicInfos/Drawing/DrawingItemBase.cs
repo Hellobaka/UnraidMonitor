@@ -14,7 +14,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Text,
             ProgressBar,
             ProgressRing,
-            Chart
+            Chart,
+            Alert
         }
 
         /// <summary>
