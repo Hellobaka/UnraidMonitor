@@ -31,14 +31,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 填充模式的百分比占比
         /// </summary>
-        public virtual double FillPercentage { get; set; } = 100;
+        public virtual float FillPercentage { get; set; } = 100;
 
         /// <summary>
         /// 固定宽度的宽度数值
         /// </summary>
-        public virtual double FixedWidth { get; set; } = 0;
+        public virtual float FixedWidth { get; set; } = 0;
 
-        public virtual (SKPoint endPoint, double width, double height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public virtual Thickness Margin { get; set; } = Thickness.DefaultMargin;
+
+        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, double desireWidth, double desireHeight, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             // 计算实际高度
             // 计算结束点

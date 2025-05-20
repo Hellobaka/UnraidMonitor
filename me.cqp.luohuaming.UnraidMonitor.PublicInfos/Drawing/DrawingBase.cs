@@ -11,6 +11,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
     {
         public class Title
         {
+            public bool HasTitle { get; set; }
+
             public bool HasIcon { get; set; }
 
             public string IconPath { get; set; }
@@ -21,19 +23,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public string Text { get; set; }
 
+            public string OverrideColor { get; set; }
+
+            public string OverrideFont { get; set; }
+
             public bool Bold { get; set; }
 
-            public int TextSize { get; set; }
+            public int TextSize { get; set; } = 14;
+
+            public float TitleMarginBottom { get; set; } = 10;
         }
 
         public class Border
         {
             public bool HasBorder { get; set; } = false;
-         
+
             public SKColor BorderColor { get; set; } = SKColors.Transparent;
-         
+
             public float BorderWidth { get; set; } = 0;
-         
+
             public float BorderRadius { get; set; } = 0;
         }
 
@@ -66,26 +74,26 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 默认标题栏
         /// </summary>
-        public virtual Title DrawingTitle { get; set; }
+        public Title DrawingTitle { get; set; } = new();
 
-        public virtual Border DrawingBorder { get; set; }
+        public Border DrawingBorder { get; set; } = new();
 
         /// <summary>
         /// 布局选项
         /// </summary>
-        public virtual Layout DrawingLayout { get; set; } = Layout.Fill;
+        public Layout DrawingLayout { get; set; } = Layout.Fill;
 
-        public virtual DrawingContainer[] Containers { get; set; } = [];
+        public virtual DrawingItemBase[] Content { get; set; } = [];
 
         /// <summary>
         /// 若绘制边框, 则使用的圆角
         /// </summary>
-        public virtual float Radius { get; set; }
+        public float Radius { get; set; }
 
         /// <summary>
         /// 对背景的高斯模糊
         /// </summary>
-        public virtual float BackgroundBlur { get; set; }
+        public float BackgroundBlur { get; set; }
 
         /// <summary>
         /// 强制高度
@@ -95,25 +103,146 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// Margin
         /// </summary>
-        public virtual Thickness Margin { get; set; }
+        public virtual Thickness Margin { get; set; } = Thickness.DefaultMargin;
 
         /// <summary>
         /// Padding
         /// </summary>
-        public virtual Thickness Padding { get; set; }
+        public virtual Thickness Padding { get; set; } = Thickness.DefaultPadding;
 
-        public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        /// <summary>
+        /// 遍历绘制所有Item
+        /// </summary>
+        /// <param name="painting">内容画布</param>
+        /// <param name="startPoint">当前绘画起始点</param>
+        /// <param name="width">可用宽度(包括Margin)</param>
+        /// <param name="theme">主题</param>
+        /// <param name="palette">调色板</param>
+        /// <returns>绘制结束点位（右下角），实际使用宽度，实际使用高度</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public virtual (SKPoint endPoint, float height) Draw(Painting painting, SKPoint startPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             if (painting == null)
             {
                 throw new InvalidOperationException("未提供父画布，无法绘制");
             }
-            // 此处根据绘制填充选项，计算绘制的宽度
-            // 根据容器列表，计算绘制的高度
-            // 若高度大于期望宽度，则使用实际高度，并将此高度返回重新对本行的元素重新按照此高度绘制
-            // 调用各个容器的绘制方法
-            // 返回绘制的结束点与实际高度
-            return (SKPoint.Empty, 0, 0);
+            float startLeft = (int)(startPoint.X + Padding.Left);
+            float startTop = (int)(startPoint.Y + Padding.Top);
+
+            SKPoint currentPoint = new(startLeft, startTop);
+            // 绘制Title
+            if (DrawingTitle != null && DrawingTitle.HasTitle)
+            {
+                if (DrawingTitle.HasIcon)
+                {
+                    // 绘制Icon
+                    SKRect iconRect = new(currentPoint.X + DrawingTitle.IconMargin.Left, currentPoint.Y + DrawingTitle.IconMargin.Top, currentPoint.X + DrawingTitle.IconSize.Width, currentPoint.Y + DrawingTitle.IconSize.Height);
+                    painting.DrawImage(DrawingTitle.IconPath, iconRect);
+                    currentPoint.X += DrawingTitle.IconSize.Width + DrawingTitle.IconMargin.Right;
+                }
+                currentPoint = painting.DrawText(DrawingTitle.Text, Painting.Anywhere
+                    , currentPoint
+                    , SKColor.Parse(string.IsNullOrEmpty(DrawingTitle.OverrideColor) ? DrawingTitle.OverrideColor : palette.TextColor)
+                    , DrawingTitle.TextSize
+                    , Painting.CreateCustomFont(DrawingTitle.OverrideFont)
+                    , DrawingTitle.Bold);
+                currentPoint.X = startLeft;
+                currentPoint.Y += DrawingTitle.TitleMarginBottom;
+            }
+            // 调用各个Item的绘制方法
+            float fillPercentage = 0;
+            SKPoint rowStartPoint = new(currentPoint.X, currentPoint.Y);
+            SKPoint lastEndPoint = SKPoint.Empty;
+            List<float> currentRowHeights = [];
+            foreach (var item in Content)
+            {
+                float desireWidth = width;
+                // 检查宽度是否溢出
+                if (item.Layout == Layout.Fill)
+                {
+                    if (fillPercentage + item.FillPercentage > 100)
+                    {
+                        item.FillPercentage = 0;
+                    }
+                    // 换行
+                    NewLine(item.Margin);
+                    desireWidth = width / 100f * item.FillPercentage;
+                }
+                else if (item.Layout == Layout.FixedWidth)
+                {
+                    desireWidth = item.FixedWidth;
+                }
+                else if (item.Layout == Layout.Left
+                    || item.Layout == Layout.Minimal)
+                {
+                    desireWidth = width - currentPoint.X - item.Margin.Right;
+                }
+
+                if (item.Layout == Layout.Fill)
+                {
+                    if (fillPercentage + item.FillPercentage > 100)
+                    {
+                        item.FillPercentage = 0;
+                    }
+                    // 换行
+                    NewLine(item.Margin);
+                }
+                var (endPoint, actualWidth, actualHeight) = item.Draw(painting, currentPoint, desireWidth, ContentHeight, theme, palette);
+                currentRowHeights.Add(actualHeight);
+                lastEndPoint = endPoint;
+                // 根据填充类型计算下一个开始坐标
+                switch (item.Layout)
+                {
+                    default:
+                    case Layout.Left:
+                        // 填充模式为剩余所有空间，换行
+                        NewLine(item.Margin);
+                        break;
+
+                    case Layout.Minimal:
+                        // 填充模式为最小宽度，X加Margin
+                        currentPoint = new(endPoint.X + item.Margin.Right, currentPoint.Y);
+                        break;
+
+                    case Layout.FixedWidth:
+                        // 填充模式为固定宽度，X为起始坐标+Margin+Width
+                        currentPoint = new(currentPoint.X + item.FixedWidth + item.Margin.Right, currentPoint.Y);
+                        break;
+
+                    case Layout.Fill:
+                        // 填充模式为百分比宽度，若填充百分比+当前行宽度大于100，则换行
+                        if (fillPercentage + item.FillPercentage >= 100)
+                        {
+                            NewLine(item.Margin);
+                        }
+                        else
+                        {
+                            currentPoint = new(currentPoint.X + desireWidth + item.Margin.Right, currentPoint.Y);
+                            fillPercentage += item.FillPercentage;
+                        }
+                        break;
+                }
+            }
+            // 绘制Border
+            if (DrawingBorder != null && DrawingBorder.HasBorder)
+            {
+                painting.DrawRectangle(new SKRect
+                {
+                    Location = startPoint,
+                    Size = new SKSize(width, lastEndPoint.Y + Padding.Bottom)
+                }, SKColors.Transparent, DrawingBorder.BorderColor, DrawingBorder.BorderWidth, DrawingBorder.BorderRadius);
+            }
+
+            void NewLine(Thickness margin)
+            {
+                float maxHeight = currentRowHeights.Max();
+                currentPoint = new(rowStartPoint.X, rowStartPoint.Y + maxHeight + margin.Bottom);
+                fillPercentage = 0;
+                currentRowHeights = [];
+                rowStartPoint = new(currentPoint.X, currentPoint.Y);
+            }
+
+            return (new(lastEndPoint.X + Padding.Right, lastEndPoint.Y + Padding.Bottom), lastEndPoint.Y - startPoint.Y + Padding.Top + Padding.Bottom);
         }
     }
 }

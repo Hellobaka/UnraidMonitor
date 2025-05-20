@@ -216,18 +216,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             float drawHeight = 0;
             // 记录模糊区域
             List<(SKPath path, float blur)> blurAreas = [];
-            List<float> currentRowWidths = [];
             List<float> currentRowHeights = [];
             // 绘制内容
             if (Content != null && Content.Length > 0)
             {
                 SKPoint startPoint = new(0, 0);
-                float desireWidth = contentPainting.Width;
                 float fillPercentage = 0;
                 foreach (var item in Content)
                 {
                     startPoint.X += item.Margin.Left;
                     startPoint.Y += item.Margin.Top;
+                    float desireWidth = contentPainting.Width;
                     // 检查宽度是否溢出
                     if (item.DrawingLayout == DrawingBase.Layout.Fill)
                     {
@@ -237,10 +236,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         }
                         // 换行
                         NewLine(item.Margin);
+                        desireWidth = contentPainting.Width / 100f * item.FillPercentage;
                     }
-                    var (endPoint, actualWidth, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
+                    else if(item.DrawingLayout == DrawingBase.Layout.FixedWidth)
+                    {
+                        desireWidth = item.FixedWidth;
+                    }
+                    else if(item.DrawingLayout == DrawingBase.Layout.Left
+                        || item.DrawingLayout == DrawingBase.Layout.Minimal)
+                    {
+                        desireWidth = contentPainting.Width - startPoint.X - item.Margin.Right;
+                    }
+
+                    var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
-                    currentRowWidths.Add(actualWidth);
                     // 记录子项的模糊区域
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
@@ -268,14 +277,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                         case DrawingBase.Layout.Fill:
                             // 填充模式为百分比宽度，若填充百分比+当前行宽度大于100，则换行
-                            float fillWidth = contentPainting.Width / 100f * item.FillPercentage;
                             if (fillPercentage + item.FillPercentage >= 100)
                             {
                                 NewLine(item.Margin);
                             }
                             else
                             {
-                                startPoint = new(startPoint.X + fillWidth + item.Margin.Right, startPoint.Y);
+                                startPoint = new(startPoint.X + desireWidth + item.Margin.Right, startPoint.Y);
                                 fillPercentage += item.FillPercentage;
                             }
                             break;
@@ -287,7 +295,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     float maxHeight = currentRowHeights.Max();
                     startPoint = new(0, startPoint.Y + maxHeight + margin.Bottom);
                     fillPercentage = 0;
-                    currentRowWidths = [];
                     currentRowHeights = [];
                 }
             }
