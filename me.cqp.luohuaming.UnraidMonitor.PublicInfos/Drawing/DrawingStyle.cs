@@ -135,7 +135,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             (Theme.Unraid, false) => new Colors
             {
                 AccentColor = "#FA7C2F",
-                TextColor = "#FFFFFF",
+                TextColor = "#000000",
                 BackgroundColor = "#2B2A29"
             },
             (Theme.Unraid, true) => new Colors
@@ -161,7 +161,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             (Theme.MaterialDesign3, true) => new Colors
             {
                 AccentColor = "#675496",
-                TextColor = "#000000",
+                TextColor = "#FFFFFF",
                 BackgroundColor = "#E2E0F9",
                 FatalColor = "#2B2030",
                 FatalIconColor = "#DF3752",
@@ -189,7 +189,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             (Theme.MaterialDesign2, true) => new Colors
             {
                 AccentColor = "#5411F5",
-                TextColor = "#000000",
+                TextColor = "#FFFFFF",
                 BackgroundColor = "#E5E5E5",
                 FatalColor = "#2B2030",
                 FatalIconColor = "#DF3752",
