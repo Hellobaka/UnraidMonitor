@@ -17,20 +17,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainSurface = SKSurface.Create(new SKImageInfo(width, height));
             MainCanvas.Clear(SKColors.White);
 
-            CustomFont = CreateCustomFont();
+            CustomFont = CreateCustomFont(AppConfig.CustomFont);
         }
 
-        private static SKTypeface CreateCustomFont()
+        public static SKTypeface CreateCustomFont(string fontPathOrName)
         {
             // 路径 > 名称
-            if (!string.IsNullOrEmpty(AppConfig.CustomFontPath))
+            if (!string.IsNullOrEmpty(fontPathOrName) && File.Exists(fontPathOrName))
             {
                 // 自定义路径不支持粗体
-                return SKTypeface.FromFile(AppConfig.CustomFontPath);
+                return SKTypeface.FromFile(fontPathOrName);
             }
 
-            return !string.IsNullOrEmpty(AppConfig.CustomFont)
-                ? SKTypeface.FromFamilyName(AppConfig.CustomFont) ?? SKTypeface.Default
+            return !string.IsNullOrEmpty(fontPathOrName)
+                ? SKTypeface.FromFamilyName(fontPathOrName) ?? SKTypeface.Default
                 : SKTypeface.Default;
         }
 
@@ -136,16 +136,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainCanvas.DrawImage(image, rect, AntialiasPaint);
         }
 
-        public void DrawRectangle(SKRect rect, SKColor fillColor, SKColor strokeColor, float strokeWidth)
+        public void DrawRectangle(SKRect rect, SKColor fillColor, SKColor strokeColor, float strokeWidth, float radius = 0)
         {
-            using var paint = new SKPaint
+            if (fillColor != SKColors.Transparent)
             {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = fillColor
-            };
+                using var paint = new SKPaint
+                {
+                    IsAntialias = true,
+                    Style = SKPaintStyle.Fill,
+                    Color = fillColor
+                };
 
-            MainCanvas.DrawRect(rect, paint);
+                MainCanvas.DrawRect(rect, paint);
+            }
 
             if (strokeWidth == 0)
             {
@@ -158,7 +161,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Color = strokeColor,
                 StrokeWidth = strokeWidth
             };
-            MainCanvas.DrawRect(rect, strokePaint);
+            if (radius > 0)
+            {
+                MainCanvas.DrawPath(CreateRoundedRectPath(rect, radius), strokePaint);
+            }
+            else
+            {
+                MainCanvas.DrawRect(rect, strokePaint);
+            }
         }
 
         /// <summary>

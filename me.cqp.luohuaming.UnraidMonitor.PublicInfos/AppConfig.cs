@@ -31,8 +31,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public static int SSHCommandTimeout { get; set; } = 10;
        
         public static string CustomFont { get; set; }
-      
-        public static string CustomFontPath { get; set; }
 
         public override void LoadConfig()
         {
@@ -45,7 +43,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             SSHPassword = GetConfig("SSHPassword", "");
             SSHCommandTimeout = GetConfig("SSHCommandTimeout", 10);
             CustomFont = GetConfig("CustomFont", "");
-            CustomFontPath = GetConfig("CustomFontPath", "");
             EnableAutoReload();
         }
     }
