@@ -241,9 +241,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         if (fillPercentage + item.FillPercentage > 100)
                         {
                             item.FillPercentage = 0;
+                            // 换行
+                            NewLine(item.Margin);
                         }
-                        // 换行
-                        NewLine(item.Margin);
                         desireWidth = contentPainting.Width / 100f * item.FillPercentage;
                     }
                     else if(item.DrawingLayout == DrawingBase.Layout.FixedWidth)
@@ -258,6 +258,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                     var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
+                    drawHeight += actualHeight;
                     // 记录子项的模糊区域
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
@@ -300,7 +301,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                 void NewLine(Thickness margin)
                 {
-                    float maxHeight = currentRowHeights.Max();
+                    float maxHeight = currentRowHeights.Count > 0 ? currentRowHeights.Max() : 0;
                     startPoint = new(0, startPoint.Y + maxHeight + margin.Bottom);
                     fillPercentage = 0;
                     currentRowHeights = [];
