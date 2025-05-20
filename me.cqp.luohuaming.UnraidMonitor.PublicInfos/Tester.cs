@@ -2,7 +2,9 @@
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using Newtonsoft.Json;
+using SkiaSharp;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
@@ -27,68 +29,69 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         static void DrawTest()
         {
-            DrawingStyle a = JsonConvert.DeserializeObject<DrawingStyle>(File.ReadAllText("default.style"));
-            Console.WriteLine();
-            DrawingStyle drawingStyle = new()
+            DrawingStyle style = new()
             {
-                Name = "Test",
-                DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                BackgrdoundColor = "#66CCFF",
-                ContentBlur = 30,
-                ContentRadius = 50,
+                BackgroundBlur = 0,
+                BackgroundColor = "#1E1E1E",
+                BackgroundImages = [],
+                ContentBlur = 0,
+                ContentRadius = 0,
                 CreateTime = DateTime.Now,
+                DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
+                DrawBackgroundType = DrawingStyle.BackgroundType.Color,
+                ItemTheme = DrawingStyle.Theme.WinUI3,
                 ModifyTime = DateTime.Now,
-                Padding = Thickness.DefaultPadding,
+                Name = "Test",
+                Padding = new Thickness(16),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
                 Content = [
-                       new DrawingBase(){
-                           BackgroundBlur = 0,
-                           DrawingLayout = DrawingBase.Layout.Fill,
-                           DrawingTitle = new DrawingBase.Title{
-                               Bold = true,
-                               HasIcon = false,
-                               Text = "测试标题",
-                               TextSize = 20,
-                           },
-                           FillPercentage = 100,
-                           Marging = Thickness.DefaultMargin,
-                           Radius = 0,
-                           Containers = [
-                               new DrawingContainer(){
-                                   DrawCoulmns = 1,
-                                   Content = [
-                                        new DrawingItem_Text{
-                                            IsBold = false,
-                                            Layout = DrawingBase.Layout.Minimal,
-                                            Text = "CPU型号：",
-                                        },
-                                        new DrawingItem_Text{
-                                            IsBold = false,
-                                            Layout = DrawingBase.Layout.Fill,
-                                            Text = "Intel i7-13700K",
-                                        },
-                                       ]
-                               },
-                               new DrawingContainer(){
-                                   DrawCoulmns = 1,
-                                   Content = [
-                                        new DrawingItem_Text{
-                                            IsBold = false,
-                                            Layout = DrawingBase.Layout.Minimal,
-                                            Text = "CPU占用率：",
-                                        },
-                                        new DrawingItem_ProgressBar{
-                                            Layout = DrawingBase.Layout.Fill,
-                                            Value = 22,
-                                            Min = 0,
-                                            Max = 100,
-                                        },
-                                       ]
-                               },
-                               ]
-                       }
-                    ]
+                    new DrawingBase{
+                        BackgroundBlur = 0,
+                        ContentHeight = 0,
+                        DrawingBorder = new(),
+                        DrawingLayout = DrawingBase.Layout.Fill,
+                        DrawingTitle = new()
+                        {
+                            HasTitle = true,
+                            Text = "测试",
+                            Bold = true,
+                            TextSize = 24,
+                            HasIcon = false,
+                            IconMargin = new Thickness(10, 0),
+                            IconPath = @"icons\icon.ico",
+                            IconSize = new(40, 40),
+                        },
+                        FillPercentage = 100,
+                        FixedWidth = 0,
+                        Margin = Thickness.DefaultMargin,
+                        Padding = Thickness.DefaultPadding,
+                        Radius = 0,
+                        Content = [
+                            new DrawingItem_Text(){
+                                Text = "CPU Info:",
+                            },
+                            new DrawingItem_Text(){
+                                Text = "Intel i7-13700K",
+                                Layout = DrawingBase.Layout.Left,
+                                IsBold = true
+                            },
+                            new DrawingItem_Text(){
+                                Text = "CPU Info:",
+                                Layout = DrawingBase.Layout.FixedWidth,
+                                FixedWidth = 100,
+                            },
+                            new DrawingItem_Text(){
+                                Text = "Intel i7-13700K",
+                                Layout = DrawingBase.Layout.Left,
+                                IsBold = true
+                            },
+                        ]
+                    }
+                ],
             };
-            File.WriteAllText("default.style", JsonConvert.SerializeObject(drawingStyle, Formatting.Indented));
+            var paint = style.Draw(500);
+            paint.Save("1.bmp");
+            File.WriteAllText("default.style", JsonConvert.SerializeObject(style, Formatting.Indented));
         }
 
         static void MonitorTest()
