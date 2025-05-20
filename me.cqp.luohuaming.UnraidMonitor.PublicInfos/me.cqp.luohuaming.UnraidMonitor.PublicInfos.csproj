@@ -132,7 +132,6 @@
     <Compile Include="Drawing\Items\DrawingItem_ProgressBar.cs" />
     <Compile Include="Drawing\Items\DrawingItem_Alert.cs" />
     <Compile Include="Drawing\Items\DrawingItem_Text.cs" />
-    <Compile Include="Drawing\Models\CpuInfo.cs" />
     <Compile Include="Drawing\Painting.cs" />
     <Compile Include="Models\DiskInfo.cs" />
     <Compile Include="Models\DiskSmartInfo.cs" />
@@ -170,6 +169,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Drawing\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.6.4\build\Fody.targets" Condition="Exists('..\packages\Fody.6.6.4\build\Fody.targets')" />
