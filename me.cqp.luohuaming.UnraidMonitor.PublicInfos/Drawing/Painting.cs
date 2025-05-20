@@ -244,9 +244,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 enumerator.MoveNext();
                 int codepoint = char.ConvertToUtf32(textElement, enumerator.ElementIndex);
 
-                if (customFont != null && customFont.ContainsGlyph(codepoint))
+                if (typeface != null && typeface.ContainsGlyph(codepoint))
                 {
-                    typeface = customFont;
                 }
                 else if (typeface == null || !typeface.ContainsGlyph(codepoint) && fallbackTypeface.ContainsGlyph(codepoint))
                 {

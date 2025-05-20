@@ -12,7 +12,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public bool IsBold { get; set; }
 
-        public int TextSize { get; set; }
+        public int TextSize { get; set; } = 12;
 
         public string OverrideFont { get; set; }
 
