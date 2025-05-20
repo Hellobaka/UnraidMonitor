@@ -35,6 +35,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MaterialDesign2,
         }
 
+        /// <summary>
+        /// WinUI3 Dark
+        /// </summary>
         public class Colors
         {
             public string AccentColor { get; set; } = "#945FD7";
@@ -42,6 +45,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public string TextColor { get; set; } = "#FFFFFF";
           
             public string BackgroundColor { get; set; } = "#373737";
+          
+            public string SuccessColor { get; set; } = "#393D1B";
+          
+            public string WarningColor { get; set; } = "#433519";
+          
+            public string InfoColor { get; set; } = "#272727";
+          
+            public string FatalColor { get; set; } = "#442726";
+          
+            public string SuccessIconColor { get; set; } = "#6CCB5F";
+          
+            public string WarningIconColor { get; set; } = "#FCE100";
+          
+            public string InfoIconColor { get; set; } = "#945FD7";
+          
+            public string FatalIconColor { get; set; } = "#FF99A4";
         }
 
         /// <summary>
@@ -96,33 +115,92 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public Colors Palette { get; set; } = new();
 
-        public static Colors GetThemeDefaultColor(Theme theme) => theme switch
+        public static Colors GetThemeDefaultColor(Theme theme, bool dark) => (theme, dark) switch
         {
-            Theme.WinUI3 => new Colors
+            (Theme.WinUI3, true) => new Colors(),
+            (Theme.WinUI3, false) => new Colors
             {
                 AccentColor = "#945FD7",
                 TextColor = "#000000",
-                BackgroundColor = "#CCCCCC"
+                BackgroundColor = "#CCCCCC",
+                FatalColor = "#FDE7E9",
+                FatalIconColor = "#C42B1C",
+                InfoColor = "#F4F4F4",
+                InfoIconColor = "#945FD7",
+                SuccessColor = "#DFF6DD",
+                SuccessIconColor = "#0F7B0F",
+                WarningColor = "#FFF4CE",
+                WarningIconColor = "#9D5D00",
             },
-            Theme.Unraid => new Colors
+            (Theme.Unraid, false) => new Colors
             {
                 AccentColor = "#FA7C2F",
                 TextColor = "#FFFFFF",
                 BackgroundColor = "#2B2A29"
             },
-            Theme.MaterialDesign3 => new Colors
+            (Theme.Unraid, true) => new Colors
+            {
+                AccentColor = "#FA7C2F",
+                TextColor = "#FFFFFF",
+                BackgroundColor = "#2B2A29"
+            },
+            (Theme.MaterialDesign3, false) => new Colors
+            {
+                AccentColor = "#65558F",
+                TextColor = "#000000",
+                BackgroundColor = "#E8DEF8",
+                FatalColor = "#FEF4F3",
+                FatalIconColor = "#F55D52",
+                InfoColor = "#F2F9FE",
+                InfoIconColor = "#36A5F5",
+                SuccessColor = "#F0FCF5",
+                SuccessIconColor = "#18D988",
+                WarningColor = "#FFF9F0",
+                WarningIconColor = "#FFA118",
+            },
+            (Theme.MaterialDesign3, true) => new Colors
             {
                 AccentColor = "#675496",
                 TextColor = "#000000",
-                BackgroundColor = "#E2E0F9"
+                BackgroundColor = "#E2E0F9",
+                FatalColor = "#2B2030",
+                FatalIconColor = "#DF3752",
+                InfoColor = "#202439",
+                InfoIconColor = "#446BC9",
+                SuccessColor = "#202830",
+                SuccessIconColor = "#38A960",
+                WarningColor = "#2B272E",
+                WarningIconColor = "#EAA743",
             },
-            Theme.MaterialDesign2 => new Colors
+            (Theme.MaterialDesign2, false) => new Colors
             {
                 AccentColor = "#5411F5",
                 TextColor = "#000000",
-                BackgroundColor = "#E5E5E5"
+                BackgroundColor = "#E5E5E5",
+                FatalColor = "#FEF4F3",
+                FatalIconColor = "#F55D52",
+                InfoColor = "#F2F9FE",
+                InfoIconColor = "#36A5F5",
+                SuccessColor = "#F0FCF5",
+                SuccessIconColor = "#18D988",
+                WarningColor = "#FFF9F0",
+                WarningIconColor = "#FFA118",
             },
-            _ => new Colors()
+            (Theme.MaterialDesign2, true) => new Colors
+            {
+                AccentColor = "#5411F5",
+                TextColor = "#000000",
+                BackgroundColor = "#E5E5E5",
+                FatalColor = "#2B2030",
+                FatalIconColor = "#DF3752",
+                InfoColor = "#202439",
+                InfoIconColor = "#446BC9",
+                SuccessColor = "#202830",
+                SuccessIconColor = "#38A960",
+                WarningColor = "#2B272E",
+                WarningIconColor = "#EAA743",
+            },
+            _ => new Colors(),
         };
 
         /// <summary>
