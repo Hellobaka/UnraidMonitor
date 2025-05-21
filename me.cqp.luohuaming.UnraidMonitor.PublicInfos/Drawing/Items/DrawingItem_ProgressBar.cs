@@ -18,7 +18,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public float Max { get; set; }
 
-        public override float OverrideHeight { get; set; } = 34;
+        public override float OverrideHeight { get; set; }
+
+        public override Thickness Margin { get; set; } = new();
+
+        public override float CalcHeight(DrawingStyle.Theme theme)
+        {
+            if (OverrideHeight == 0)
+            {
+                OverrideHeight = theme switch
+                {
+                    DrawingStyle.Theme.Unraid => 34,
+                    DrawingStyle.Theme.MaterialDesign3 => 8,
+                    DrawingStyle.Theme.MaterialDesign2 => 8,
+                    _ => 8
+                };
+            }
+
+            return base.CalcHeight(theme);
+        }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
@@ -33,12 +51,46 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         private (SKPoint endPoint, float width, float height) DrawMaterialDesign2(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            throw new NotImplementedException();
+            float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
+            float remainWidth = (float)(desireWidth - valueWidth);
+            float barHeight = OverrideHeight;
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X, startPoint.Y),
+                Size = new(valueWidth, barHeight)
+            }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 0);
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X + valueWidth, startPoint.Y),
+                Size = new(remainWidth, barHeight)
+            }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 0);
+
+            return (new(startPoint.X + desireWidth, startPoint.Y + barHeight), desireWidth, barHeight);
         }
 
         private (SKPoint endPoint, float width, float height) DrawMaterialDesign3(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            throw new NotImplementedException();
+            float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
+            float remainWidth = (float)(desireWidth - valueWidth);
+            float barHeight = OverrideHeight;
+            float trackGap = barHeight / 2;
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X, startPoint.Y),
+                Size = new(valueWidth, barHeight)
+            }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 1000);
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X + trackGap + valueWidth, startPoint.Y),
+                Size = new(remainWidth - trackGap, barHeight)
+            }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 1000);
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X + valueWidth + remainWidth - trackGap - trackGap / 2, startPoint.Y + (OverrideHeight / 2) - (trackGap / 2)),
+                Size = new(trackGap, trackGap)
+            }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 1000);
+
+            return (new(startPoint.X + desireWidth, startPoint.Y + barHeight), desireWidth, barHeight);
         }
 
         private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
