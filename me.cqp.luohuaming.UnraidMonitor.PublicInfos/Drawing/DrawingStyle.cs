@@ -29,6 +29,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public enum Theme
         {
+            Unknown,
             WinUI3,
             Unraid,
             MaterialDesign3,

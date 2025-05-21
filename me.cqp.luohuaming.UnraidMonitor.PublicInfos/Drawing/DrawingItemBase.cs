@@ -47,6 +47,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public virtual float OverrideHeight { get; set; }
 
+        public virtual DrawingStyle.Theme OverrideTheme { get; set; }
+
+        public virtual DrawingStyle.Colors OverrideColor { get; set; }
+
         public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
 
         public virtual float CalcHeight(DrawingStyle.Theme theme)
