@@ -49,6 +49,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
 
+        public virtual float CalcHeight(DrawingStyle.Theme theme)
+        {
+            return OverrideHeight;
+        }
+
         public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             // 计算实际高度

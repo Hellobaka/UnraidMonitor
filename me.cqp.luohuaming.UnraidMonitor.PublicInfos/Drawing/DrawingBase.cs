@@ -178,7 +178,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 if (item.Layout == Layout.Remaining)
                 {
                     // Remaining模式需要在本行元素宽度已知之后才能绘制
-                    currentLine.Add((null, item, 0, item.OverrideHeight));
+                    currentLine.Add((null, item, 0, item.CalcHeight(theme)));
                     if (item.AfterNewLine)
                     {
                         currentLine = new();
@@ -228,9 +228,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         drawWidth = w;
                         drawHeight = h;
                     }
-                    SKPoint drawPoint = new(x: currentPoint.X + item.item.Margin.Left, y: currentPoint.Y + item.item.Margin.Top + item.item.VerticalAlignment switch
+                    SKPoint drawPoint = new(x: currentPoint.X + item.item.Margin.Left, y: currentPoint.Y + maxTopMargin + item.item.VerticalAlignment switch
                     {
-                        Position.Center => (maxHeight - item.height) / 2,
+                        Position.Center => (maxHeight / 2) - (item.height / 2),
                         Position.Bottom => maxHeight - item.height - item.item.Margin.Bottom,
                         _ => item.item.Margin.Top,
                     });
@@ -239,6 +239,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         Location = drawPoint,
                         Size = new(drawWidth, drawHeight)
                     });
+                    // Layout Debug
+                    //painting.DrawRectangle(new()
+                    //{
+                    //    Location = drawPoint,
+                    //    Size = new(drawWidth, drawHeight)
+                    //}, SKColors.Transparent, SKColors.White, 1, null, 0);
+                    //painting.DrawRectangle(new()
+                    //{
+                    //    Location = new(drawPoint.X - item.item.Margin.Left, drawPoint.Y - item.item.Margin.Top),
+                    //    Size = new(drawWidth + item.item.Margin.Left + item.item.Margin.Right, drawHeight + +item.item.Margin.Top + item.item.Margin.Bottom)
+                    //}, SKColors.Transparent, SKColors.IndianRed, 1, null, 0);
                     canvas.Dispose();
                     currentPoint.X += drawWidth + item.item.Margin.Left + item.item.Margin.Right;
                 }
