@@ -39,11 +39,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 CreateTime = DateTime.Now,
                 DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
                 DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                ItemTheme = DrawingStyle.Theme.Unraid,
+                ItemTheme = DrawingStyle.Theme.MaterialDesign3,
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.Unraid, true),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.MaterialDesign3, true),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
@@ -52,38 +52,36 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         DrawingTitle = new()
                         {
                             HasTitle = true,
-                            Text = "UNRAID",
+                            Text = "Qualcomm Snapdragon",
                             Bold = true,
                             TextSize = 36,
                             HasIcon = false,
                             IconMargin = new Thickness(10, 0),
                             IconPath = @"icons\icon.ico",
                             IconSize = new(40, 40),
-                            OverrideColor = "#E22829",
-                            OverrideColor2 = "#FF8C30",
+                            //OverrideColor = "#E22829",
+                            //OverrideColor2 = "#FF8C30",
                         },
-                        FillPercentage = 90,
+                        FillPercentage = 100,
                         FixedWidth = 0,
                         Margin = Thickness.DefaultMargin,
                         Padding = Thickness.DefaultPadding,
                         Radius = 0,
                         Content = [
                             new DrawingItem_Text(){
-                                Text = "CPU Info:",
+                                Text = "CPU Slot1:",
                             },
                             new DrawingItem_Text(){
-                                Text = "Intel i7-13700K",
+                                Text = "Qualcomm Snapdragon 999 Extra Elite",
                                 Layout = DrawingBase.Layout.Remaining,
                                 IsBold = true,
                                 AfterNewLine = true,
                             },
                             new DrawingItem_Text(){
-                                Text = "CPU Info:",
-                                Layout = DrawingBase.Layout.FixedWidth,
-                                FixedWidth = 150,
+                                Text = "CPU Slot2:",
                             },
                             new DrawingItem_Text(){
-                                Text = "Intel i7-13700K",
+                                Text = "AMD Razer 9 9950X3D",
                                 Layout = DrawingBase.Layout.Remaining,
                                 IsBold = true,
                                 AfterNewLine = true,
@@ -91,7 +89,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             new DrawingItem_Text(){
                                 Text = "CPU0:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -99,12 +97,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 16,
+                                VerticalAlignment = DrawingBase.Position.Center,
+                                FillPercentage = 15,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU1:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -112,12 +111,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 16,
+                                VerticalAlignment = DrawingBase.Position.Center,
+                                FillPercentage = 15,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU2:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -125,12 +125,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 16,
+                                VerticalAlignment = DrawingBase.Position.Center,
+                                FillPercentage = 15,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU3:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -138,13 +139,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 16,
+                                VerticalAlignment = DrawingBase.Position.Center,
+                                FillPercentage = 15,
                                 AfterNewLine = true,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU4:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -152,12 +154,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 41,
+                                VerticalAlignment = DrawingBase.Position.Center,
+                                FillPercentage = 40,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU5:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -165,13 +168,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 41,
+                                FillPercentage = 40,
+                                VerticalAlignment = DrawingBase.Position.Center,
                                 AfterNewLine = true,
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU6:",
                                 Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 9,
+                                FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
                             new DrawingItem_ProgressBar(){
@@ -179,7 +183,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Min = 0,
                                 Max = 100,
                                 Layout = DrawingBase.Layout.Remaining,
-                                FillPercentage = 92,
+                                FillPercentage = 90,
+                                VerticalAlignment = DrawingBase.Position.Center,
                                 AfterNewLine = true,
                             },
                         ]
