@@ -22,8 +22,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
             var endPoint = painting.DrawText(Text, Painting.Anywhere, startPoint, SKColor.Parse(string.IsNullOrEmpty(OverrideColor) ? palette.TextColor : OverrideColor), null, TextSize, font, IsBold);
-            
-            return (endPoint, Layout == DrawingBase.Layout.Minimal ? endPoint.X - startPoint.X : desireWidth, endPoint.Y - startPoint.Y);
+            var size = painting.MeasureString(Text, TextSize, font);
+            return (endPoint, Layout == DrawingBase.Layout.Minimal ? size.Width : desireWidth, size.Height);
         }
     }
 }
