@@ -85,6 +85,12 @@
     <Reference Include="SkiaSharp, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\SkiaSharp.2.88.9\lib\net462\SkiaSharp.dll</HintPath>
     </Reference>
+    <Reference Include="SkiaSharp.Extended, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.Extended.2.0.0\lib\netstandard2.0\SkiaSharp.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp.Extended.Svg, Version=1.60.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.Svg.1.60.0\lib\netstandard2.0\SkiaSharp.Extended.Svg.dll</HintPath>
+    </Reference>
     <Reference Include="SkiaSharp.HarfBuzz, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\SkiaSharp.HarfBuzz.2.88.9\lib\net462\SkiaSharp.HarfBuzz.dll</HintPath>
     </Reference>
@@ -127,6 +133,7 @@
     <Compile Include="Drawing\DrawingStyle.cs" />
     <Compile Include="Drawing\DrawingBase.cs" />
     <Compile Include="Drawing\DrawingItemBase.cs" />
+    <Compile Include="Drawing\Icons\SVG.cs" />
     <Compile Include="Drawing\Items\DrawingItem_Chart.cs" />
     <Compile Include="Drawing\Items\DrawingItem_ProgressRing.cs" />
     <Compile Include="Drawing\Items\DrawingItem_ProgressBar.cs" />

@@ -39,11 +39,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 CreateTime = DateTime.Now,
                 DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
                 DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                ItemTheme = DrawingStyle.Theme.Unraid,
+                ItemTheme = DrawingStyle.Theme.MaterialDesign2,
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.Unraid, true),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.MaterialDesign2, true),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
