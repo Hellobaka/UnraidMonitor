@@ -40,6 +40,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
+            CalcHeight(theme);
             return theme switch
             {
                 DrawingStyle.Theme.Unraid => DrawUnraid(painting, startPoint, desireWidth, theme, palette),
@@ -125,7 +126,24 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         private (SKPoint endPoint, float width, float height) DrawWinUI3(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            throw new NotImplementedException();
+            float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
+            float remainWidth = (float)(desireWidth - valueWidth);
+            float barHeight = OverrideHeight;
+            float trackHeight = 3;
+
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X, startPoint.Y + barHeight / 2 - trackHeight / 2),
+                Size = new(desireWidth, trackHeight)
+            }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 1000);
+
+            painting.DrawRectangle(new SKRect
+            {
+                Location = new(startPoint.X, startPoint.Y),
+                Size = new(valueWidth, barHeight)
+            }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 1000);
+
+            return (new(startPoint.X + desireWidth, startPoint.Y + barHeight), desireWidth, barHeight);
         }
     }
 }

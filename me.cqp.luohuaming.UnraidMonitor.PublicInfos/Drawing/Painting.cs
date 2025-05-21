@@ -161,6 +161,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainCanvas.DrawImage(image, rect, AntialiasPaint);
         }
 
+        public void DrawLine(SKPoint startPoint, SKPoint endPoint, SKColor strokeColor, float strokeWidth, SKShader shader = null)
+        {
+            using var paint = new SKPaint
+            {
+                IsAntialias = true,
+                Style = SKPaintStyle.Stroke,
+                Color = strokeColor,
+                StrokeWidth = strokeWidth
+            };
+            if (shader != null)
+            {
+                paint.Shader = shader;
+            }
+            MainCanvas.DrawLine(startPoint, endPoint, paint);
+        }
+
         public void DrawRectangle(SKRect rect, SKColor fillColor, SKColor strokeColor, float strokeWidth, SKShader shader = null, float radius = 0)
         {
             if (fillColor != SKColors.Transparent)
@@ -527,6 +543,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <param name="sigma">高斯模糊参数（0-3）</param>
         public void Blur(SKPath path, float sigma)
         {
+            if (sigma == 0)
+            {
+                return;
+            }
             using var snapShot = SnapShot();
             using var paint = new SKPaint();
             paint.ImageFilter = SKImageFilter.CreateBlur(sigma, sigma);

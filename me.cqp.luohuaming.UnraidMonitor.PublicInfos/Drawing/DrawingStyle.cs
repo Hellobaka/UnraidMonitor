@@ -43,7 +43,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             /// <summary>
             /// 主题色
             /// </summary>
-            public string AccentColor { get; set; } = "#945FD7";
+            public string AccentColor { get; set; } = "#75B6E7";
 
             /// <summary>
             /// 渐变或备用颜色
@@ -128,7 +128,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             (Theme.WinUI3, true) => new Colors(),
             (Theme.WinUI3, false) => new Colors
             {
-                AccentColor = "#945FD7",
+                AccentColor = "#75B6E7",
                 TextColor = "#000000",
                 BackgroundColor = "#CCCCCC",
                 FatalColor = "#FDE7E9",
@@ -184,7 +184,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             },
             (Theme.MaterialDesign2, false) => new Colors
             {
-                AccentColor = "#5411F5",
+                AccentColor = "#594AE2",
                 TextColor = "#000000",
                 BackgroundColor = "#DEDBF9",
                 FatalColor = "#FEF4F3",
@@ -198,7 +198,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             },
             (Theme.MaterialDesign2, true) => new Colors
             {
-                AccentColor = "#5411F5",
+                AccentColor = "#7E6FFF",
                 TextColor = "#FFFFFF",
                 BackgroundColor = "#DEDBF9",
                 FatalColor = "#2B2030",
@@ -272,8 +272,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     // 记录子项的模糊区域
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
-                        Location = new(startPoint.X + item.Margin.Left, startPoint.Y + item.Margin.Top),
-                        Size = new(actualHeight, actualHeight)
+                        Location = new(startPoint.X, startPoint.Y),
+                        Size = new(desireWidth + item.Margin.Left, actualHeight + item.Margin.Top)
                     }, item.Radius), item.BackgroundBlur));
                     // 根据填充类型计算下一个开始坐标
                     switch (item.DrawingLayout)
@@ -400,6 +400,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 }, ContentRadius);
                 painting.Blur(roundRect, ContentBlur);
             }
+            // 根据模糊区域绘制模糊
+            foreach (var (path, blur) in blurAreas)
+            {
+                painting.Blur(path, blur);
+            }
             // 将内容画布绘制到主画布上
             painting.DrawImage(contentPainting.SnapShot(), new SKRect
             {
@@ -407,11 +412,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Size = new(contentPainting.Width, contentPainting.Height)
             });
             contentPainting.Dispose();
-            // 根据模糊区域绘制模糊
-            foreach (var (path, blur) in blurAreas)
-            {
-                painting.Blur(path, blur);
-            }
             // 返回画布
             return painting;
         }
