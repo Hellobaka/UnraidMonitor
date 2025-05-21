@@ -39,11 +39,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 CreateTime = DateTime.Now,
                 DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
                 DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                ItemTheme = DrawingStyle.Theme.WinUI3,
+                ItemTheme = DrawingStyle.Theme.Unraid,
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.Unraid, true),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
@@ -67,6 +67,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         Margin = Thickness.DefaultMargin,
                         Padding = Thickness.DefaultPadding,
                         Radius = 0,
+                        LayoutDebug = false,
                         Content = [
                             new DrawingItem_Text(){
                                 Text = "CPU Slot1:",
@@ -187,6 +188,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 VerticalAlignment = DrawingBase.Position.Center,
                                 AfterNewLine = true,
                             },
+                            new DrawingItem_Chart(){
+                                Points = MockChartValue(100),
+                                AfterNewLine = true,
+                                OverrideHeight = 200,
+                                VerticalValueDisplayCount = 5,
+                                ShowVerticalGridLine = true,
+                                HorizonValueDisplayCount = 10
+                            },
+                            new DrawingItem_Chart(){
+                                Points = MockChartValue(50),
+                                AfterNewLine = true,
+                                VerticalValueDisplayCount = 2,
+                            },
                         ]
                     }
                 ],
@@ -194,6 +208,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             var paint = style.Draw(1000);
             paint.Save("1.bmp");
             File.WriteAllText("default.style", JsonConvert.SerializeObject(style, Formatting.Indented));
+        }
+
+        static Random Random = new Random();
+
+        static (DateTime, double)[] MockChartValue(int count)
+        {
+            var list = new List<(DateTime, double)>();
+            for (int i = 0; i < count; i++)
+            {
+                list.Add((DateTime.Now.AddSeconds(-1 * (count - i)), Random.Next(0, 100)));
+            }
+            return list.ToArray();
         }
 
         static void MonitorTest()

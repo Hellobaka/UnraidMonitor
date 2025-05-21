@@ -329,13 +329,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             return new SKPoint(currentX, currentY);
         }
 
-        public void DrawSmoothLine(SKPoint[] points, SKColor strokeColor, float strokeWidth, SKColor gradientStart, SKColor gradientEnd)
+        public void DrawChart(SKPoint[] points, SKRect rect, SKColor strokeColor, float strokeWidth, SKColor gradientStart, SKColor gradientEnd)
         {
-            for (int i = 0; i< points.Length; i++)
-            {
-                points[i] = new SKPoint(points[i].X, Height - points[i].Y);
-            }
-
             if (points.Length < 2)
             {
                 return;
@@ -370,12 +365,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                 path.CubicTo(control1, control2, p2);
             }
-            path.LineTo(points[points.Length - 1].X, Height);
-            path.LineTo(points[0].X, Height);
+            MainCanvas.DrawPath(path, paint);
+
+            var last = points[points.Length - 1];
+            var first = points[0];
+            path.LineTo(last.X, rect.Bottom);
+            path.LineTo(first.X, rect.Bottom);
             path.Close();
+
             var shader = SKShader.CreateLinearGradient(
-                new SKPoint(0, Height),
-                new SKPoint(0, 0),
+                rect.Location,
+                new(rect.Left, rect.Bottom),
                 new SKColor[] { gradientStart, gradientEnd },
                 null,
                 SKShaderTileMode.Clamp);
@@ -386,8 +386,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Style = SKPaintStyle.Fill,
                 IsAntialias = true
             };
-
-            MainCanvas.DrawPath(path, paint);
             MainCanvas.DrawPath(path, fillPaint);
         }
 

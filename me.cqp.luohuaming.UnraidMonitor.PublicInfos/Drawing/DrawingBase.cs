@@ -107,6 +107,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public virtual Thickness Padding { get; set; } = Thickness.DefaultPadding;
 
+        public bool LayoutDebug { get; set; }
+
         /// <summary>
         /// 遍历绘制所有Item
         /// </summary>
@@ -239,17 +241,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         Location = drawPoint,
                         Size = new(drawWidth, drawHeight)
                     });
-                    // Layout Debug
-                    //painting.DrawRectangle(new()
-                    //{
-                    //    Location = drawPoint,
-                    //    Size = new(drawWidth, drawHeight)
-                    //}, SKColors.Transparent, SKColors.White, 1, null, 0);
-                    //painting.DrawRectangle(new()
-                    //{
-                    //    Location = new(drawPoint.X - item.item.Margin.Left, drawPoint.Y - item.item.Margin.Top),
-                    //    Size = new(drawWidth + item.item.Margin.Left + item.item.Margin.Right, drawHeight + +item.item.Margin.Top + item.item.Margin.Bottom)
-                    //}, SKColors.Transparent, SKColors.IndianRed, 1, null, 0);
+                    if (LayoutDebug)
+                    {
+                        painting.DrawRectangle(new()
+                        {
+                            Location = drawPoint,
+                            Size = new(drawWidth, drawHeight)
+                        }, SKColors.Transparent, SKColors.White, 1, null, 0);
+                        painting.DrawRectangle(new()
+                        {
+                            Location = new(drawPoint.X - item.item.Margin.Left, drawPoint.Y - item.item.Margin.Top),
+                            Size = new(drawWidth + item.item.Margin.Left + item.item.Margin.Right, drawHeight + +item.item.Margin.Top + item.item.Margin.Bottom)
+                        }, SKColors.Transparent, SKColors.IndianRed, 1, null, 0);
+                    }
                     canvas.Dispose();
                     currentPoint.X += drawWidth + item.item.Margin.Left + item.item.Margin.Right;
                 }
