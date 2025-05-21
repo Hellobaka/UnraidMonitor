@@ -40,28 +40,34 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public class Colors
         {
+            /// <summary>
+            /// 主题色
+            /// </summary>
             public string AccentColor { get; set; } = "#945FD7";
-          
+
+            /// <summary>
+            /// 渐变或备用颜色
+            /// </summary>
             public string Accent2Color { get; set; }
-          
+
             public string TextColor { get; set; } = "#FFFFFF";
-          
+
             public string BackgroundColor { get; set; } = "#373737";
-          
+
             public string SuccessColor { get; set; } = "#393D1B";
-          
+
             public string WarningColor { get; set; } = "#433519";
-          
+
             public string InfoColor { get; set; } = "#272727";
-          
+
             public string FatalColor { get; set; } = "#442726";
-          
+
             public string SuccessIconColor { get; set; } = "#6CCB5F";
-          
+
             public string WarningIconColor { get; set; } = "#FCE100";
-          
+
             public string InfoIconColor { get; set; } = "#945FD7";
-          
+
             public string FatalIconColor { get; set; } = "#FF99A4";
         }
 
@@ -164,9 +170,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             },
             (Theme.MaterialDesign3, true) => new Colors
             {
-                AccentColor = "#675496",
+                AccentColor = "#D0BCFF",
                 TextColor = "#FFFFFF",
-                BackgroundColor = "#E2E0F9",
+                BackgroundColor = "#4A4458",
                 FatalColor = "#2B2030",
                 FatalIconColor = "#DF3752",
                 InfoColor = "#202439",
@@ -180,7 +186,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 AccentColor = "#5411F5",
                 TextColor = "#000000",
-                BackgroundColor = "#E5E5E5",
+                BackgroundColor = "#DEDBF9",
                 FatalColor = "#FEF4F3",
                 FatalIconColor = "#F55D52",
                 InfoColor = "#F2F9FE",
@@ -194,7 +200,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 AccentColor = "#5411F5",
                 TextColor = "#FFFFFF",
-                BackgroundColor = "#E5E5E5",
+                BackgroundColor = "#DEDBF9",
                 FatalColor = "#2B2030",
                 FatalIconColor = "#DF3752",
                 InfoColor = "#202439",
@@ -249,15 +255,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         }
                         desireWidth = contentPainting.Width / 100f * item.FillPercentage;
                     }
-                    else if(item.DrawingLayout == DrawingBase.Layout.FixedWidth)
+                    else if (item.DrawingLayout == DrawingBase.Layout.FixedWidth)
                     {
                         desireWidth = item.FixedWidth;
                     }
-                    else if(item.DrawingLayout == DrawingBase.Layout.Remaining
+                    else if (item.DrawingLayout == DrawingBase.Layout.Remaining
                         || item.DrawingLayout == DrawingBase.Layout.Minimal)
                     {
-                        desireWidth = contentPainting.Width - startPoint.X - item.Margin.Right;
+                        desireWidth = contentPainting.Width - startPoint.X;
                     }
+                    desireWidth -= item.Margin.Left + item.Margin.Right;
 
                     var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
@@ -399,6 +406,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Location = new(Padding.Left, Padding.Top),
                 Size = new(contentPainting.Width, contentPainting.Height)
             });
+            contentPainting.Dispose();
             // 根据模糊区域绘制模糊
             foreach (var (path, blur) in blurAreas)
             {
