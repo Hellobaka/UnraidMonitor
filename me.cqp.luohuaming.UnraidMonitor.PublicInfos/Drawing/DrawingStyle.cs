@@ -59,7 +59,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public string WarningColor { get; set; } = "#433519";
 
-            public string InfoColor { get; set; } = "#272727";
+            public string InfoColor { get; set; } = "#373737";
 
             public string FatalColor { get; set; } = "#442726";
 
@@ -67,7 +67,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public string WarningIconColor { get; set; } = "#FCE100";
 
-            public string InfoIconColor { get; set; } = "#945FD7";
+            public string InfoIconColor { get; set; } = "#75B6E7";
 
             public string FatalIconColor { get; set; } = "#FF99A4";
         }
@@ -135,7 +135,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 FatalColor = "#FDE7E9",
                 FatalIconColor = "#C42B1C",
                 InfoColor = "#F4F4F4",
-                InfoIconColor = "#945FD7",
+                InfoIconColor = "#75B6E7",
                 SuccessColor = "#DFF6DD",
                 SuccessIconColor = "#0F7B0F",
                 WarningColor = "#FFF4CE",
