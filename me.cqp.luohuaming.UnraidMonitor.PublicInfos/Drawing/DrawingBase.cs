@@ -63,6 +63,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             FixedWidth
         }
 
+        public enum AlertType
+        {
+            Info,
+            Warning,
+            Fatal,
+            Success
+        }
+
         /// <summary>
         /// 填充模式的百分比占比
         /// </summary>
@@ -229,6 +237,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         canvas.Resize((int)Math.Ceiling(w), (int)Math.Ceiling(h));
                         drawWidth = w;
                         drawHeight = h;
+
+                        maxHeight = Math.Max(maxHeight, drawHeight);
+                        maxBottomMargin = Math.Max(maxBottomMargin, item.item.Margin.Bottom);
                     }
                     SKPoint drawPoint = new(x: currentPoint.X + item.item.Margin.Left, y: currentPoint.Y + maxTopMargin + item.item.VerticalAlignment switch
                     {

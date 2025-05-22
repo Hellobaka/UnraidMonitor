@@ -29,6 +29,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public string OverrideFormat { get; set; }
 
+        public string OverrideFont { get; set; }
+
         public float TextSize { get; set; } = 20;
 
         public override float CalcHeight(DrawingStyle.Theme theme)
@@ -44,7 +46,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             CalcHeight(theme);
             Thickness padding = new();
-
+            var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
             var size = painting.MeasureString(Max.ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
             float textPadding = 5;
             if (ShowHorizonValue)
@@ -79,7 +81,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 }
                 if (ShowVerticalValue)
                 {
-                    painting.DrawText(text, Painting.Anywhere, new SKPoint(p1.X - size.Width - textPadding, p1.Y - size.Height / 2), SKColor.Parse(palette.TextColor), null, TextSize);
+                    painting.DrawText(text, Painting.Anywhere, new SKPoint(p1.X - size.Width - textPadding, p1.Y - size.Height / 2), SKColor.Parse(palette.TextColor), null, TextSize, font);
                 }
             }
             int dataInterval = Math.Max(Points.Length / HorizonValueDisplayCount, 1);
@@ -96,7 +98,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 }
                 if (ShowHorizonValue)
                 {
-                    painting.DrawText(text, Painting.Anywhere, new SKPoint(p1.X - size.Width / 2, p1.Y + textPadding), SKColor.Parse(palette.TextColor), null, TextSize);
+                    painting.DrawText(text, Painting.Anywhere, new SKPoint(p1.X - size.Width / 2, p1.Y + textPadding), SKColor.Parse(palette.TextColor), null, TextSize, font);
                 }
             }
             // Values

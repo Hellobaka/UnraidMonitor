@@ -39,11 +39,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 CreateTime = DateTime.Now,
                 DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
                 DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                ItemTheme = DrawingStyle.Theme.MaterialDesign2,
+                ItemTheme = DrawingStyle.Theme.WinUI3,
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.MaterialDesign2, true),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
@@ -200,6 +200,44 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 Points = MockChartValue(50),
                                 AfterNewLine = true,
                                 VerticalValueDisplayCount = 2,
+                            },
+                            new DrawingItem_Alert(){
+                                AlertType = DrawingBase.AlertType.Info,
+                                Header = "Info",
+                                IsHeaderBold = true,
+                                Content = "Alert Short Text Test",
+                                AfterNewLine = true,
+                            },
+                            new DrawingItem_Alert(){
+                                AlertType = DrawingBase.AlertType.Warning,
+                                Header = "Warning",
+                                IsHeaderBold = true,
+                                Content = "Alert Short Text Test",
+                                AfterNewLine = true,
+                            },
+                            new DrawingItem_Alert(){
+                                AlertType = DrawingBase.AlertType.Success,
+                                Header = "Success",
+                                IsHeaderBold = true,
+                                Content = "Alert Short Text Test",
+                                AfterNewLine = true,
+                            },
+                            new DrawingItem_Alert(){
+                                AlertType = DrawingBase.AlertType.Fatal,
+                                Header = "Fatal",
+                                IsHeaderBold = true,
+                                Content = "Alert Short Text Test",
+                                AfterNewLine = true,
+                            },
+                            new DrawingItem_Alert(){
+                                AlertType = DrawingBase.AlertType.Info,
+                                Header = "Info",
+                                IsHeaderBold = false,
+                                Content = @"正在尝试收集与目标为“.NETFramework,Version=v4.8”的项目“me.cqp.luohuaming.UnraidMonitor.PublicInfos”有关的包“HarfBuzzSharp.7.3.0.3”的依赖项信息
+正在解析操作以卸载程序包“HarfBuzzSharp.7.3.0.3”
+无法卸载“HarfBuzzSharp.7.3.0.3”，因为“SkiaSharp.HarfBuzz.2.88.9”依赖于它。
+已用时间: 00:00:00.5298694",
+                                AfterNewLine = true,
                             },
                         ]
                     }
