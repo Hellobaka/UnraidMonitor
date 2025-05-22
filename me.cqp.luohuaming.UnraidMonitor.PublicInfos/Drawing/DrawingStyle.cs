@@ -146,14 +146,30 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Accent2Color = "#FF8C30",
                 AccentColor = "#E22829",
                 TextColor = "#000000",
-                BackgroundColor = "#2B2A29"
+                BackgroundColor = "#f2f2f2",
+                FatalColor = "#FF9E9E",
+                FatalIconColor = "#F0000C",
+                InfoColor = "#808080",
+                InfoIconColor = "#42453E",
+                SuccessColor = "#DFF2BF",
+                SuccessIconColor = "#4F8A10",
+                WarningColor = "#FEEFB3",
+                WarningIconColor = "#E68A00",
             },
             (Theme.Unraid, true) => new Colors
             {
                 Accent2Color = "#FF8C30",
                 AccentColor = "#E22829",
                 TextColor = "#FFFFFF",
-                BackgroundColor = "#2B2A29"
+                BackgroundColor = "#1b1d1b",
+                FatalColor = "#FF9E9E",
+                FatalIconColor = "#F0000C",
+                InfoColor = "#808080",
+                InfoIconColor = "#42453E",
+                SuccessColor = "#4f8A10",
+                SuccessIconColor = "#DFF2BF",
+                WarningColor = "#FEEFB3",
+                WarningIconColor = "#E68A00",
             },
             (Theme.MaterialDesign3, false) => new Colors
             {
@@ -162,7 +178,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 BackgroundColor = "#E8DEF8",
                 FatalColor = "#FEECEB",
                 FatalIconColor = "#F55D52",
-                InfoColor = "#edebf2",
+                InfoColor = "#EDEBF2",
                 InfoIconColor = "#65558F",
                 SuccessColor = "#E4FBF1",
                 SuccessIconColor = "#18D988",

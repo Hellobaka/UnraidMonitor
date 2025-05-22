@@ -1,4 +1,5 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Icons;
+﻿using HarfBuzzSharp;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Icons;
 using SkiaSharp;
 using System;
 
@@ -163,7 +164,53 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
-            throw new NotImplementedException();
+            var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
+            float width = desireWidth - Padding.Left - Padding.Right;
+            SKColor iconColor = SKColor.Parse(AlertType switch
+            {
+                DrawingBase.AlertType.Warning => palette.WarningIconColor,
+                DrawingBase.AlertType.Fatal => palette.FatalIconColor,
+                DrawingBase.AlertType.Success => palette.SuccessIconColor,
+                _ => palette.InfoIconColor,
+            });
+            SKColor backgroundColor = SKColor.Parse(AlertType switch
+            {
+                DrawingBase.AlertType.Warning => palette.WarningColor,
+                DrawingBase.AlertType.Fatal => palette.FatalColor,
+                DrawingBase.AlertType.Success => palette.SuccessColor,
+                _ => palette.InfoColor,
+            });
+            using Painting content = new((int)Math.Ceiling(desireWidth), 1000);
+            SKPoint currentPoint = new();
+            float textHeight = 0;
+            // Header
+            var size = content.MeasureString(Header, TextSize, font);
+            textHeight = Math.Max(textHeight, size.Height);
+            currentPoint = content.DrawText(Header, Painting.Anywhere, currentPoint, iconColor, null, TextSize, font, IsHeaderBold);
+            // Content
+            currentPoint.X = 0;
+            currentPoint.Y += size.Height / 4;
+            size = content.MeasureString(Content, TextSize, font);
+            currentPoint = content.DrawText(Content, new()
+            {
+                Location = new(currentPoint.X, currentPoint.Y),
+                Size = new(width - currentPoint.X, 1000)
+            }, currentPoint, iconColor, null, TextSize, font, false);
+            textHeight = Math.Max(textHeight, Math.Max(size.Height, currentPoint.Y));
+            // Draw to main canvas
+            content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
+            painting.DrawRectangle(new()
+            {
+                Location = new(startPoint.X, startPoint.Y),
+                Size = new(desireWidth, content.Height + Padding.Top + Padding.Bottom)
+            }, backgroundColor, iconColor, 1, null, 4);
+            painting.DrawImage(content.SnapShot(), new()
+            {
+                Location = new(startPoint.X + Padding.Left, startPoint.Y + Padding.Top),
+                Size = new(content.Width, content.Height)
+            });
+
+            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + content.Height + Padding.Bottom), desireWidth, content.Height + Padding.Top + Padding.Bottom);
         }
     }
 }
