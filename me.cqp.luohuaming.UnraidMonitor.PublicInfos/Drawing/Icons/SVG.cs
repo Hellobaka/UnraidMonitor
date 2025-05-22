@@ -22,6 +22,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Icons
 
         public static string ChangeFillColor(string input, string color) => input.Replace("fill=\"#e3e3e3\"", $"fill=\"{color}\"");
 
-        public static string ChangeSize(string input, SKSize size) => input.Replace("height=\"24px\"", $"height=\"{size.Width}px\"").Replace("width=\"24px\"", $"width=\"{size.Height}px\"");
+        public static string ChangeSize(string input, SKSize size) => input.Replace("height=\"24px\"", $"height=\"{size.Height}px\"").Replace("width=\"24px\"", $"width=\"{size.Width}px\"");
     }
 }

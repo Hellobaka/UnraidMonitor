@@ -32,7 +32,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             DrawingStyle style = new()
             {
                 BackgroundBlur = 0,
-                BackgroundColor = "#1E1E1E",
+                BackgroundColor = "#FFFFFF",
                 BackgroundImages = [],
                 ContentBlur = 0,
                 ContentRadius = 0,
@@ -43,7 +43,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, false),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
