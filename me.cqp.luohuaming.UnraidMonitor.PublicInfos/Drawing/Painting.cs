@@ -1,12 +1,12 @@
-﻿using HarfBuzzSharp;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.HarfBuzz;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using static me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.DrawingStyle;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
@@ -247,16 +247,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public SKPoint DrawText(string text, SKRect area, SKPoint startPoint, SKColor color, SKShader shader = null, float fontSize = 26, SKTypeface customFont = null, bool isBold = false)
         {
             var textElementEnumerator = StringInfo.GetTextElementEnumerator(text);
-            float currentX = startPoint.X;
-            float currentY = startPoint.Y + fontSize;
-            float lineGap = fontSize / 2;
-            float lineHeight = fontSize + lineGap;
+            float currentX = startPoint.X; // 建议从 area.Left 开始
+            float currentY = startPoint.Y; // 这里用作每行的“top”
+            float lineHeight = 0f; // 当前行的最大高度
+            float maxLineHeight = 0f; // 当前行最大高度（用于换行时累加）
 
             SKTypeface GetTypeface(SKTypeface baseFont, bool bold)
             {
                 return baseFont != null && baseFont.IsBold == bold
                     ? baseFont
                     : SKTypeface.FromFamilyName(baseFont.FamilyName, bold ? SKFontStyle.Bold : SKFontStyle.Normal);
+            }
+
+            // 支持中英文分词：英文按单词，中文/标点/空白逐个
+            IEnumerable<string> Tokenize(string text)
+            {
+                // \w+ 匹配英文单词，[\u4e00-\u9fa5]匹配单个汉字，\s+空白，. 匹配其它单字符（标点等）
+                var regex = new Regex(@"(\w+)|([\u4e00-\u9fa5])|(\s+)|([^\w\s])", RegexOptions.Compiled);
+                foreach (Match match in regex.Matches(text))
+                    yield return match.Value;
             }
 
             SKTypeface typeface = customFont != null ? GetTypeface(customFont, isBold) : null;
@@ -267,10 +276,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 string textElement = textElementEnumerator.GetTextElement();
                 if (textElement.Contains("\n"))
                 {
+                    // 换行：y 增加当前行高，x 归位，行高归零
                     currentX = area.Left;
-                    currentY += lineHeight;
+                    currentY += maxLineHeight;
+                    maxLineHeight = 0f;
                     continue;
                 }
+
                 var enumerator = StringInfo.GetTextElementEnumerator(textElement);
                 enumerator.MoveNext();
                 int codepoint = char.ConvertToUtf32(textElement, enumerator.ElementIndex);
@@ -309,24 +321,46 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 }
 
                 var shaper = new SKShaper(typeface);
+                var metrics = paint.FontMetrics;
 
                 var shapedText = shaper.Shape(textElement, paint);
 
+                // 用 top/bottom 计算该字的高度
+                float glyphHeight = metrics.Bottom - metrics.Top;
+                // 当前行最大高度
+                maxLineHeight = Math.Max(maxLineHeight, glyphHeight);
+
+                // 如果超出右边界则换行
                 if (currentX + shapedText.Width > area.Right)
                 {
                     currentX = area.Left;
-                    currentY += lineHeight;
+                    currentY += maxLineHeight;
+                    maxLineHeight = glyphHeight; // 新行只包含当前字
                 }
-                if (area.Bottom != 0 && currentY > area.Bottom)
+
+                // 如果超出下边界则停止
+                if (area.Bottom != 0 && currentY + maxLineHeight > area.Bottom)
                 {
-                    currentY -= lineHeight;
                     break;
                 }
-                MainCanvas.DrawShapedText(textElement, currentX, currentY, paint);
+
+                // 关键：每个字的基线y = currentY - metrics.Top
+                float baselineY = currentY - metrics.Top;
+
+                MainCanvas.DrawShapedText(textElement, currentX, baselineY, paint);
+
+                // 外框：currentY 是top，maxLineHeight是height
+                //DrawRectangle(new()
+                //{
+                //    Location = new(currentX, currentY),
+                //    Size = new(shapedText.Width, glyphHeight)
+                //}, SKColors.Transparent, SKColors.Red, 1, null, 0);
+
                 currentX += shapedText.Width;
             }
 
-            return new SKPoint(currentX, currentY);
+            // 返回最后一个字符的右下角
+            return new SKPoint(currentX, currentY + maxLineHeight);
         }
 
         public void DrawChart(SKPoint[] points, SKRect rect, SKColor strokeColor, float strokeWidth, SKColor gradientStart, SKColor gradientEnd)
@@ -553,6 +587,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainCanvas.ClipPath(path, SKClipOperation.Intersect, true);
             MainCanvas.Clear(SKColors.Transparent);
             MainCanvas.DrawImage(snapShot, 0, 0, paint);
+            MainCanvas.Restore();
+        }
+
+        public void DrawSVG(string svg, SKPoint point)
+        {
+            using MemoryStream stream = new(Encoding.UTF8.GetBytes(svg));
+            var svgImage = new SkiaSharp.Extended.Svg.SKSvg();
+            svgImage.Load(stream);
+            var svgPath = svgImage.Picture;
+            MainCanvas.Save();
+            MainCanvas.Translate(point);
+            MainCanvas.DrawPicture(svgPath);
             MainCanvas.Restore();
         }
 
