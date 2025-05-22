@@ -85,18 +85,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             }, currentPoint, SKColor.Parse(palette.TextColor), null, TextSize, font, false);
             textHeight = Math.Max(textHeight, Math.Max(size.Height, currentPoint.Y));
             // Draw to main canvas
-            content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
+            // content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
             painting.DrawRectangle(new()
             {
                 Location = new(startPoint.X, startPoint.Y),
-                Size = new(desireWidth, content.Height + Padding.Top + Padding.Bottom)
+                Size = new(desireWidth, textHeight + Padding.Top + Padding.Bottom)
             }, backgroundColor, SKColors.Transparent, 0, null, 4);
             painting.DrawImage(content.SnapShot(), new()
             {
                 Location = new(startPoint.X + Padding.Left, startPoint.Y + Padding.Top),
                 Size = new(content.Width, content.Height)
             });
-            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + content.Height + Padding.Bottom), desireWidth, content.Height + Padding.Top + Padding.Bottom);
+            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + textHeight + Padding.Bottom), desireWidth, textHeight + Padding.Top + Padding.Bottom);
         }
 
         private (SKPoint endPoint, float width, float height) DrawMaterialDesign(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
@@ -148,18 +148,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             }, currentPoint, iconColor, null, TextSize, font, false);
             textHeight = Math.Max(textHeight, Math.Max(size.Height, currentPoint.Y));
             // Draw to main canvas
-            content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
+            // content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
             painting.DrawRectangle(new()
             {
                 Location = new(startPoint.X, startPoint.Y),
-                Size = new(desireWidth, content.Height + Padding.Top + Padding.Bottom)
+                Size = new(desireWidth, textHeight + Padding.Top + Padding.Bottom)
             }, backgroundColor, SKColors.Transparent, 0, null, 4);
             painting.DrawImage(content.SnapShot(), new()
             {
                 Location = new(startPoint.X + Padding.Left, startPoint.Y + Padding.Top),
                 Size = new(content.Width, content.Height)
             });
-            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + content.Height + Padding.Bottom), desireWidth, content.Height + Padding.Top + Padding.Bottom);
+            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + textHeight + Padding.Bottom), desireWidth, textHeight + Padding.Top + Padding.Bottom);
         }
 
         private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
@@ -198,19 +198,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             }, currentPoint, iconColor, null, TextSize, font, false);
             textHeight = Math.Max(textHeight, Math.Max(size.Height, currentPoint.Y));
             // Draw to main canvas
-            content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
+            // content.Resize((int)Math.Ceiling(content.Width), (int)Math.Ceiling(textHeight));
             painting.DrawRectangle(new()
             {
                 Location = new(startPoint.X, startPoint.Y),
-                Size = new(desireWidth, content.Height + Padding.Top + Padding.Bottom)
+                Size = new(desireWidth, textHeight + Padding.Top + Padding.Bottom)
             }, backgroundColor, iconColor, 1, null, 4);
             painting.DrawImage(content.SnapShot(), new()
             {
                 Location = new(startPoint.X + Padding.Left, startPoint.Y + Padding.Top),
                 Size = new(content.Width, content.Height)
             });
-
-            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + content.Height + Padding.Bottom), desireWidth, content.Height + Padding.Top + Padding.Bottom);
+            return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + textHeight + Padding.Bottom), desireWidth, textHeight + Padding.Top + Padding.Bottom);
         }
     }
 }

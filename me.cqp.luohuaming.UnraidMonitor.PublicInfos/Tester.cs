@@ -32,18 +32,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             DrawingStyle style = new()
             {
                 BackgroundBlur = 0,
-                BackgroundColor = "#FFFFFF",
+                BackgroundColor = "#0E0E0E",
                 BackgroundImages = [],
                 ContentBlur = 0,
                 ContentRadius = 0,
                 CreateTime = DateTime.Now,
                 DrawBackgroundImageScaleType = DrawingStyle.BackgroundImageScaleType.Center,
                 DrawBackgroundType = DrawingStyle.BackgroundType.Color,
-                ItemTheme = DrawingStyle.Theme.Unraid,
+                ItemTheme = DrawingStyle.Theme.WinUI3,
                 ModifyTime = DateTime.Now,
                 Name = "Test",
                 Padding = new Thickness(16),
-                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.Unraid, false),
+                Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
