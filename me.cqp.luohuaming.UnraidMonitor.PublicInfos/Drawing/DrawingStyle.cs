@@ -285,7 +285,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                     var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
-                    drawHeight += actualHeight;
+                    //drawHeight += actualHeight;
                     // 记录子项的模糊区域
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
@@ -329,6 +329,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 void NewLine(Thickness margin)
                 {
                     float maxHeight = currentRowHeights.Count > 0 ? currentRowHeights.Max() : 0;
+                    drawHeight += maxHeight + margin.Bottom;
                     startPoint = new(0, startPoint.Y + maxHeight + margin.Bottom);
                     fillPercentage = 0;
                     currentRowHeights = [];
