@@ -143,7 +143,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 currentPoint = DrawTitle(painting, theme, palette, startLeft, currentPoint);
             }
             // 调用各个Item的绘制方法
-            currentPoint = DrawItems(painting, currentPoint, width, theme, palette);
+            currentPoint = DrawItems(painting, currentPoint, width - Padding.Left - Padding.Right, theme, palette);
             // 绘制Border
             if (DrawingBorder != null && DrawingBorder.HasBorder)
             {
