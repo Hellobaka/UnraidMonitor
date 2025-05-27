@@ -1,6 +1,9 @@
-﻿using SkiaSharp;
+﻿using LiteDB;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,9 +52,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual DrawingStyle.Theme OverrideTheme { get; set; }
 
-        public virtual DrawingStyle.Colors OverrideColor { get; set; }
+        public virtual DrawingStyle.Colors OverridePalette { get; set; }
 
         public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
+
+        public BindingBase Binding { get; set; }
+
+        public virtual void ApplyBinding()
+        {
+            if (Binding != null)
+            {
+                Debugger.Break();
+                return;
+            }
+            Binding.Get();
+        }
 
         public virtual float CalcHeight(DrawingStyle.Theme theme)
         {

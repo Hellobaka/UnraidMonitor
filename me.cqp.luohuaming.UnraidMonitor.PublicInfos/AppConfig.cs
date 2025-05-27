@@ -29,6 +29,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public static string SSHPassword { get; set; } = "";
       
         public static int SSHCommandTimeout { get; set; } = 10;
+      
+        public static int CacheKeepSeconds { get; set; } = (int)TimeSpan.FromDays(1).TotalSeconds;
        
         public static string FallbackFont { get; set; }
 
@@ -43,6 +45,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             SSHPassword = GetConfig("SSHPassword", "");
             SSHCommandTimeout = GetConfig("SSHCommandTimeout", 10);
             FallbackFont = GetConfig("FallbackFont", "微软雅黑");
+            CacheKeepSeconds = GetConfig("CacheKeepSeconds", (int)TimeSpan.FromDays(1).TotalSeconds);
             EnableAutoReload();
         }
     }

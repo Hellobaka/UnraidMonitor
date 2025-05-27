@@ -1,10 +1,12 @@
 ﻿using LiteDB;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 {
@@ -48,6 +50,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         public Timer SystemUptimeTimer { get; set; }
 
         public Timer UPSTimer { get; set; }
+
+        public Dictionary<string, List<(DateTime cacheTime, object data)>> Cache { get; set; } = [];
 
         public void StopMonitor()
         {
@@ -219,6 +223,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     .FirstOrDefault(x => x.Name == "DateTime")?
                     .SetValue(data, DateTime.Now);
             }
+            CacheData(data);
             Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType;
             var db = DBHelper.Instance;
             MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "GetCollection" && x.IsGenericMethod && x.GetParameters().Length == 0);
@@ -243,6 +248,39 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             {
                 throw new Exception($"Insert method not found for type {entityType.Name}");
             }
+        }
+
+        private void CacheData(object data)
+        {
+            Task.Run(() =>
+            {
+                lock (this)
+                {
+                    var entityType = data.GetType();
+                    string name = entityType.Name;
+                    DateTime time = DateTime.Now;
+                    if (Cache.TryGetValue(name, out var cache))
+                    {
+                        for (int i = 0; i < cache.Count; i++)
+                        {
+                            if ((time - cache[i].cacheTime).TotalSeconds > AppConfig.CacheKeepSeconds)
+                            {
+                                cache.RemoveAt(i);
+                                i--;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        cache.Add((time, data));
+                    }
+                    else
+                    {
+                        Cache.Add(name, [(time, data)]);
+                    }
+                }
+            });
         }
     }
 }

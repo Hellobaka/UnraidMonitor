@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System;
+using System.Linq;
 using System.Runtime.Remoting.Messaging;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
@@ -21,6 +22,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override float OverrideHeight { get; set; }
 
         public override Thickness Margin { get; set; } = new();
+
+        public override void ApplyBinding()
+        {
+            base.ApplyBinding();
+            if (Binding.Value.TryGetValue("Value", out var data))
+            {
+                var item = data.FirstOrDefault();
+                var itemType = item.GetType().Name;
+                Value = itemType switch
+                {
+                    "Int32" or "Double" or "Single" => (float)Binding.GetNumber(data),
+                    _ => Min
+                };
+            }
+        }
 
         public override float CalcHeight(DrawingStyle.Theme theme)
         {

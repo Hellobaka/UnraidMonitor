@@ -2,6 +2,8 @@
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Icons;
 using SkiaSharp;
 using System;
+using static System.Net.Mime.MediaTypeNames;
+using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -24,6 +26,58 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public float TextSize { get; set; } = 26;
 
         public Thickness Padding { get; set; } = new Thickness(16);
+
+        public Converter AlertTypeConverter { get; set; }
+
+        public override void ApplyBinding()
+        {
+            base.ApplyBinding();
+            if (Binding.Value.TryGetValue("Header", out var data))
+            {
+                var item = data.FirstOrDefault();
+                var itemType = item.GetType().Name;
+                Header = itemType switch
+                {
+                    "Int32" or "Double" or "Single" => string.Format(Binding.StringFormat, Binding.GetNumber(data)),
+                    "DateTime" => ((DateTime)item).ToString(Binding.StringFormat),
+                    _ => string.Format(Binding.StringFormat, item),
+                };
+            }
+            if (Binding.Value.TryGetValue("Content", out data))
+            {
+                var item = data.FirstOrDefault();
+                var itemType = item.GetType().Name;
+                Content = itemType switch
+                {
+                    "Int32" or "Double" or "Single" => string.Format(Binding.StringFormat, Binding.GetNumber(data)),
+                    "DateTime" => ((DateTime)item).ToString(Binding.StringFormat),
+                    _ => string.Format(Binding.StringFormat, item),
+                };
+            }
+            if (Binding.Value.TryGetValue("AlertType", out data))
+            {
+                var item = data.FirstOrDefault().ToString();
+                if (AlertTypeConverter != null)
+                {
+                    if (AlertTypeConverter.Info == item)
+                    {
+                        AlertType = DrawingBase.AlertType.Info;
+                    }
+                    else if (AlertTypeConverter.Success == item)
+                    {
+                        AlertType = DrawingBase.AlertType.Success;
+                    }
+                    else if (AlertTypeConverter.Warning == item)
+                    {
+                        AlertType = DrawingBase.AlertType.Warning;
+                    }
+                    else if (AlertTypeConverter.Fatal == item)
+                    {
+                        AlertType = DrawingBase.AlertType.Fatal;
+                    }
+                }
+            }
+        }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
@@ -210,6 +264,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 Size = new(content.Width, content.Height)
             });
             return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + textHeight + Padding.Bottom), desireWidth, textHeight + Padding.Top + Padding.Bottom);
+        }
+
+        public class Converter
+        {
+            public string Info { get; set; }
+
+            public string Warning { get; set; }
+
+            public string Fatal { get; set; }
+
+            public string Success { get; set; }
         }
     }
 }

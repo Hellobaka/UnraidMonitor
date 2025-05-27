@@ -19,7 +19,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public long UsedBytes { get; set; }
 
-        public long AvaliableBytes { get; set; }
+        public long AvailableBytes { get; set; }
 
         public DateTime DateTime { get; set; }
 
@@ -63,7 +63,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 var splits = item.Split([' '], StringSplitOptions.RemoveEmptyEntries);
                 if (splits.Length >= 6 && splits[0] == name)
                 {
-                    AvaliableBytes = long.Parse(splits[3]);
+                    AvailableBytes = long.Parse(splits[3]);
                     UsedBytes = long.Parse(splits[2]);
                     TotalBytes = long.Parse(splits[1]);
                     break;

@@ -1,5 +1,9 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json.Linq;
+using SkiaSharp;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -40,6 +44,47 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 OverrideHeight = 100;
             }
             return base.CalcHeight(theme);
+        }
+
+        public override void ApplyBinding()
+        {
+            base.ApplyBinding();
+            List<float> dataY = [];
+            List<DateTime> dataX = [];
+            if (Binding.Value.TryGetValue("Points", out var data))
+            {
+                var item = data.FirstOrDefault();
+                var itemType = item.GetType().Name;
+                if (itemType != "Int32" || itemType != "Double" || itemType != "Single")
+                {
+                    return;
+                }
+                foreach(var i in data)
+                {
+                    dataY.Add((float)i);
+                }
+            }
+            if (Binding.Value.TryGetValue("DateTime", out data))
+            {
+                var item = data.FirstOrDefault();
+                var itemType = item.GetType().Name;
+                if (itemType != "DateTime")
+                {
+                    return;
+                }
+                foreach(var i in data)
+                {
+                    dataX.Add((DateTime)i);
+                }
+            }
+            if (dataX.Count != dataY.Count)
+            {
+                Debugger.Break();
+            }
+            for (int i = 0; i < Math.Min(dataX.Count, dataY.Count); i++)
+            {
+                Points = [.. Points, (dataX[i], dataY[i])];
+            }
         }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)

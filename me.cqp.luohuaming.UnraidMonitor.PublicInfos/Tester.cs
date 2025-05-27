@@ -47,12 +47,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 Content = [
                     new DrawingBase{
                         BackgroundBlur = 0,
-                        DrawingBorder = new(),
+                        DrawingBorder = new()
+                        {
+                            BorderColor = SKColors.White,
+                            BorderRadius = 10,
+                            BorderWidth = 1,
+                            HasBorder = true,
+                        },
                         DrawingLayout = DrawingBase.Layout.Percentage,
                         DrawingTitle = new()
                         {
                             HasTitle = true,
-                            Text = "Qualcomm Snapdragon",
+                            Text = "CPU Info",
                             Bold = true,
                             TextSize = 36,
                             HasIcon = false,
@@ -62,11 +68,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             //OverrideColor = "#E22829",
                             //OverrideColor2 = "#FF8C30",
                         },
-                        FillPercentage = 100,
+                        FillPercentage = 50,
                         FixedWidth = 0,
                         Margin = Thickness.DefaultMargin,
                         Padding = Thickness.DefaultPadding,
-                        Radius = 0,
+                        Radius = 10,
                         LayoutDebug = false,
                         Content = [
                             new DrawingItem_Text(){
@@ -89,7 +95,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU0:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -103,7 +109,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU1:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -117,7 +123,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU2:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -131,7 +137,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU3:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -146,7 +152,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU4:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -160,7 +166,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU5:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -175,7 +181,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             },
                             new DrawingItem_Text(){
                                 Text = "CPU6:",
-                                Layout = DrawingBase.Layout.Percentage,
+                                Layout = DrawingBase.Layout.Minimal,
                                 FillPercentage = 10,
                                 VerticalAlignment = DrawingBase.Position.Center
                             },
@@ -188,19 +194,66 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                                 VerticalAlignment = DrawingBase.Position.Center,
                                 AfterNewLine = true,
                             },
+                        ]
+                    },
+                    new DrawingBase{
+                        BackgroundBlur = 0,
+                        DrawingBorder = new(),
+                        DrawingLayout = DrawingBase.Layout.Percentage,
+                        DrawingTitle = new()
+                        {
+                            HasTitle = true,
+                            Text = "CPU Usage",
+                            Bold = true,
+                            TextSize = 36,
+                            HasIcon = false,
+                            IconMargin = new Thickness(10, 0),
+                            IconPath = @"icons\icon.ico",
+                            IconSize = new(40, 40),
+                            //OverrideColor = "#E22829",
+                            //OverrideColor2 = "#FF8C30",
+                        },
+                        FillPercentage = 50,
+                        FixedWidth = 0,
+                        Margin = Thickness.DefaultMargin,
+                        Padding = Thickness.DefaultPadding,
+                        Radius = 0,
+                        LayoutDebug = false,
+                        Content = [
                             new DrawingItem_Chart(){
                                 Points = MockChartValue(100),
                                 AfterNewLine = true,
                                 OverrideHeight = 200,
                                 VerticalValueDisplayCount = 5,
                                 ShowVerticalGridLine = true,
-                                HorizonValueDisplayCount = 10
+                                HorizonValueDisplayCount = 5
                             },
-                            new DrawingItem_Chart(){
-                                Points = MockChartValue(50),
-                                AfterNewLine = true,
-                                VerticalValueDisplayCount = 2,
-                            },
+                        ]
+                    },
+                    new DrawingBase{
+                        BackgroundBlur = 0,
+                        DrawingBorder = new(),
+                        DrawingLayout = DrawingBase.Layout.Percentage,
+                        DrawingTitle = new()
+                        {
+                            HasTitle = true,
+                            Text = "Notice",
+                            Bold = true,
+                            TextSize = 36,
+                            HasIcon = false,
+                            IconMargin = new Thickness(10, 0),
+                            IconPath = @"icons\icon.ico",
+                            IconSize = new(40, 40),
+                            //OverrideColor = "#E22829",
+                            //OverrideColor2 = "#FF8C30",
+                        },
+                        FillPercentage = 100,
+                        FixedWidth = 0,
+                        Margin = Thickness.DefaultMargin,
+                        Padding = Thickness.DefaultPadding,
+                        Radius = 0,
+                        LayoutDebug = false,
+                        Content = [
                             new DrawingItem_Alert(){
                                 AlertType = DrawingBase.AlertType.Info,
                                 Header = "Info",
@@ -243,9 +296,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     }
                 ],
             };
-            var paint = style.Draw(1000);
+            var paint = style.Draw(1500);
             paint.Save("1.bmp");
-            File.WriteAllText("default.style", JsonConvert.SerializeObject(style, Formatting.Indented));
+            File.WriteAllText("layout.style", JsonConvert.SerializeObject(style, Formatting.Indented));
         }
 
         static Random Random = new Random();

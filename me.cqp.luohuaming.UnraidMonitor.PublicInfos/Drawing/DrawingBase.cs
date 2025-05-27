@@ -197,7 +197,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     continue;
                 }
                 Painting itemCanvas = new((int)Math.Ceiling(desireWidth), 1000);
-                var (endPoint, actualWidth, actualHeight) = item.Draw(itemCanvas, new(), desireWidth, item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.OverrideTheme, item.OverrideColor ?? palette);
+                var (endPoint, actualWidth, actualHeight) = item.Draw(itemCanvas, new(), desireWidth, item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.OverrideTheme, item.OverridePalette ?? palette);
                 itemCanvas.Resize((int)Math.Ceiling(actualWidth), (int)Math.Ceiling(actualHeight));
                 currentLine.Add((itemCanvas, item, actualWidth, actualHeight));
                 if (item.AfterNewLine)
@@ -233,7 +233,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     {
                         float widthWithoutMargin = remainingItemWidth - item.item.Margin.Left - item.item.Margin.Right;
                         canvas = new((int)Math.Ceiling(widthWithoutMargin), 1000);
-                        var (_, w, h) = item.item.Draw(canvas, new(), widthWithoutMargin, item.item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.item.OverrideTheme, item.item.OverrideColor ?? palette);
+                        var (_, w, h) = item.item.Draw(canvas, new(), widthWithoutMargin, item.item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.item.OverrideTheme, item.item.OverridePalette ?? palette);
                         canvas.Resize((int)Math.Ceiling(w), (int)Math.Ceiling(h));
                         drawWidth = w;
                         drawHeight = h;

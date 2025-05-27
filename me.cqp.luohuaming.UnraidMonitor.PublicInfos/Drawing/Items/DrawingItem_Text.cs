@@ -1,4 +1,6 @@
 ﻿using SkiaSharp;
+using System;
+using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -17,6 +19,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public string OverrideFont { get; set; }
 
         public string OverrideColor { get; set; }
+
+        public override void ApplyBinding()
+        {
+            base.ApplyBinding();
+            if (Binding.Value.TryGetValue("Text", out var data))
+            {
+                var item = data.FirstOrDefault();
+                var itemType = item.GetType().Name;
+                Text = itemType switch
+                {
+                    "Int32" or "Double" or "Single" => string.Format(Binding.StringFormat, Binding.GetNumber(data)),
+                    "DateTime" => ((DateTime)item).ToString(Binding.StringFormat),
+                    _ => string.Format(Binding.StringFormat, item),
+                };
+            }
+        }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
