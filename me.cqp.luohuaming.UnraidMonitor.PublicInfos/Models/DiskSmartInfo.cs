@@ -186,29 +186,29 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             // 公共属性
-            public DiskType Type { get; private set; }
+            public DiskType Type { get; set; }
 
-            public DiskHealth HealthStatus { get; private set; } = DiskHealth.Unknown; // 默认Unknown
+            public DiskHealth HealthStatus { get; set; } = DiskHealth.Unknown; // 默认Unknown
 
-            public int? TemperatureCelsius { get; private set; }
+            public int? TemperatureCelsius { get; set; }
 
-            public long? BytesRead { get; private set; }
+            public long? BytesRead { get; set; }
 
-            public long? BytesWritten { get; private set; }
+            public long? BytesWritten { get; set; }
 
-            public int? PowerOnHours { get; private set; }
+            public int? PowerOnHours { get; set; }
 
-            public int? PowerCycles { get; private set; }
+            public int? PowerCycles { get; set; }
 
-            public string InterfaceSpeed { get; private set; }
+            public string InterfaceSpeed { get; set; }
 
-            public TimeSpan? HeadFlyingHours { get; private set; } // HDD特有
+            public TimeSpan? HeadFlyingHours { get; set; } // HDD特有
 
-            public int? ReallocatedSectors { get; private set; }    // HDD特有，用于健康度计算
+            public int? ReallocatedSectors { get; set; }    // HDD特有，用于健康度计算
 
-            public int? CurrentPendingSectors { get; private set; } // HDD特有，用于健康度计算
+            public int? CurrentPendingSectors { get; set; } // HDD特有，用于健康度计算
 
-            public int? OfflineUncorrectableSectors { get; private set; } // HDD特有，用于健康度计算
+            public int? OfflineUncorrectableSectors { get; set; } // HDD特有，用于健康度计算
 
             // 存储所有原始属性，方便调试或显示
             public Dictionary<string, string> RawAttributes { get; } = new(StringComparer.OrdinalIgnoreCase);
@@ -321,7 +321,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         info.InterfaceSpeed = input.Contains("3Gb/s") ? "SATA 3Gbps" : input.Contains("1.5Gb/s") ? "SATA 1.5Gbps" : "SATA";
                     }
                 }
-                // 您可能需要更复杂的逻辑来从SMART输出中确定准确的接口速度
             }
 
             private static void ParseNvmeAttributes(string input, SmartInfo info)
@@ -350,13 +349,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             break;
 
                         case "Data Units Read":
-                            // NVMe units are typically 512KB (1024 * 512 bytes)
-                            info.BytesRead = ParseStorageValue(value) * 524288L; // Use L for long literal
+                            // NVMe units are typically 512KB (1000 * 512 bytes)
+                            info.BytesRead = ParseStorageValue(value) * 512000L; // Use L for long literal
                             break;
 
                         case "Data Units Written":
                             // NVMe units are typically 512KB
-                            info.BytesWritten = ParseStorageValue(value) * 524288L; // Use L for long literal
+                            info.BytesWritten = ParseStorageValue(value) * 512000L; // Use L for long literal
                             break;
 
                         case "Power On Hours":
@@ -409,9 +408,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     info.HealthStatus = DiskHealth.Fatal;
                 }
 
-                // 您可以根据需要添加更多基于其他SMART属性的警告或致命判断逻辑
-                // 例如：Spin Up Time (3), Command Timeout (188), UDMA CRC Error Count (199) 等
-                // 需要从 RawAttributes 中获取这些值并进行判断
                 if (info.HealthStatus != DiskHealth.Fatal && info.RawAttributes.TryGetValue("UDMA_CRC_Error_Count", out var crcErrorValueStr))
                 {
                     if (ParseInt(crcErrorValueStr) > 0)

@@ -269,7 +269,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             ValueType.Avg => data.Average(x => (double)x),
             ValueType.Sum => data.Sum(x => (double)x),
             ValueType.Count => data.Count(),
-            _ => (double)data.FirstOrDefault(),
+            _ => (double)data.Last(),
         };
 
         private static DateTime GetDateTime(TimeRange range, int value)

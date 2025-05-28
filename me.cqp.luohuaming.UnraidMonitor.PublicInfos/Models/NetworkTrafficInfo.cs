@@ -8,9 +8,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
     {
         public string Name { get; set; } = "";
 
-        public string RxBytes { get; set; } = "";
+        public long RxBytes { get; set; }
 
-        public string TxBytes { get; set; } = "";
+        public long TxBytes { get; set; }
 
         public DateTime DateTime { get; set; }
 
@@ -37,8 +37,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 list.Add(new NetworkTrafficInfo
                 {
                     Name = name,
-                    RxBytes = rx,
-                    TxBytes = tx
+                    RxBytes = long.TryParse(rx , out long l) ? l : 0,
+                    TxBytes = long.TryParse(tx, out l) ? l : 0,
                 });
             }
             return list.ToArray();

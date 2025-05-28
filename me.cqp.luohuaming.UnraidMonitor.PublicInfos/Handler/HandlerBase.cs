@@ -77,15 +77,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
             foreach (var property in properties)
             {
-                string key = property.Name; // 例如 "CPUInfo"
+                string key = property.Name; // CPUInfo
                 if (key == "Instance")
                 {
                     continue;
                 }
                 int interval = (int)property.GetValue(null);
 
-                string timerFieldName = key + "Timer";       // 例如 "CPUInfoTimer"
-                string methodName = "Get" + key;             // 例如 "GetCPUInfo"
+                string timerFieldName = key + "Timer"; // CPUInfoTimer
+                string methodName = "Get" + key; // GetCPUInfo
 
                 var t = instanceType.GetProperty(timerFieldName);
                 var collectMethod = instanceType.GetMethod(methodName);
@@ -98,10 +98,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
                 (t.GetValue(this) as Timer)?.Dispose();
 
-                if (interval > 0)
+                if (interval >= 0)
                 {
                     Timer timer = new(_ =>
                     {
+                        Console.WriteLine($"Executing {collectMethod.Name}");
                         var data = collectMethod.Invoke(this, null);
                         this.InsertData(data);
                     }, null, 0, interval);
