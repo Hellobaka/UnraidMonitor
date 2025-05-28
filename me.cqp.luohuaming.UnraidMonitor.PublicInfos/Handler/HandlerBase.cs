@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -212,7 +211,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             CacheData(data);
             Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType;
             var db = DBHelper.Instance;
-            MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "GetCollection" && x.IsGenericMethod && x.GetParameters().Length == 0);
+            MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "Insertable" && x.IsGenericMethod && x.GetParameters().Length == 0);
             MethodInfo generic = method.MakeGenericMethod(itemType);
             object collection = generic.Invoke(db, []);
             var insertMethod = collection.GetType().GetMethods().FirstOrDefault(x => x.Name == "Insert" && x.ReturnType.Name == "BsonValue");
