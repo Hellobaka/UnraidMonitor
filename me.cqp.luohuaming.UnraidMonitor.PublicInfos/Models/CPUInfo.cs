@@ -30,7 +30,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public static CpuInfo ParseDmidecode(string input)
         {
             var info = new CpuInfo();
-
+            info.DateTime = DateTime.Now;
             var modelMatch = ModelRegex.Match(input);
             if (modelMatch.Success)
             {

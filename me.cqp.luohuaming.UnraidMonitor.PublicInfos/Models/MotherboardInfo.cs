@@ -18,7 +18,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public static MotherboardInfo ParseDmidecode(string input)
         {
             var info = new MotherboardInfo();
-
+            info.DateTime = DateTime.Now;
             var manufacturerMatch = ManufacturerRegex.Match(input);
             var productNameMatch = ProductNameRegex.Match(input);
 

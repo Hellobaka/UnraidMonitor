@@ -209,21 +209,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return;
             }
             var entityType = data.GetType();
-            if (array != null)
-            {
-                foreach (var item in array)
-                {
-                    item.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                        .FirstOrDefault(x => x.Name == "DateTime")?
-                        .SetValue(item, DateTime.Now);
-                }
-            }
-            else
-            {
-                entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                    .FirstOrDefault(x => x.Name == "DateTime")?
-                    .SetValue(data, DateTime.Now);
-            }
             CacheData(data);
             Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType;
             var db = DBHelper.Instance;

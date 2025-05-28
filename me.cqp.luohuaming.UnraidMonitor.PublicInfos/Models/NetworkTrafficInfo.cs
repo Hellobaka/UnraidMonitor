@@ -39,6 +39,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     Name = name,
                     RxBytes = long.TryParse(rx , out long l) ? l : 0,
                     TxBytes = long.TryParse(tx, out l) ? l : 0,
+                    DateTime = DateTime.Now
                 });
             }
             return list.ToArray();

@@ -99,6 +99,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public SmartInfo Smart { get; set; }
 
+        public DateTime DateTime { get; set; }
+
         private static Regex ModelFamilyRegex { get; } =
             new(@"(?:Model Family|Model Number):\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -151,7 +153,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     FormattedCapacity = CapacityRegex.Match(input).Groups[2].Value.Trim(),
                     LogicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[1].Value, out int value) ? value : 0,
                     PhysicalSectorSize = int.TryParse(SectorSizeRegex.Match(input).Groups[2].Value, out value) ? value : 0,
-                    Smart = SmartInfo.Parse(input)
+                    Smart = SmartInfo.Parse(input),
+                    DateTime = DateTime.Now
                 };
         }
 

@@ -36,7 +36,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 {
                     currentInterface = new NetworkInterfaceInfo
                     {
-                        Name = interfaceMatch.Groups[1].Value.Trim()
+                        Name = interfaceMatch.Groups[1].Value.Trim(),
+                        DateTime = DateTime.Now
                     };
                     interfaces.Add(currentInterface);
                     continue;

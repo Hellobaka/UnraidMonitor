@@ -34,7 +34,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     {
                         ParentName = parent,
                         Name = match.Groups[1].Value.Trim(),
-                        Temperature = double.TryParse(match.Groups[2].Value.Trim(), out double value) ? value : -1
+                        Temperature = double.TryParse(match.Groups[2].Value.Trim(), out double value) ? value : -1,
+                        DateTime = DateTime.Now
                     });
                 }
             }

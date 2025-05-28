@@ -24,7 +24,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public static MemoryInfo ParseFromFree(string input)
         {
             var info = new MemoryInfo();
-
+            info.DateTime = DateTime.Now;
             var match = MemoryRegex.Match(input);
 
             if (match.Success)

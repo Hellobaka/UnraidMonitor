@@ -61,6 +61,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
                     currentGroup = line.Trim('[', ']', '\"');
                     currentDiskInfo = new DiskInfo();
+                    currentDiskInfo.DateTime = DateTime.Now;
                     continue;
                 }
                 if (currentDiskInfo == null)

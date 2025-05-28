@@ -48,7 +48,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                         Name = match.Groups[1].Value.Trim(),
                         Size = match.Groups[2].Value.Trim(),
                         Type = match.Groups[3].Value.Trim(),
-                        MountPoint = match.Groups[4].Value.Trim()
+                        MountPoint = match.Groups[4].Value.Trim(),
+                        DateTime = DateTime.Now
                     });
                 }
             }

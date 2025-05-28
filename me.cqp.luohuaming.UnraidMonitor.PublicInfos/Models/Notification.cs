@@ -19,6 +19,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         {
             var lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             var notification = new Notification();
+            notification.DateTime = DateTime.Now;
             foreach (var line in lines)
             {
                 var parts = line.Split('=');

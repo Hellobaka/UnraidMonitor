@@ -31,7 +31,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     {
                         ParentName = parent,
                         Name = name,
-                        RPM = int.TryParse(rpm, out int value) ? value : -1
+                        RPM = int.TryParse(rpm, out int value) ? value : -1,
+                        DateTime = DateTime.Now
                     });
                 }
             }

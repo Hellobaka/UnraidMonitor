@@ -42,7 +42,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                     result.Add(new VirtualMachine
                     {
                         Name = parts[1].Trim(),
-                        Running = parts[2].Trim() == "running"
+                        Running = parts[2].Trim() == "running",
+                        DateTime = DateTime.Now
                     });
                 }
             }

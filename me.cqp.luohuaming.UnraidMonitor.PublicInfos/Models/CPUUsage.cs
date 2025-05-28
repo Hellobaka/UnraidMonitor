@@ -65,7 +65,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                             Wait = double.Parse(match.Groups[6].Value),
                             HardwareInterrupt = double.Parse(match.Groups[7].Value),
                             SoftwareInterrupt = double.Parse(match.Groups[8].Value),
-                            Steal = double.Parse(match.Groups[9].Value)
+                            Steal = double.Parse(match.Groups[9].Value),
+                            DateTime = DateTime.Now
                         };
 
                         cpuUsages.Add(usage);

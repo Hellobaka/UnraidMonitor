@@ -33,6 +33,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         {
             var lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
             UPSStatus status = new();
+            status.DateTime = DateTime.Now;
             foreach(var line in lines)
             {
                 var parts = line.Split([':'], 2);
