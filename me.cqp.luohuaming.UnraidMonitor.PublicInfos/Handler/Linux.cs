@@ -39,7 +39,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取CpuUsage", $"指令执行失败：{error}");
                 return null;
             }
-            return CpuUsage.ParseFromTop(output);
+            var usages = CpuUsage.ParseFromTop(output);
+            var total = new CpuUsage()
+            {
+                CPUId = "CPUTotal",
+                User = CpuUsage.GetTotalUsage(usages),
+            };
+            return [total, .. usages];
         }
 
         public override DiskMountInfo[] GetDiskMountInfos()
