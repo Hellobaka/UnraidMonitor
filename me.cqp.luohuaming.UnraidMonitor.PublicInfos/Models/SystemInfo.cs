@@ -12,7 +12,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public string SystemName { get; set; }
 
-        public string SystemEditon { get; set; }
+        public string SystemEdition { get; set; }
+
+        public DateTime DateTime { get; set; }
 
         /// <summary>
         /// /var/local/emhttp/var.ini
@@ -39,7 +41,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 }
                 if(parts.First() == "regTy")
                 {
-                    info.SystemEditon = parts.Last().Trim();
+                    info.SystemEdition = parts.Last().Trim();
                 }
             }
 

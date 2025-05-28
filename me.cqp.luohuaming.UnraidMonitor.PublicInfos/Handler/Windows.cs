@@ -407,7 +407,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
             return new()
             {
-                SystemEditon = edition,
+                SystemEdition = edition,
                 SystemName = osName,
                 Version = version
             };
@@ -444,7 +444,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         public override UPSStatus GetUPS()
         {
-            return null;
+            UPSStatus ups = new();
+            ups.DateTime = DateTime.Now;
+            using ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Battery");
+            foreach (ManagementObject battery in searcher.Get())
+            {
+                ups.Status = battery["Availability"]?.ToString() == "2" ? "ONLINE" : "ONBATT";
+                ups.BatteryLevel = (ushort)battery["EstimatedChargeRemaining"];
+                ups.TimeLeft = (uint)battery["EstimatedRunTime"];
+                ups.Model = battery["Caption"].ToString();
+                ups.MaxPower = 0;
+                ups.CurrentVoltage = 0;
+                ups.CurrentLoad = 0;
+
+                break;
+            }
+            return ups;
         }
 
         public override VirtualMachine[] GetVirtualMachines()
