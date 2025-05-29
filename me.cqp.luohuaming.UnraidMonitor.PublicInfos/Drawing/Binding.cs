@@ -1,5 +1,6 @@
-﻿using LiteDB;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -91,7 +92,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         Year
     }
 
-    public class BindingBase
+    public class Binding
     {
         public ItemType ItemType { get; set; } = ItemType.CPUInfo;
 
@@ -100,11 +101,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 绑定的路径，格式为：{"Item属性": "Model属性"}
         /// </summary>
-        public Dictionary<string, string> BindingPath { get; set; } = [];
+        public Dictionary<string, MultipleBinding[]> BindingPath { get; set; } = [];
 
         public Dictionary<string, string> Conditions { get; set; }
 
-        public Dictionary<string, List<object>> Value { get; set; }
+        public Dictionary<string, BindingResult> Value { get; set; }
 
         public string StringFormat { get; set; } = "";
 
@@ -120,7 +121,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         private DateTime To { get; set; }
 
-        public List<T> GetMetrics<T>()
+        public List<T> GetMetrics<T>() where T : MonitorDataBase, new()
         {
             From = GetDateTime(FromTimeRange, FromTimeValue);
             To = GetDateTime(ToTimeRange, ToTimeValue);
@@ -157,10 +158,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             }
         }
 
-        private List<T> GetDataFromDB<T>()
+        private List<T> GetDataFromDB<T>() where T : MonitorDataBase, new()
         {
-            var db = DBHelper.Instance;
-            return db.GetCollection<T>().Find(Query.And(Query.GTE("DateTime", From), Query.LTE("DateTime", To))).ToList();
+            return MonitorDataBase.GetDataRange<T>(From, To);
         }
 
         private List<T> GetDataFromCache<T>()
@@ -175,16 +175,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// 调用 GetMetrics 方法并解析结果为字典列表
         /// </summary>
         /// <returns>列表内容为：属性值 - 值</returns>
-        public List<Dictionary<string, object>> CallGetMetricsAndParseResult()
+        public Dictionary<string, BindingResult> CallGetMetricsAndParseResult()
         {
             var itemType = Type.GetType($"me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.{ItemType}");
-            Dictionary<PropertyInfo, string> pathProperties = [];
+            MultipleBinding[] multipleBindings = BindingPath.SelectMany(x => x.Value).Distinct().ToArray();
+            Dictionary<MultipleBinding, PropertyInfo> pathProperties = [];// 模型属性，反射属性
             Dictionary<PropertyInfo, string> tags = [];
             foreach (var item in itemType.GetProperties())
             {
-                if (BindingPath.TryGetValue(item.Name, out string p))
+                // 反射Model所有属性，获取绑定路径和条件
+                // 整理MultiBinding，获取所有绑定需求的路径，若当前模型属性在绑定需求中，则缓存反射信息
+                var bind = multipleBindings.FirstOrDefault(x => x.Path == item.Name);
+                if (bind != null)
                 {
-                    pathProperties[item] = p;
+                    bind.IsNumber = item.Name == "Int32" || item.Name == "Double" || item.Name == "Single";
+                    pathProperties[bind] = item;
                 }
                 if (Conditions.TryGetValue(item.Name, out string value))
                 {
@@ -201,29 +206,56 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 var genericMethod = method.MakeGenericMethod(itemType);
                 var data = genericMethod.Invoke(this, []);
+                // Item属性键，此次绑定结果
+                Dictionary<string, BindingResult> result = [];
+                // 从缓存以及数据库获取数据后，解析结果
                 if (data is IEnumerable list)
                 {
-                    List<Dictionary<string, object>> r = [];
                     foreach (var item in list)
                     {
                         if (tags.All(x => x.Key.GetValue(item).ToString() == x.Value))
                         {
-                            Dictionary<string, object> dict = [];
-                            if (pathProperties.Count == 0 && BindingPath.FirstOrDefault().Key == "$")
+                            // 要求满足所有条件，说明此Item可以进行绑定
+                            // 按照BindingPath进行绑定
+                            foreach (var bind in BindingPath)
                             {
-                                dict.Add("$", item);
-                            }
-                            else
-                            {
-                                foreach (var property in pathProperties)
+                                foreach (var binding in bind.Value)
                                 {
-                                    dict.Add(property.Value, property.Key.GetValue(item));
+                                    if (pathProperties.TryGetValue(binding, out var propertyInfo))
+                                    {
+                                        var value = propertyInfo.GetValue(item);
+                                        binding.RawValues = [.. binding.RawValues, value];
+                                    }
+                                    else
+                                    {
+                                        Debugger.Break();
+                                    }
                                 }
                             }
-                            r.Add(dict);
                         }
                     }
-                    return r;
+                    // 解析绑定结果
+                    foreach(var bind in BindingPath)
+                    {
+                        if (!result.TryGetValue(bind.Key, out var resultBinding))
+                        {
+                            resultBinding = new();
+                            object[] bindingResult = [];
+                            bool hasString = bind.Value.Any(x => !x.IsNumber);
+                            foreach(var binding in bind.Value)
+                            {
+                                resultBinding.RawValues = [..binding.RawValues, ..resultBinding.RawValues];
+                                if (binding.IsNumber)
+                                {
+                                    bindingResult = [.. bindingResult, GetNumber(binding.RawValues, binding.ValueType)];
+                                }
+                            }
+                            resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
+                            resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
+                            result[bind.Key] = resultBinding;
+                        }
+                    }
+                    return result;
                 }
                 else
                 {
@@ -239,30 +271,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public void Get()
         {
-            var data = CallGetMetricsAndParseResult();
-            if (data.Count == 0)
-            {
-                Value = [];
-                return;
-            }
-            foreach (var item in data)
-            {
-                foreach (var property in item)
-                {
-                    if (Value.TryGetValue(property.Key, out var v))
-                    {
-                        Value[property.Key].Add(property.Value);
-
-                    }
-                    else
-                    {
-                        Value.Add(property.Key, [property.Value]);
-                    }
-                }
-            }
+            Value = CallGetMetricsAndParseResult();
         }
 
-        public double GetNumber(List<object> data) => ValueType switch
+        public double GetNumber(object[] data, ValueType valueType) => data.Length == 0 ? 0 : valueType switch
         {
             ValueType.Max => data.Max(x => (double)x),
             ValueType.Min => data.Min(x => (double)x),
@@ -285,5 +297,39 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
             };
         }
+    }
+
+    /// <summary>
+    /// 多值绑定，仅可用于文本多绑，数字
+    /// </summary>
+    public class MultipleBinding
+    {
+        public string Path { get; set; }
+
+        public ValueType ValueType { get; set; } = ValueType.Instant;
+
+        public bool IsNumber { get; set; }
+
+        public object[] RawValues { get; set; } = [];
+
+        public override bool Equals(object obj)
+        {
+            MultipleBinding other = obj as MultipleBinding;
+            return other.Path == Path;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+    }
+
+    public class BindingResult
+    {
+        public object[] RawValues { get; set; }
+
+        public double ParsedNumber { get; set; }
+
+        public string FormattedString { get; set; }
     }
 }

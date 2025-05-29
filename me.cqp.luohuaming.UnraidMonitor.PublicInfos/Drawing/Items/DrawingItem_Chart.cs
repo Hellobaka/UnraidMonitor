@@ -53,26 +53,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             List<DateTime> dataX = [];
             if (Binding.Value.TryGetValue("Points", out var data))
             {
-                var item = data.FirstOrDefault();
-                var itemType = item.GetType().Name;
-                if (itemType != "Int32" || itemType != "Double" || itemType != "Single")
-                {
-                    return;
-                }
-                foreach(var i in data)
+                foreach(var i in data.RawValues)
                 {
                     dataY.Add((float)i);
                 }
             }
             if (Binding.Value.TryGetValue("DateTime", out data))
             {
-                var item = data.FirstOrDefault();
-                var itemType = item.GetType().Name;
-                if (itemType != "DateTime")
-                {
-                    return;
-                }
-                foreach(var i in data)
+                foreach(var i in data.RawValues)
                 {
                     dataX.Add((DateTime)i);
                 }

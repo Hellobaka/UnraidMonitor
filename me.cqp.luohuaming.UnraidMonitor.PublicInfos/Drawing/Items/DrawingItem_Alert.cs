@@ -34,29 +34,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             base.ApplyBinding();
             if (Binding.Value.TryGetValue("Header", out var data))
             {
-                var item = data.FirstOrDefault();
-                var itemType = item.GetType().Name;
-                Header = itemType switch
-                {
-                    "Int32" or "Double" or "Single" => string.Format(Binding.StringFormat, Binding.GetNumber(data)),
-                    "DateTime" => ((DateTime)item).ToString(Binding.StringFormat),
-                    _ => string.Format(Binding.StringFormat, item),
-                };
+                Header = data.FormattedString;
             }
             if (Binding.Value.TryGetValue("Content", out data))
             {
-                var item = data.FirstOrDefault();
-                var itemType = item.GetType().Name;
-                Content = itemType switch
-                {
-                    "Int32" or "Double" or "Single" => string.Format(Binding.StringFormat, Binding.GetNumber(data)),
-                    "DateTime" => ((DateTime)item).ToString(Binding.StringFormat),
-                    _ => string.Format(Binding.StringFormat, item),
-                };
+                Content = data.FormattedString;
             }
             if (Binding.Value.TryGetValue("AlertType", out data))
             {
-                var item = data.FirstOrDefault().ToString();
+                var item = data.FormattedString;
                 if (AlertTypeConverter != null)
                 {
                     if (AlertTypeConverter.Info == item)

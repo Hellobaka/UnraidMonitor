@@ -28,13 +28,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             base.ApplyBinding();
             if (Binding.Value.TryGetValue("Value", out var data))
             {
-                var item = data.FirstOrDefault();
-                var itemType = item.GetType().Name;
-                Value = itemType switch
-                {
-                    "Int32" or "Double" or "Single" => (float)Binding.GetNumber(data),
-                    _ => Min
-                };
+                Value = (float)data.ParsedNumber;
             }
         }
 

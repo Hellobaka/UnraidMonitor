@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -56,7 +55,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
 
-        public BindingBase Binding { get; set; }
+        public Binding Binding { get; set; }
 
         public virtual void ApplyBinding()
         {

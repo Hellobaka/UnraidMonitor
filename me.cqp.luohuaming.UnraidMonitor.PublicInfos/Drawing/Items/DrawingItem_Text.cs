@@ -25,14 +25,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             base.ApplyBinding();
             if (Binding.Value.TryGetValue("Text", out var data))
             {
-                var item = data.FirstOrDefault();
-                var itemType = item.GetType().Name;
-                Text = itemType switch
-                {
-                    "Int32" or "Double" or "Single" => string.Format(Binding.StringFormat, Binding.GetNumber(data)),
-                    "DateTime" => ((DateTime)item).ToString(Binding.StringFormat),
-                    _ => string.Format(Binding.StringFormat, item),
-                };
+                Text = data.FormattedString;
             }
         }
 
