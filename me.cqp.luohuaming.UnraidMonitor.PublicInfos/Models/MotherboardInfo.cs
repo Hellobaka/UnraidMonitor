@@ -3,13 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class MotherboardInfo
+    public class MotherboardInfo : MonitorDataBase
     {
         public string Manufacturer { get; set; } = "";
 
         public string ProductName { get; set; } = "";
-
-        public DateTime DateTime { get; set; }
 
         private static Regex ManufacturerRegex { get; } = new(@"Manufacturer:\s*(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

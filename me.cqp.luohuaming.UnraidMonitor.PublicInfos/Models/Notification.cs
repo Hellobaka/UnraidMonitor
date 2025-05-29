@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class Notification
+    public class Notification : MonitorDataBase
     {
         public string Event { get; set; } = "";
 
@@ -12,8 +12,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public string Subject { get; set; } = "";
 
         public string Importance { get; set; } = "";
-
-        public DateTime DateTime { get; set; }
 
         public static Notification ParseFromUnreadFile(string input)
         {

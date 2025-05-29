@@ -202,40 +202,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         public void InsertData(object data)
         {
-            Array array = data as Array;
-            if (data == null || (array != null && array.Length == 0))
-            {
-                return;
-            }
             var entityType = data.GetType();
-            CacheData(data);
-            Type itemType = entityType.IsArray ? entityType.GetElementType() : entityType;
-            var db = DBHelper.Instance;
-            MethodInfo method = db.GetType().GetMethods().FirstOrDefault(x => x.Name == "Insertable" && x.IsGenericMethod && x.GetParameters().Length == 0);
-            MethodInfo generic = method.MakeGenericMethod(itemType);
-            object collection = generic.Invoke(db, []);
-            var insertMethod = collection.GetType().GetMethods().FirstOrDefault(x => x.Name == "Insert" && x.ReturnType.Name == "BsonValue");
-            if (insertMethod != null)
+            if (entityType.IsArray)
             {
-                if (!entityType.IsArray)
-                {
-                    insertMethod.Invoke(collection, [data]);
-                }
-                else
-                {
-                    foreach (var item in array)
-                    {
-                        insertMethod.Invoke(collection, [item]);
-                    }
-                }
+                InsertData((MonitorDataBase[])data);
             }
             else
             {
-                throw new Exception($"Insert method not found for type {entityType.Name}");
+                InsertData([(MonitorDataBase)data]);
             }
         }
 
-        private void CacheData(object data)
+        public void InsertData(MonitorDataBase[] data)
+        {
+            CacheData(data);
+            foreach(var item in data)
+            {
+                item.Insert();
+            }
+        }
+
+        private void CacheData(MonitorDataBase[] data)
         {
             Task.Run(() =>
             {

@@ -3,11 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class SystemUptime
+    public class SystemUptime : MonitorDataBase
     {
         public TimeSpan UpTime { get; set; } = TimeSpan.Zero;
-
-        public DateTime DateTime { get; set; }
 
         private static Regex UptimeRegexA { get; } = new(@"up\s+(\d+)\s+days?,\s+(\d+):(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

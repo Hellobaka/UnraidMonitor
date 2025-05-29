@@ -9,7 +9,7 @@ using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class VirtualMachine
+    public class VirtualMachine : MonitorDataBase
     {
         public string Name { get; set; }
 
@@ -21,8 +21,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public List<(string name, string mac, IPAddress ip)> Networks { get; set; } = [];
 
         public string? Icon { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         public static VirtualMachine[] ParseFromVirsh(string input)
         {

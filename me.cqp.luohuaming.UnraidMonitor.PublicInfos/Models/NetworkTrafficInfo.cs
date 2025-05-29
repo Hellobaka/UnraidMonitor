@@ -4,15 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class NetworkTrafficInfo
+    public class NetworkTrafficInfo : MonitorDataBase
     {
         public string Name { get; set; } = "";
 
         public long RxBytes { get; set; }
 
         public long TxBytes { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         private static Regex InterfaceBlockRegex { get; } = new(@"^\d+:\s*([^\s:]+):.*?(?=^\d+:|\z)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);
 

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 {
-    public class DiskSmartInfo
+    public class DiskSmartInfo : MonitorDataBase
     {
         public enum DiskType
         {
@@ -98,8 +99,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public bool SmartEnabled { get; set; }
 
         public SmartInfo Smart { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         private static Regex ModelFamilyRegex { get; } =
             new(@"(?:Model Family|Model Number):\s+(.+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

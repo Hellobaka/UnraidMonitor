@@ -4,15 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class TemperatureInfo
+    public class TemperatureInfo : MonitorDataBase
     {
         public string ParentName { get; set; } = "";
 
         public string Name { get; set; } = "";
 
         public double Temperature { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         private static Regex TemperatureRegex { get; } = new Regex(@"^([A-Za-z0-9 _\-]+):?\s*([+-]?\d+\.\d)\s*C", RegexOptions.Compiled | RegexOptions.Singleline);
 

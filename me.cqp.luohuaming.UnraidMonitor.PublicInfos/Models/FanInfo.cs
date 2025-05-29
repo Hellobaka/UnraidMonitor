@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class FanInfo
+    public class FanInfo : MonitorDataBase
     {
         public string ParentName { get; set; } = "";
 
         public string Name { get; set; } = "";
 
         public int RPM { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         public static FanInfo[] ParseFromSensor(string input)
         {

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class CpuInfo
+    public class CpuInfo : MonitorDataBase
     {
         public int BaseSpeedMHz { get; set; }
 
@@ -14,8 +14,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public string Model { get; set; } = "";
 
         public int PhysicalCores { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         private static Regex BaseSpeedRegex { get; } = new(@"Current Speed:\s*(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

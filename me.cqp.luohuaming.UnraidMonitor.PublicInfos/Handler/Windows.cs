@@ -38,7 +38,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             Computer = new()
             {
                 IsCpuEnabled = true,
-                IsGpuEnabled = true,
+                IsGpuEnabled = false,
                 IsMemoryEnabled = true,
                 IsMotherboardEnabled = true,
                 IsStorageEnabled = true,
@@ -218,7 +218,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                         ModelFamily = hardDisk.Name,
                         SmartEnabled = true,
                         SmartSupported = true,
-                        Smart = new()
+                    };
+                    if (smartData.Length > 0)
+                    {
+                        info.Smart = new()
                         {
                             TemperatureCelsius = smartData.FirstOrDefault(x => x.Id == 0xC2).RawValue[0] == 0 ? smartData.FirstOrDefault(x => x.Id == 0xC2).RawValue[2] : smartData.FirstOrDefault(x => x.Id == 0xC2).RawValue[0],
                             BytesRead = ParseSmartRawValue(smartData.FirstOrDefault(x => x.Id == 0xF2).RawValue),
@@ -230,8 +233,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                             OfflineUncorrectableSectors = (int?)ParseSmartRawValue(smartData.FirstOrDefault(x => x.Id == 0xC6).RawValue),
                             ReallocatedSectors = (int?)ParseSmartRawValue(smartData.FirstOrDefault(x => x.Id == 0x05).RawValue),
                             Type = DiskSmartInfo.DiskType.HDD,
-                        }
-                    };
+                        };
+                    }
                 }
                 if (info != null)
                 {

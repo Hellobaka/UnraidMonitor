@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class DiskInfo
+    public class DiskInfo : MonitorDataBase
     {
         public enum DiskType
         {
@@ -26,7 +26,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public string Model { get; set; } = "";
 
-        public string PowerMode { get; set; }
+        public string PowerMode { get; set; } = "";
 
         public long Total { get; set; }
 
@@ -36,11 +36,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public double Temperature { get; set; }
 
-        public string FileSystem { get; set; }
+        public string FileSystem { get; set; } = "";
 
         public bool Running => PowerMode.Contains("-on");
-
-        public DateTime DateTime { get; set; }
 
         public double UsedPercent => Total == 0 ? 0 : Math.Round((double)Used / Total * 100, 2);
 

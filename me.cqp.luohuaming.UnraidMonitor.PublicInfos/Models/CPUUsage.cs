@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class CpuUsage
+    public class CpuUsage : MonitorDataBase
     {
         public string CPUId { get; set; }
 
@@ -26,8 +26,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public double User { get; set; }
 
         public double Wait { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         private static Regex CPUParseRegex { get; } = new(@"%Cpu(\d+)\s*:\s*([\d.]+)\s*us,\s*([\d.]+)\s*sy,\s*([\d.]+)\s*ni,\s*([\d.]+)\s*id,\s*([\d.]+)\s*wa,\s*([\d.]+)\s*hi,\s*([\d.]+)\s*si,\s*([\d.]+)\s*st", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

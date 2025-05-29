@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class NetworkInterfaceInfo
+    public class NetworkInterfaceInfo : MonitorDataBase
     {
         public List<string> IpAddresses { get; set; } = [];
 
@@ -13,8 +13,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public string MacAddress { get; set; } = "";
 
         public string Name { get; set; } = "";
-
-        public DateTime DateTime { get; set; }
 
         private static Regex InterfaceRegex { get; } = new(@"^\d+:\s+([^:]+):", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 

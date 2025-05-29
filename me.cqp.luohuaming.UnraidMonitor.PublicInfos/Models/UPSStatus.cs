@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class UPSStatus
+    public class UPSStatus : MonitorDataBase
     {
-        public string Model { get; set; }
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        public int Id { get; set; }
+
+        public string Model { get; set; } = "";
 
         public double MaxPower { get; set; }
 
@@ -23,11 +27,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         /// <summary>
         /// ONLINE/ONBATT
         /// </summary>
-        public string Status { get; set; }
+        public string Status { get; set; } = "";
 
         public double CurrentPower => MaxPower * (CurrentLoad / 100);
-
-        public DateTime DateTime { get; set; }
 
         public static UPSStatus ParseFromApcAccess(string input)
         {

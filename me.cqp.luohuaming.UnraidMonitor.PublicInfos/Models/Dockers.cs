@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class Dockers
+    public class Dockers : MonitorDataBase
     {
         public string ContainerID { get; set; } = "";
 
@@ -15,8 +15,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public string Image { get; set; }
 
         public bool Running { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         public static Dockers[] ParseFromDockerPs(string input)
         {

@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class SystemInfo
+    public class SystemInfo : MonitorDataBase
     {
         public string Version { get; set; }
 
         public string SystemName { get; set; }
 
         public string SystemEdition { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         /// <summary>
         /// /var/local/emhttp/var.ini

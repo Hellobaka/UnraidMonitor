@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
-    public class DiskMountInfo
+    public class DiskMountInfo : MonitorDataBase
     {
         public string MountPoint { get; set; } = "";
 
@@ -20,8 +20,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         public long UsedBytes { get; set; }
 
         public long AvailableBytes { get; set; }
-
-        public DateTime DateTime { get; set; }
 
         public double UsedPercent => TotalBytes == 0 ? 0 : Math.Round((double)UsedBytes / TotalBytes * 100, 2);
 
