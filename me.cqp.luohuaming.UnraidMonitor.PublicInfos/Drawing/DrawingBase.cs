@@ -169,6 +169,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             preDraw.Add(currentLine);
             foreach (var item in Content)
             {
+                item.ApplyBinding();
                 float desireWidth = width;
                 // 计算宽度
                 if (item.Layout == Layout.Percentage)
@@ -243,7 +244,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     }
                     SKPoint drawPoint = new(x: currentPoint.X + item.item.Margin.Left, y: currentPoint.Y + maxTopMargin + item.item.VerticalAlignment switch
                     {
-                        Position.Center => (maxHeight / 2) - (item.height / 2),
+                        Position.Center => maxTopMargin + (maxHeight / 2) - (item.height / 2),
                         Position.Bottom => maxHeight - item.height - item.item.Margin.Bottom,
                         _ => item.item.Margin.Top,
                     });
