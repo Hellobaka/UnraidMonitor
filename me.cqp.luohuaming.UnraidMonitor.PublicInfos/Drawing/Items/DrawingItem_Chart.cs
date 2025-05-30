@@ -49,20 +49,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override void ApplyBinding()
         {
             base.ApplyBinding();
-            List<float> dataY = [];
+            if (Binding == null)
+            {
+                return;
+            }
+            List<double> dataY = [];
             List<DateTime> dataX = [];
             if (Binding.Value.TryGetValue("Points", out var data))
             {
-                foreach(var i in data.RawValues)
+                foreach (var i in data.RawValues)
                 {
-                    dataY.Add((float)i);
+                    dataY.Add(Convert.ToDouble(i));
                 }
             }
             if (Binding.Value.TryGetValue("DateTime", out data))
             {
-                foreach(var i in data.RawValues)
+                bool isDiff = Binding.BindingPath.FirstOrDefault(x => x.Key == "DateTime").Value.FirstOrDefault().ValueType == ValueType.Diff;
+                for (int i = 0; i < data.RawValues.Length; i++)
                 {
-                    dataX.Add((DateTime)i);
+                    if (isDiff && i % 2 == 1)
+                    {
+                        dataX.Add((DateTime)data.RawValues[i]);
+                    }
+                    else if(!isDiff)
+                    {
+                        dataX.Add((DateTime)data.RawValues[i]);
+                    }
                 }
             }
             if (dataX.Count != dataY.Count)
@@ -73,6 +85,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             {
                 Points = [.. Points, (dataX[i], dataY[i])];
             }
+            if (Binding.Value.TryGetValue("Min", out data))
+            {
+                Min = (float)data.ParsedNumber;
+            }
+            if (Binding.Value.TryGetValue("Max", out data))
+            {
+                Max = (float)data.ParsedNumber;
+                Max = Math.Max(Max, Min + 1);
+            }
         }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
@@ -80,7 +101,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             CalcHeight(theme);
             Thickness padding = new();
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
-            var size = painting.MeasureString(Max.ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
+            var size = painting.MeasureString((Math.Round(Max, 2)).ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
             float textPadding = 5;
             if (ShowHorizonValue)
             {
@@ -101,9 +122,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             p2 = new(p1.X + desireWidth - padding.Left, p1.Y);
             painting.DrawLine(p1, p2, SKColor.Parse(palette.BackgroundColor), 1);
             // GridLine
-            for (int i = (int)Min; i <= (int)Max; i += (int)(Max - Min) / (VerticalValueDisplayCount - 1))
+            for (double i = Min; i <= Max; i += (Max - Min) / (VerticalValueDisplayCount - 1))
             {
-                string text = i.ToString();
+                string text = Math.Round(i, 2).ToString();
                 size = painting.MeasureString(text, TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
                 float y = (float)(chartHeight * (i - Min) / (Max - Min));
                 p1 = new(startPoint.X + padding.Left, startPoint.Y + padding.Top + chartHeight - y);
@@ -148,7 +169,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             SKPoint[] skPoints = new SKPoint[Points.Length];
             for (int i = 0; i < Points.Length; i++)
             {
-                float y = (float)(chartHeight * (Points[i].value - Min) / (Max - Min));
+                float y = chartHeight - (float)(chartHeight * (Points[i].value - Min) / (Max - Min));
 
                 skPoints[i] = new SKPoint(paddingLeft + (float)(i * chartWidth / (Points.Length - 1)), paddingTop + y);
             }
