@@ -23,6 +23,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override void ApplyBinding()
         {
             base.ApplyBinding();
+            if (Binding == null)
+            {
+                return;
+            }
             if (Binding.Value.TryGetValue("Text", out var data))
             {
                 Text = data.FormattedString;

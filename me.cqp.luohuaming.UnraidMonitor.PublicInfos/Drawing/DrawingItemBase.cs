@@ -59,12 +59,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual void ApplyBinding()
         {
-            if (Binding != null)
-            {
-                Debugger.Break();
-                return;
-            }
-            Binding.Get();
+            Binding?.Get();
         }
 
         public virtual float CalcHeight(DrawingStyle.Theme theme)
