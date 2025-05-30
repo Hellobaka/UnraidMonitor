@@ -15,9 +15,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public float Value { get; set; }
 
-        public float Min { get; set; }
+        public float Min { get; set; } = 0;
 
-        public float Max { get; set; }
+        public float Max { get; set; } = 100;
 
         public override float OverrideHeight { get; set; }
 
@@ -26,9 +26,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override void ApplyBinding()
         {
             base.ApplyBinding();
+            if (Binding == null)
+            {
+                return;
+            }
             if (Binding.Value.TryGetValue("Value", out var data))
             {
                 Value = (float)data.ParsedNumber;
+            }
+            if (Binding.Value.TryGetValue("Min", out data))
+            {
+                Min = (float)data.ParsedNumber;
+            }
+            if (Binding.Value.TryGetValue("Max", out data))
+            {
+                Max = (float)data.ParsedNumber;
             }
         }
 
