@@ -466,6 +466,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public void Resize(int width, int height)
         {
+            if (width <= 0 || height <= 0)
+            {
+                return;
+            }
             var newSurface = SKSurface.Create(new SKImageInfo(width, height));
             SKCanvas canvas = newSurface.Canvas;
             canvas.Clear(SKColors.Transparent);
