@@ -252,6 +252,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             // 记录模糊区域
             List<(SKPath path, float blur)> blurAreas = [];
             List<float> currentRowHeights = [];
+            bool hasNewLine = false;
             // 绘制内容
             if (Content != null && Content.Length > 0)
             {
@@ -326,8 +327,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     }
                 }
 
+                if (!hasNewLine)
+                {
+                    NewLine(Thickness.DefaultMargin);
+                }
                 void NewLine(Thickness margin)
                 {
+                    hasNewLine = true;
                     float maxHeight = currentRowHeights.Count > 0 ? currentRowHeights.Max() : 0;
                     drawHeight += maxHeight + margin.Bottom;
                     startPoint = new(0, startPoint.Y + maxHeight + margin.Bottom);
