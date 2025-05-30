@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -6,8 +7,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class NetworkInterfaceInfo : MonitorDataBase
     {
+        [SugarColumn(IsJson = true)]
         public List<string> IpAddresses { get; set; } = [];
 
+        [SugarColumn(IsJson = true)]
         public List<string> Ipv6Addresses { get; set; } = [];
 
         public string MacAddress { get; set; } = "";

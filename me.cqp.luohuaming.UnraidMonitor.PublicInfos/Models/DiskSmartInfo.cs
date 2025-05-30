@@ -1,10 +1,9 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
+namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class DiskSmartInfo : MonitorDataBase
     {
@@ -92,6 +91,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// SMART支持状态
         /// </summary>
         public bool SmartSupported { get; set; }
+
+        public DiskHealth HealthStatus => Smart.HealthStatus;
 
         /// <summary>
         /// SMART启用状态

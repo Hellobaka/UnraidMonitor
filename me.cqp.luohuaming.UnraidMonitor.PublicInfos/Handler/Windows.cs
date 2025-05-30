@@ -64,12 +64,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var maxClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["MaxClockSpeed"];
             return new()
             {
-                MaxTurboSpeedMHz = cpu.MaxSpeed,
+                MaxTurboSpeedGHz = cpu.MaxSpeed / 1000f,
                 LogicalCores = cpu.ThreadCount,
                 PhysicalCores = cpu.CoreCount,
                 Model = cpu.Version,
                 DateTime = DateTime.Now,
-                BaseSpeedMHz = (int)(uint)(maxClockSpeed ?? 0)
+                BaseSpeedGHz = (uint)(maxClockSpeed ?? 0) / 1000f
             };
         }
 
@@ -412,15 +412,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             {
                 SystemEdition = edition,
                 SystemName = osName,
-                Version = version
+                Version = version,
             };
         }
 
         public override SystemUptime GetSystemUptime()
         {
+            var timespan = TimeSpan.FromMilliseconds(Environment.TickCount);
             return new()
             {
-                UpTime = TimeSpan.FromMilliseconds(Environment.TickCount)
+                UpTimeDay = timespan.Days,
+                UpTimeHour = timespan.Hours,
+                UpTimeMinute = timespan.Minutes,
+                UpTimeSecond = timespan.Seconds
             };
         }
 

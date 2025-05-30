@@ -5,11 +5,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class CpuInfo : MonitorDataBase
     {
-        public int BaseSpeedMHz { get; set; }
+        public double BaseSpeedGHz { get; set; }
 
         public int LogicalCores { get; set; }
 
-        public int MaxTurboSpeedMHz { get; set; }
+        public double MaxTurboSpeedGHz { get; set; }
 
         public string Model { get; set; } = "";
 
@@ -50,13 +50,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
             var baseSpeedMatch = BaseSpeedRegex.Match(input);
             if (baseSpeedMatch.Success)
             {
-                info.BaseSpeedMHz = int.Parse(baseSpeedMatch.Groups[1].Value);
+                info.BaseSpeedGHz = double.Parse(baseSpeedMatch.Groups[1].Value) / 1000;
             }
 
             var maxSpeedMatch = MaxSpeedRegex.Match(input);
             if (maxSpeedMatch.Success)
             {
-                info.MaxTurboSpeedMHz = int.Parse(maxSpeedMatch.Groups[1].Value);
+                info.MaxTurboSpeedGHz = double.Parse(maxSpeedMatch.Groups[1].Value) / 1000;
             }
 
             return info;
