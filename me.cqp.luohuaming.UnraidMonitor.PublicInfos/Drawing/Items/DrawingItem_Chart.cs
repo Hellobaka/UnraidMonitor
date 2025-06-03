@@ -92,8 +92,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             if (Binding.Value.TryGetValue("Max", out data))
             {
                 Max = (float)data.ParsedNumber;
-                Max = Math.Max(Max, Min + 1);
             }
+            Max = Math.Max(Max, Min + 0.1);
         }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
@@ -137,6 +137,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 {
                     painting.DrawText(text, Painting.Anywhere, new SKPoint(p1.X - size.Width - textPadding, p1.Y - size.Height / 2), SKColor.Parse(palette.TextColor), null, TextSize, font);
                 }
+            }
+            if (Points.Length == 0)
+            {
+                return (new SKPoint(startPoint.X + desireWidth, startPoint.Y + OverrideHeight), desireWidth, OverrideHeight);
             }
             int dataInterval = Math.Max(Points.Length / HorizonValueDisplayCount, 1);
             for (int i = 1; i <= HorizonValueDisplayCount; i++)
