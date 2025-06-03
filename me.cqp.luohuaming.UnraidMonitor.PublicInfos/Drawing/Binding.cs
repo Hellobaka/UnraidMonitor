@@ -38,8 +38,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         DiffMax,
 
         DiffMin,
-
-        DiffAvg
     }
 
     public enum ItemType
@@ -283,8 +281,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                             }
                             try
                             {
-                                resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
-                                resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
+                                if (bindingResult.Length > 0)
+                                {
+                                    resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
+                                    resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
+                                }
                             }
                             catch { }
                             result[bind.Key] = resultBinding;
@@ -330,8 +331,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public double GetNumber(object[] data, ValueType valueType) => data.Length == 0 ? 0 : valueType switch
         {
-            ValueType.DiffMin or ValueType.Max => data.Max(x => Convert.ToDouble(x)),
-            ValueType.DiffMax or ValueType.Min => data.Min(x => Convert.ToDouble(x)),
+            ValueType.DiffMax or ValueType.Max => data.Max(x => Convert.ToDouble(x)),
+            ValueType.DiffMin or ValueType.Min => data.Min(x => Convert.ToDouble(x)),
             ValueType.Diff or ValueType.Avg => data.Average(x => Convert.ToDouble(x)),
             ValueType.Sum => data.Sum(x => Convert.ToDouble(x)),
             ValueType.Count => data.Count(),
