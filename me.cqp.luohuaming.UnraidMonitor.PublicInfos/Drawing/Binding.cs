@@ -286,6 +286,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                                     resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
                                     resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
                                 }
+                                else
+                                {
+                                    resultBinding.ParsedNumber = 0;
+                                    int formatCount = StringFormat.Count(x => x == '{' && x != '}');
+                                    resultBinding.FormattedString = string.Format(StringFormat, new string[formatCount]); ;
+                                }
                             }
                             catch { }
                             result[bind.Key] = resultBinding;
