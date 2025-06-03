@@ -17,8 +17,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Height = height;
             MainSurface = SKSurface.Create(new SKImageInfo(width, height));
             MainCanvas.Clear(SKColors.Transparent);
-
-            FallbackFont = CreateCustomFont(AppConfig.FallbackFont);
         }
 
         public static SKTypeface CreateCustomFont(string fontPathOrName)
@@ -64,6 +62,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public float Width { get; set; }
 
+        internal SKCanvas MainCanvas => MainSurface.Canvas;
+
         private static SKPaint AntialiasPaint { get; set; } = new SKPaint
         {
             IsAntialias = true,
@@ -72,11 +72,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         private static SKFontManager FontManager { get; set; } = SKFontManager.CreateDefault();
 
-        private SKTypeface FallbackFont { get; set; }
+        private static SKTypeface FallbackFont { get; set; } = CreateCustomFont(AppConfig.FallbackFont);
 
         private bool Disposing { get; set; }
-
-        private SKCanvas MainCanvas => MainSurface.Canvas;
 
         private SKSurface MainSurface { get; set; }
 
@@ -416,7 +414,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             return SKImage.FromBitmap(bitmap);
         }
 
-        public SKSize MeasureString(string text, float fontSize, SKTypeface customFont)
+        public static SKSize MeasureString(string text, float fontSize, SKTypeface customFont)
         {
             SKTypeface typeface;
             if (customFont != null && customFont.ContainsGlyphs(text))

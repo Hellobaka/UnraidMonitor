@@ -11,8 +11,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Remaining;
 
-        public float Radius { get; set; }
-
         public float Value { get; set; }
 
         public float Min { get; set; } = 0;

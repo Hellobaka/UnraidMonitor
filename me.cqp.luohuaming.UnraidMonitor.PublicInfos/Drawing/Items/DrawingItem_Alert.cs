@@ -110,18 +110,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             SKPoint currentPoint = new();
             float textHeight = 0;
             // Icon
-            SKSize size = content.MeasureString("O", TextSize, font);
+            SKSize size = Painting.MeasureString("O", TextSize, font);
             currentPoint = content.DrawText(alertChar, Painting.Anywhere, currentPoint, iconColor, null, size.Height, iconFont, false);
             // Header
             currentPoint.X += 12;
             currentPoint.Y = 0;
-            size = content.MeasureString(Header, TextSize, font);
+            size = Painting.MeasureString(Header, TextSize, font);
             textHeight = Math.Max(textHeight, size.Height);
             currentPoint = content.DrawText(Header, Painting.Anywhere, currentPoint, SKColor.Parse(palette.TextColor), null, TextSize, font, IsHeaderBold);
             // Content
             currentPoint.X += 12;
             currentPoint.Y = 0;
-            size = content.MeasureString(Content, TextSize, font);
+            size = Painting.MeasureString(Content, TextSize, font);
             currentPoint = content.DrawText(Content, new()
             {
                 Location = new(currentPoint.X, currentPoint.Y),
@@ -172,19 +172,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             SKPoint currentPoint = new();
             float textHeight = 0;
             // Icon
-            SKSize size = content.MeasureString("O", TextSize, font);
+            SKSize size = Painting.MeasureString("O", TextSize, font);
             alertSvg = SVG.ChangeSize(alertSvg, new SKSize(size.Height, size.Height));
             content.DrawSVG(alertSvg, new(currentPoint.X, currentPoint.Y));
             currentPoint.X += size.Height;
             // Header
             currentPoint.X += 12;
-            size = content.MeasureString(Header, TextSize, font);
+            size = Painting.MeasureString(Header, TextSize, font);
             textHeight = Math.Max(textHeight, size.Height);
             currentPoint = content.DrawText(Header, Painting.Anywhere, currentPoint, iconColor, null, TextSize, font, IsHeaderBold);
             // Content
             currentPoint.X += 12;
             currentPoint.Y = 0;
-            size = content.MeasureString(Content, TextSize, font);
+            size = Painting.MeasureString(Content, TextSize, font);
             currentPoint = content.DrawText(Content, new()
             {
                 Location = new(currentPoint.X, currentPoint.Y),
@@ -228,13 +228,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             SKPoint currentPoint = new();
             float textHeight = 0;
             // Header
-            var size = content.MeasureString(Header, TextSize, font);
+            var size = Painting.MeasureString(Header, TextSize, font);
             textHeight = Math.Max(textHeight, size.Height);
             currentPoint = content.DrawText(Header, Painting.Anywhere, currentPoint, iconColor, null, TextSize, font, IsHeaderBold);
             // Content
             currentPoint.X = 0;
             currentPoint.Y += size.Height / 4;
-            size = content.MeasureString(Content, TextSize, font);
+            size = Painting.MeasureString(Content, TextSize, font);
             currentPoint = content.DrawText(Content, new()
             {
                 Location = new(currentPoint.X, currentPoint.Y),

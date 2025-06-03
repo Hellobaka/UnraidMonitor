@@ -101,7 +101,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             CalcHeight(theme);
             Thickness padding = new();
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
-            var size = painting.MeasureString((Math.Round(Max, 2)).ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
+            var size = Painting.MeasureString((Math.Round(Max, 2)).ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
             float textPadding = 5;
             if (ShowHorizonValue)
             {
@@ -125,7 +125,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             for (double i = Min; i <= Max; i += (Max - Min) / (VerticalValueDisplayCount - 1))
             {
                 string text = Math.Round(i, 2).ToString();
-                size = painting.MeasureString(text, TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
+                size = Painting.MeasureString(text, TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
                 float y = (float)(chartHeight * (i - Min) / (Max - Min));
                 p1 = new(startPoint.X + padding.Left, startPoint.Y + padding.Top + chartHeight - y);
                 p2 = new(p1.X + desireWidth, p1.Y);
@@ -146,7 +146,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             for (int i = 1; i <= HorizonValueDisplayCount; i++)
             {
                 string text = Points[i * dataInterval - 1].time.ToString(string.IsNullOrEmpty(OverrideFormat) ? "HH:mm:ss" : OverrideFormat);
-                size = painting.MeasureString(text, TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
+                size = Painting.MeasureString(text, TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
 
                 p1 = new(startPoint.X + padding.Left + (desireWidth / (HorizonValueDisplayCount - 1)) * i, startPoint.Y + padding.Top + chartHeight);
                 p2 = new(p1.X, p1.Y - chartHeight);

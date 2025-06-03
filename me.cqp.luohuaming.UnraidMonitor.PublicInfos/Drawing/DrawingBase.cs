@@ -52,7 +52,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Top,
             Center,
             Bottom,
-            Left
         }
 
         public enum Layout
@@ -289,7 +288,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 currentPoint.X += DrawingTitle.IconSize.Width + DrawingTitle.IconMargin.Left + DrawingTitle.IconMargin.Right;
             }
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(DrawingTitle.OverrideFont) ? DrawingTitle.OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
-            var size = painting.MeasureString(DrawingTitle.Text, DrawingTitle.TextSize, font);
+            var size = Painting.MeasureString(DrawingTitle.Text, DrawingTitle.TextSize, font);
             if (DrawingTitle.HasIcon)
             {
                 // 垂直居中于图标
