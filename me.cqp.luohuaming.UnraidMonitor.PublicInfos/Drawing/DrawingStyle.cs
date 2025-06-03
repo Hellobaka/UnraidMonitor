@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -439,5 +440,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             // 返回画布
             return painting;
         }
+
+        public string Serialize() => JsonConvert.SerializeObject(this, new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+            Formatting = Formatting.Indented,
+        });
+
+        public static DrawingStyle LoadFromFile(string path) => JsonConvert.DeserializeObject<DrawingStyle>(File.ReadAllText(path), new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+        });
     }
 }
