@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -270,6 +271,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         private (SKPoint endPoint, float width, float height) DrawUnraid(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             float sweepAngle = (float)(360f * ((Value - Min) / (Max - Min)));
+            using Painting ring = new((int)(Radius * 2 + StrokeWidth), (int)(Radius * 2 + StrokeWidth));
+            ring.Clear(SKColors.Transparent);
+            var center = new SKPoint(Radius + StrokeWidth / 2, Radius + StrokeWidth / 2);
             if (!TransparentBackground)
             {
                 using var backgroundPaint = new SKPaint
@@ -280,8 +284,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                     StrokeCap = IsRounded ? SKStrokeCap.Round : SKStrokeCap.Square,
                     IsAntialias = true
                 };
-                painting.MainCanvas.DrawCircle(new SKPoint(startPoint.X + desireWidth / 2, startPoint.Y + Radius + StrokeWidth / 2), Radius, backgroundPaint);
+                ring.MainCanvas.DrawCircle(center, Radius, backgroundPaint);
             }
+            ring.MainCanvas.Save();
+            ring.MainCanvas.Translate(center);
+            ring.MainCanvas.RotateDegrees(-90);
+            ring.MainCanvas.Translate(-center.X, -center.Y);
             using var paint = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
@@ -289,17 +297,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 StrokeCap = IsRounded ? SKStrokeCap.Round : SKStrokeCap.Square,
                 IsAntialias = true
             };
-            var center = new SKPoint(startPoint.X + desireWidth / 2 - Radius, startPoint.Y + StrokeWidth / 2);
-            painting.MainCanvas.Save();
-            painting.MainCanvas.Translate(center);
-            painting.MainCanvas.RotateDegrees(-90);
-            painting.MainCanvas.Translate(-center.X, -center.Y);
 
             if (!string.IsNullOrEmpty(palette.Accent2Color))
             {
                 paint.Shader = SKShader.CreateSweepGradient(
-                    center,
-                    new SKColor[] { SKColor.Parse(palette.AccentColor), SKColor.Parse(palette.Accent2Color) }
+                    center: center,
+                    colors: new SKColor[] { SKColor.Parse(palette.Accent2Color), SKColor.Parse(palette.AccentColor), SKColor.Parse(palette.Accent2Color) },
+                    colorPos: null,
+                    tileMode: SKShaderTileMode.Clamp,
+                    startAngle: 0,
+                    endAngle: 360
                 );
             }
             else
@@ -307,20 +314,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 paint.Color = SKColor.Parse(palette.AccentColor);
             }
 
-            using (var path = new SKPath())
+            using var path = new SKPath();
+            path.AddArc(new SKRect
             {
-                path.AddArc(
-                    new SKRect
-                    {
-                        Location = center,
-                        Size = new(Radius * 2, Radius * 2)
-                    },
-                    0,
-                    sweepAngle
-                );
-                painting.MainCanvas.DrawPath(path, paint);
-                painting.MainCanvas.Restore();
-            }
+                Location = new(StrokeWidth / 2, StrokeWidth / 2),
+                Size = new(Radius * 2, Radius * 2)
+            }, 0, sweepAngle);
+            ring.MainCanvas.DrawPath(path, paint);
+            painting.DrawImage(ring.SnapShot(), new SKRect()
+            {
+                Location = new SKPoint(startPoint.X + desireWidth / 2 - Radius - StrokeWidth / 2, startPoint.Y),
+                Size = new SKSize(ring.Width, ring.Height)
+            });
             paint.Dispose();
             return (new(startPoint.X + desireWidth, startPoint.Y + Radius * 2 + StrokeWidth), desireWidth, 0);
         }
