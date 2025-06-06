@@ -15,6 +15,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public static CQApi CQApi { get; set; }
         public static string AppDirectory { get; set; }
         public static string ImageDirectory { get; set; }
+        public static string UnraidMonitorImageSavePath => Path.Combine(ImageDirectory, "UnraidMonitor");
 
         public static HandlerBase MonitorAPI { get; set; }
 

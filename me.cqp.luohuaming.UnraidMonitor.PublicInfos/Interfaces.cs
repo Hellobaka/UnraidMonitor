@@ -31,6 +31,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public string StylePath { get; set; }
 
         [JsonIgnore]
-        public DrawingStyle DrawingStyle => DrawingStyle.LoadFromFile(StylePath);
+        public DrawingStyle? DrawingStyle => DrawingStyle.LoadFromFile(StylePath);
     }
 }

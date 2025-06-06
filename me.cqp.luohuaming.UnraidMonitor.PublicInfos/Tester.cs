@@ -1166,32 +1166,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             var uptime = handler.GetSystemUptime();
             Console.WriteLine("[Uptime]");
             PrintProperties(uptime);
-            handler.InsertData(uptime);
 
             // 0. 系统信息
             var systemInfo = handler.GetSystemInfo();
             Console.WriteLine("[SystemInfo]");
             PrintProperties(systemInfo);
-            handler.InsertData(systemInfo);
 
             // 1. CPU信息
             var cpuInfo = handler.GetCpuInfo();
             Console.WriteLine("[CPUInfo]");
             PrintProperties(cpuInfo);
-            handler.InsertData(cpuInfo);
 
             // 2.1. UPS信息
             var ups = handler.GetUPS();
             Console.WriteLine("[UPS]");
             PrintProperties(ups);
-            handler.InsertData(ups);
 
             // 2. CPU使用率
             var cpuUsages = handler.GetCpuUsages();
             Console.WriteLine("[CPUUsage]");
             foreach (var item in cpuUsages ?? Array.Empty<me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.CpuUsage>())
                 PrintProperties(item);
-            handler.InsertData(cpuUsages);
 
             // 3. 内存信息
             var memoryInfo = handler.GetMemoryInfo();
