@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Remaining;
 
+        [JsonIgnore]
         public (DateTime time, double value)[] Points { get; set; } = [];
 
         public double Min { get; set; } = 0;

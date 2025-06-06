@@ -62,7 +62,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             var cpu = (Motherboard as Motherboard).SMBios.Processors.FirstOrDefault();
             using var searcher = new ManagementObjectSearcher("select MaxClockSpeed from Win32_Processor");
             var maxClockSpeed = searcher.Get().Cast<ManagementBaseObject>().FirstOrDefault()?["MaxClockSpeed"];
-            return new()
+            var item = new CpuInfo()
             {
                 MaxTurboSpeedGHz = cpu.MaxSpeed / 1000f,
                 LogicalCores = cpu.ThreadCount,
@@ -71,6 +71,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 DateTime = DateTime.Now,
                 BaseSpeedGHz = (uint)(maxClockSpeed ?? 0) / 1000f
             };
+            item.CacheItem();
+            return item;
         }
 
         public override CpuUsage[] GetCpuUsages()
@@ -88,6 +90,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                         User = (double)(sensor.Value ?? 0),
                     };
                     list.Add(usage);
+                    usage.CacheItem();
                 }
             }
             return list.ToArray();
@@ -113,6 +116,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     Type = DiskInfo.DiskType.Data,
                 };
                 diskInfos.Add(info);
+                info.CacheItem();
             }
             int index = 0;
 
@@ -150,6 +154,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                         Type = drive.DriveFormat.ToString()
                     };
                     diskMountInfos.Add(info);
+                    info.CacheItem();
                 }
             }
             return diskMountInfos.ToArray();
@@ -239,6 +244,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 if (info != null)
                 {
                     smartInfos.Add(info);
+                    info.CacheItem();
                 }
             }
             return smartInfos.ToArray();
@@ -262,6 +268,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     ParentName = item.Parent.Name,
                     RPM = (int)(item.Sensors.FirstOrDefault(x => x.Name == "Speed")?.Value ?? 0)
                 };
+                fan.CacheItem();
                 fans.Add(fan);
             }
             foreach (var item in Motherboard.SubHardware)
@@ -277,6 +284,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                         RPM = (int)(fan.Value ?? 0)
                     };
                     fans.Add(fanInfo);
+                    fanInfo.CacheItem();
                 }
             }
             return fans.ToArray();
@@ -294,13 +302,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             long total = (Motherboard as Motherboard).SMBios.MemoryDevices.Sum(x => x.Size) * 1024;
             long used = (long)(Memory.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load).Value / 100f * total);
             long free = total - used;
-            return new()
+            MemoryInfo item = new()
             {
                 Available = free,
                 Total = total,
                 Used = used,
                 DateTime = DateTime.Now
             };
+            item.CacheItem();
+            return item;
         }
 
         public override MotherboardInfo GetMotherboardInfo()
@@ -311,12 +321,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
             }
             Motherboard.Update();
             var m = Motherboard as Motherboard;
-            return new()
+            MotherboardInfo item = new()
             {
                 DateTime = DateTime.Now,
                 Manufacturer = m.Manufacturer.ToString(),
                 ProductName = m.Name,
             };
+            item.CacheItem();
+            return item;
         }
 
         public override NetworkInterfaceInfo[] GetNetworkInterfaceInfos()
@@ -350,6 +362,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     };
 
                     list.Add(info);
+                    info.CacheItem();
                 }
             }
 
@@ -378,6 +391,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     TxBytes = sent
                 };
                 list.Add(info);
+                info.CacheItem();
             }
             return list.ToArray();
         }
@@ -408,24 +422,28 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 version = releaseId;
             }
 
-            return new()
+            SystemInfo item = new()
             {
                 SystemEdition = edition,
                 SystemName = osName,
                 Version = version,
             };
+            item.CacheItem();
+            return item;
         }
 
         public override SystemUptime GetSystemUptime()
         {
             var timespan = TimeSpan.FromMilliseconds(Environment.TickCount);
-            return new()
+            SystemUptime item = new()
             {
                 UpTimeDay = timespan.Days,
                 UpTimeHour = timespan.Hours,
                 UpTimeMinute = timespan.Minutes,
                 UpTimeSecond = timespan.Seconds
             };
+            item.CacheItem();
+            return item;
         }
 
         public override TemperatureInfo[] GetTemperatureInfos()
@@ -444,6 +462,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                         DateTime = DateTime.Now
                     };
                     list.Add(info);
+                    info.CacheItem();
                 }
             }
             return list.ToArray();
@@ -466,6 +485,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
                 break;
             }
+            ups.CacheItem();
             return ups;
         }
 

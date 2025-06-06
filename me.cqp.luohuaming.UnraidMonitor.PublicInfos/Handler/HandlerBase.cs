@@ -50,8 +50,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
 
         public Timer UPSTimer { get; set; }
 
-        public Dictionary<string, List<(DateTime cacheTime, object data)>> Cache { get; set; } = [];
-
         public void StopMonitor()
         {
             var instanceType = this.GetType();
@@ -103,7 +101,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     {
                         Console.WriteLine($"Executing {collectMethod.Name}");
                         var data = collectMethod.Invoke(this, null);
-                        this.InsertData(data);
                     }, null, 0, interval);
 
                     t.SetValue(this, timer);
@@ -198,57 +195,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         public virtual Notification[] GetNotifications()
         {
             throw new NotImplementedException();
-        }
-
-        public void InsertData(object data)
-        {
-            var entityType = data.GetType();
-            if (entityType.IsArray)
-            {
-                InsertData((MonitorDataBase[])data);
-            }
-            else
-            {
-                InsertData([(MonitorDataBase)data]);
-            }
-        }
-
-        public void InsertData(MonitorDataBase[] data)
-        {
-            CacheData(data);
-        }
-
-        private void CacheData(MonitorDataBase[] data)
-        {
-            Task.Run(() =>
-            {
-                lock (this)
-                {
-                    var entityType = data.GetType();
-                    string name = entityType.Name;
-                    DateTime time = DateTime.Now;
-                    if (Cache.TryGetValue(name, out var cache))
-                    {
-                        for (int i = 0; i < cache.Count; i++)
-                        {
-                            if ((time - cache[i].cacheTime).TotalSeconds > AppConfig.CacheKeepSeconds)
-                            {
-                                cache.RemoveAt(i);
-                                i--;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        cache.Add((time, data));
-                    }
-                    else
-                    {
-                        Cache.Add(name, [(time, data)]);
-                    }
-                }
-            });
         }
     }
 }

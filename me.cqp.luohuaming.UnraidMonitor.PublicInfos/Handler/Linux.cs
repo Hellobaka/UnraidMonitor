@@ -27,7 +27,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取CPUInfo", $"指令执行失败：{error}");
                 return null;
             }
-            return CpuInfo.ParseDmidecode(output);
+            var item = CpuInfo.ParseDmidecode(output);
+            item.CacheItem();
+            return item;
         }
 
         public override CpuUsage[] GetCpuUsages()
@@ -45,7 +47,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 CPUId = "CPUTotal",
                 User = CpuUsage.GetTotalUsage(usages),
             };
-            return [total, .. usages];
+            CpuUsage[] items = [total, .. usages];
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override DiskMountInfo[] GetDiskMountInfos()
@@ -81,6 +88,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     i++;
                 }
                 item.ParseDiskFree(output, diskName);
+                item.CacheItem();
             }
 
             return array;
@@ -95,7 +103,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取Dockers", $"指令执行失败：{error}");
                 return null;
             }
-            return Dockers.ParseFromDockerPs(output);
+            var items = Dockers.ParseFromDockerPs(output);
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override FanInfo[] GetFanInfos()
@@ -107,7 +120,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取FanInfos", $"指令执行失败：{error}");
                 return null;
             }
-            return FanInfo.ParseFromSensor(output);
+            var items = FanInfo.ParseFromSensor(output);
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override MemoryInfo GetMemoryInfo()
@@ -119,7 +137,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取MemoryInfo", $"指令执行失败：{error}");
                 return null;
             }
-            return MemoryInfo.ParseFromFree(output);
+            var item = MemoryInfo.ParseFromFree(output);
+            item.CacheItem();
+            return item;
         }
 
         public override MotherboardInfo GetMotherboardInfo()
@@ -131,7 +151,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取MotherboardInfo", $"指令执行失败：{error}");
                 return null;
             }
-            return MotherboardInfo.ParseDmidecode(output);
+            var item = MotherboardInfo.ParseDmidecode(output);
+            item.CacheItem();
+            return item;
         }
 
         public override NetworkInterfaceInfo[] GetNetworkInterfaceInfos()
@@ -143,7 +165,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取NetworkInterfaceInfos", $"指令执行失败：{error}");
                 return null;
             }
-            return NetworkInterfaceInfo.ParseFromIPA(output);
+            var items = NetworkInterfaceInfo.ParseFromIPA(output);
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override NetworkTrafficInfo[] GetNetworkTrafficInfos()
@@ -155,7 +182,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 MainSave.CQLog?.Error("获取NetworkTrafficInfos", $"指令执行失败：{error}");
                 return null;
             }
-            return NetworkTrafficInfo.ParseFromIPS(output);
+            var items = NetworkTrafficInfo.ParseFromIPS(output);
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override TemperatureInfo[] GetTemperatureInfos()
@@ -168,7 +200,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return null;
             }
 
-            return TemperatureInfo.ParseFromSensor(output);
+            var items = TemperatureInfo.ParseFromSensor(output);
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override DiskSmartInfo[] GetDiskSmartInfos()
@@ -202,6 +239,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 if (info != null)
                 {
                     list.Add(info);
+                    info.CacheItem();
                 }
             }
 
@@ -240,6 +278,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                     continue;
                 }
                 item.ParseIcon(output);
+                item.CacheItem();
             }
 
             return result;
@@ -255,7 +294,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return null;
             }
 
-            return SystemInfo.ParseFromUnraidIni(output);
+            var item = SystemInfo.ParseFromUnraidIni(output);
+            item.CacheItem();
+            return item;
         }
 
         public override SystemUptime GetSystemUptime()
@@ -268,7 +309,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return new();
             }
 
-            return SystemUptime.ParseFromUptime(output);
+            var item = SystemUptime.ParseFromUptime(output);
+            item.CacheItem();
+            return item;
         }
 
         public override DiskInfo[] GetDiskInfos()
@@ -281,7 +324,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return [];
             }
 
-            return DiskInfo.ParseFromDiskIni(output);
+            var items = DiskInfo.ParseFromDiskIni(output);
+            foreach (var item in items)
+            {
+                item.CacheItem();
+            }
+            return items;
         }
 
         public override UPSStatus GetUPS()
@@ -294,7 +342,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 return null;
             }
 
-            return UPSStatus.ParseFromApcAccess(output);
+            var item = UPSStatus.ParseFromApcAccess(output);
+            item.CacheItem();
+            return item;
         }
 
         public override Notification[] GetNotifications()
@@ -320,6 +370,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
                 if (notification != null)
                 {
                     list.Add(notification);
+                    notification.CacheItem();
                 }
             }
             return list.ToArray();

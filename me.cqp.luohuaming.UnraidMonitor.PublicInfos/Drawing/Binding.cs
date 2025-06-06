@@ -144,43 +144,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 throw new ArgumentException("开始时间不得大于结束时间");
             }
 
-            // 从缓存或DB获取统计数据
-            var name = typeof(T).Name;
-            DateTime cacheEndTime = DateTime.Now;
-            if (HandlerBase.Instance.Cache.TryGetValue(name, out var cache))
-            {
-                cacheEndTime = cache.FirstOrDefault().cacheTime;
-            }
-            var cacheData = GetDataFromCache<T>();
-            if (From > cacheEndTime)
-            {
-                // 目标时间晚于缓存时间，可都从缓存获取
-                return cacheData;
-            }
-            else if (To < cacheEndTime)
-            {
-                // 目标时间早于缓存时间，直接从DB获取
-                return GetDataFromDB<T>();
-            }
-            else
-            {
-                // 目标时间在缓存时间范围内，合并缓存和DB数据
-                var dbData = GetDataFromDB<T>();
-                return cacheData.Concat(dbData).OrderBy(x => x.DateTime).ToList();
-            }
-        }
-
-        private List<T> GetDataFromDB<T>() where T : MonitorDataBase, new()
-        {
-            return [];
+            // 从缓存获取统计数据
+            return GetDataFromCache<T>().OrderBy(x => x.DateTime).ToList();
         }
 
         private List<T> GetDataFromCache<T>()
         {
             var name = typeof(T).Name;
-            return HandlerBase.Instance.Cache.TryGetValue(name, out var cache)
-                ? cache.Where(x => x.cacheTime > From).OrderBy(x => x.cacheTime).Select(x => (T)x.data).ToList()
-                : ([]);
+            List<T> data = [];
+            if( MonitorDataBase.Cache.TryGetValue(name, out var cache))
+            {
+                foreach(var item in cache.Where(x => x.cacheTime > From).OrderBy(x => x.cacheTime))
+                {
+                    if (item.data is Array arr)
+                    {
+                        foreach (var i in arr)
+                        {
+                            data.Add((T)i);
+                        }
+                    }
+                    else
+                    {
+                        data.Add((T)item.data);
+                    }
+                }
+            }
+            return data;
         }
 
         /// <summary>
@@ -197,7 +186,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 // 反射Model所有属性，获取绑定路径和条件
                 // 整理MultiBinding，获取所有绑定需求的路径，若当前模型属性在绑定需求中，则缓存反射信息
-                foreach(var bind in multipleBindings.Where(x => x.Path == item.Name))
+                foreach (var bind in multipleBindings.Where(x => x.Path == item.Name))
                 {
                     string valueType = item.PropertyType.Name;
                     bind.IsNumber = valueType == "Int32" || valueType == "Int64" || valueType == "Double" || valueType == "Single";
