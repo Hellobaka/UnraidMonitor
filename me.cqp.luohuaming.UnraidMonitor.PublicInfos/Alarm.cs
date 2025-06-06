@@ -18,12 +18,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static AlarmManager Instance { get; set; } = new AlarmManager();
 
-        private List<AlarmRuleBase> Rules { get; set; } = [];
+        public List<AlarmRuleBase> Rules { get; set; } = [];
 
         public static void LoadRules(string path)
         {
             try
             {
+                if (!File.Exists(path))
+                {
+                    return;
+                }
                 List<AlarmRuleBase> rules = JsonConvert.DeserializeObject<List<AlarmRuleBase>>(File.ReadAllText(path));
                 foreach (var rule in rules)
                 {
