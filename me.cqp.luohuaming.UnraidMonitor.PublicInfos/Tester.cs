@@ -6,6 +6,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 {
@@ -27,7 +28,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             DBHelper.Init();
             var handler = new Windows();
             //MonitorTest();
-            DrawTest();
+            LoadStyleTest();
+            //DrawTest();
+        }
+
+        static void LoadStyleTest()
+        {
+            var paint = DrawingStyle.LoadFromFile("default.style").Draw(1500);
+            paint.Save("2.bmp");
         }
 
         static void DrawTest()
@@ -49,1093 +57,1093 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
                 Content = [
                     new DrawingBase{
-                        DrawingLayout = DrawingBase.Layout.Percentage,
-                        FillPercentage = 50,
-                        DrawingTitle = new(){
-                            HasTitle = true,
-                            Text = "主板",
-                            Bold = true,
-                            TextSize = 46,
-                        },
-                        Content = [
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.MotherboardInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "制造商: {0}",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Manufacturer"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.MotherboardInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "型号: {0}",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "ProductName"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                        ]
+                    DrawingLayout = DrawingBase.Layout.Percentage,
+                    FillPercentage = 50,
+                    DrawingTitle = new(){
+                        HasTitle = true,
+                        Text = "主板",
+                        Bold = true,
+                        TextSize = 46,
                     },
-                    new DrawingBase{
-                        DrawingLayout = DrawingBase.Layout.Percentage,
-                        FillPercentage = 50,
-                        DrawingTitle = new(){
-                            HasTitle = true,
-                            Text = "系统",
-                            Bold = true,
-                            TextSize = 46,
-                        },
-                        Content = [
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.SystemInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "版本: {0} {1} {2}",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "SystemName"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "SystemEdition"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "Version"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.SystemUptime,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "启动时间: {0}天 {1}小时 {2}分钟 {3}秒",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "UpTimeDay"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "UpTimeHour"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "UpTimeMinute"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "UpTimeSecond"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                        ]
-                    },
-                    new DrawingBase{
-                        BackgroundBlur = 0,
-                        DrawingBorder = new()
-                        {
-                            BorderColor = SKColors.White,
-                            BorderRadius = 10,
-                            BorderWidth = 1,
-                            HasBorder = false,
-                        },
-                        DrawingLayout = DrawingBase.Layout.Percentage,
-                        DrawingTitle = new()
-                        {
-                            HasTitle = true,
-                            Text = "CPU Info",
-                            Bold = true,
-                            TextSize = 36,
-                            HasIcon = false,
-                            IconMargin = new Thickness(10, 0),
-                            IconPath = @"icons\icon.ico",
-                            IconSize = new(40, 40),
-                            //OverrideColor = "#E22829",
-                            //OverrideColor2 = "#FF8C30",
-                        },
-                        FillPercentage = 100,
-                        FixedWidth = 0,
-                        Margin = Thickness.DefaultMargin,
-                        Padding = Thickness.DefaultPadding,
-                        Radius = 10,
-                        LayoutDebug = false,
-                        Content = [
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.CpuInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "型号: {0} @ {1:f2} GHz",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Model"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "BaseSpeedGHz"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.CpuInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "规格: {0} 核心 {1} 线程",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "PhysicalCores"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "LogicalCores"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text {
-                                Text = "总占用率:",
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Remaining,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Total" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU1:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #1" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU2:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #2" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU3:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #3" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU4:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #4" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU5:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #5" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU6:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #6" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU7:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #7" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU8:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #8" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU9:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #9 Thread #1" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU10:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #9 Thread #2" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU11:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #10 Thread #1" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU12:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #10 Thread #2" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU13:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #11 Thread #1" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU14:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #11 Thread #2" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU15:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #12 Thread #1" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
-                            new DrawingItem_Text {
-                                Text = "CPU16:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #12 Thread #2" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
-                                }
-                            },
+                    Content = [
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.MotherboardInfo,
 
-                            new DrawingItem_Text {
-                                Text = "CPU17:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #13" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "制造商: {0}",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Manufacturer"
+                                        },
+                                    ] }
                                 }
                             },
-                            new DrawingItem_Text {
-                                Text = "CPU18:",
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 8,
-                            },
-                            new DrawingItem_ProgressBar {
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Layout = DrawingBase.Layout.Percentage,
-                                FillPercentage = 42,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Core #14" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] }
-                                    }
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.MotherboardInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "型号: {0}",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "ProductName"
+                                        },
+                                    ] }
                                 }
                             },
-                            new DrawingItem_Chart{
-                                AfterNewLine = true,
-                                OverrideHeight = 200,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"CPUId", "CPU Total" }
-                                    },
-                                    ItemType = ItemType.CpuUsage,
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"DateTime", [
-                                            new MultipleBinding{
-                                                Path = "DateTime"
-                                            },
-                                        ] },
-                                        {"Points", [
-                                            new MultipleBinding{
-                                                Path = "TotalUsage"
-                                            },
-                                        ] },
-                                    }
+                        },
+                    ]
+                },
+                new DrawingBase{
+                    DrawingLayout = DrawingBase.Layout.Percentage,
+                    FillPercentage = 50,
+                    DrawingTitle = new(){
+                        HasTitle = true,
+                        Text = "系统",
+                        Bold = true,
+                        TextSize = 46,
+                    },
+                    Content = [
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.SystemInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "版本: {0} {1} {2}",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "SystemName"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "SystemEdition"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "Version"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.SystemUptime,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "启动时间: {0}天 {1}小时 {2}分钟 {3}秒",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "UpTimeDay"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "UpTimeHour"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "UpTimeMinute"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "UpTimeSecond"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                    ]
+                },
+                new DrawingBase{
+                    BackgroundBlur = 0,
+                    DrawingBorder = new()
+                    {
+                        BorderColor = SKColors.White,
+                        BorderRadius = 10,
+                        BorderWidth = 1,
+                        HasBorder = false,
+                    },
+                    DrawingLayout = DrawingBase.Layout.Percentage,
+                    DrawingTitle = new()
+                    {
+                        HasTitle = true,
+                        Text = "CPU Info",
+                        Bold = true,
+                        TextSize = 36,
+                        HasIcon = false,
+                        IconMargin = new Thickness(10, 0),
+                        IconPath = @"icons\icon.ico",
+                        IconSize = new(40, 40),
+                        //OverrideColor = "#E22829",
+                        //OverrideColor2 = "#FF8C30",
+                    },
+                    FillPercentage = 100,
+                    FixedWidth = 0,
+                    Margin = Thickness.DefaultMargin,
+                    Padding = Thickness.DefaultPadding,
+                    Radius = 10,
+                    LayoutDebug = false,
+                    Content = [
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.CpuInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "型号: {0} @ {1:f2} GHz",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Model"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "BaseSpeedGHz"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.CpuInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "规格: {0} 核心 {1} 线程",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "PhysicalCores"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "LogicalCores"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text {
+                            Text = "总占用率:",
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Remaining,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Total" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
                                 }
                             }
-                        ]
-                    },
-                    new DrawingBase{
-                        DrawingTitle = new(){
-                            HasTitle = true,
-                            Text = "内存",
-                            Bold = true,
-                            TextSize = 46,
                         },
-                        Content = [
-                            new DrawingItem_Text{
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.MemoryInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "占用率 ({0:f2}%)：{1:f1}GB / {2:f1}GB",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "UsagePercentage"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "Used",
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                            new MultipleBinding{
-                                                Path = "Total",
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                        ] }
-                                    }
+                        new DrawingItem_Text {
+                            Text = "CPU1:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #1" }
                                 },
-                            },
-                            new DrawingItem_ProgressBar{
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.MemoryInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "UsagePercentage"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Chart{
-                                AfterNewLine = true,
-                                OverrideHeight = 200,
-                                Binding = new(){
-                                    Conditions = [],
-                                    ItemType = ItemType.MemoryInfo,
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"DateTime", [
-                                            new MultipleBinding{
-                                                Path = "DateTime"
-                                            },
-                                        ] },
-                                        {"Points", [
-                                            new MultipleBinding{
-                                                Path = "UsagePercentage"
-                                            },
-                                        ] },
-                                    }
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
                                 }
                             }
-
-                        ]
-                    },
-                    new DrawingBase{
-                        DrawingTitle = new(){
-                            HasTitle = true,
-                            Text = "硬盘",
-                            Bold = true,
-                            TextSize = 46,
                         },
-                        Content = [
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.DiskInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "磁盘0：{0} 挂载于 {1}",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Model"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "DeviceName"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.DiskInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "运行状态：{0}",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Running"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.DiskInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "温度：{0:f1}°C",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Temperature"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Text = "SMART：Good"
-                            },
-                            new DrawingItem_Text{
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.DiskInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "占用率：{0:f2}GB / {1:f2}GB",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Used",
-                                                NumberConverter = NumberConverter.BytesToGB
-                                            },
-                                            new MultipleBinding{
-                                                Path = "Total",
-                                                NumberConverter = NumberConverter.BytesToGB
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_ProgressBar{
-                                AfterNewLine = true,
-                                VerticalAlignment = DrawingBase.Position.Center,
-                                Binding = new Binding(){
-                                    Conditions = [],
-                                    ItemType = ItemType.DiskInfo,
-                                    
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"Value", [
-                                            new MultipleBinding{
-                                                Path = "UsedPercent"
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                        ]
-                    },
-                     new DrawingBase{
-                        DrawingTitle = new(){
-                            HasTitle = true,
-                            Text = "网络",
-                            Bold = true,
-                            TextSize = 46,
+                        new DrawingItem_Text {
+                            Text = "CPU2:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
                         },
-                        Content = [
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = new(){
-                                        {"Name", "WLAN" }
-                                    },
-                                    ItemType = ItemType.NetworkTrafficInfo,
-
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "{0}：↑{1:f1}Mbps ↓{2:f1}Mbps",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Name"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "TxBytes",
-                                                ValueType = Drawing.ValueType.Diff,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                            new MultipleBinding{
-                                                Path = "RxBytes",
-                                                ValueType = Drawing.ValueType.Diff,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                        ] }
-                                    }
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #2" }
                                 },
-                            },
-                            new DrawingItem_Text{
-                                AfterNewLine = true,
-                                Binding = new Binding(){
-                                    Conditions = new(){
-                                        {"Name", "以太网 2" }
-                                    },
-                                    ItemType = ItemType.NetworkTrafficInfo,
+                                ItemType = ItemType.CpuUsage,
 
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    StringFormat = "{0}：↑{1:f1}Mbps ↓{2:f1}Mbps",
-                                    BindingPath = new(){
-                                        {"Text", [
-                                            new MultipleBinding{
-                                                Path = "Name"
-                                            },
-                                            new MultipleBinding{
-                                                Path = "TxBytes",
-                                                ValueType = Drawing.ValueType.Diff,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                            new MultipleBinding{
-                                                Path = "RxBytes",
-                                                ValueType = Drawing.ValueType.Diff,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                        ] }
-                                    }
-                                },
-                            },
-                            new DrawingItem_Chart{
-                                AfterNewLine = true,
-                                OverrideHeight = 200,
-                                Binding = new(){
-                                    Conditions = new(){
-                                        {"Name", "WLAN" }
-                                    },
-                                    ItemType = ItemType.NetworkTrafficInfo,
-                                    FromTimeRange = TimeRange.Day,
-                                    FromTimeValue = 1,
-                                    ToTimeRange = TimeRange.Day,
-                                    ToTimeValue = 0,
-                                    BindingPath = new(){
-                                        {"DateTime", [
-                                            new MultipleBinding{
-                                                Path = "DateTime",
-                                                ValueType = Drawing.ValueType.Diff,
-                                            },
-                                        ] },
-                                        {"Points", [
-                                            new MultipleBinding{
-                                                Path = "TxBytes",
-                                                ValueType = Drawing.ValueType.Diff,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                        ] },
-                                        {"Max", [
-                                            new MultipleBinding{
-                                                Path = "TxBytes",
-                                                ValueType = Drawing.ValueType.DiffMax,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                        ] },
-                                        {"Min", [
-                                            new MultipleBinding{
-                                                Path = "TxBytes",
-                                                ValueType = Drawing.ValueType.DiffMin,
-                                                NumberConverter = NumberConverter.BytesToMB
-                                            },
-                                        ] },
-                                    }
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
                                 }
                             }
-                        ]
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU3:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #3" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU4:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #4" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU5:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #5" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU6:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #6" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU7:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #7" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU8:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #8" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU9:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #9 Thread #1" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU10:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #9 Thread #2" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU11:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #10 Thread #1" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU12:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #10 Thread #2" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU13:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #11 Thread #1" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU14:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #11 Thread #2" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU15:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #12 Thread #1" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU16:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #12 Thread #2" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+
+                        new DrawingItem_Text {
+                            Text = "CPU17:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #13" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Text {
+                            Text = "CPU18:",
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 8,
+                        },
+                        new DrawingItem_ProgressBar {
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Layout = DrawingBase.Layout.Percentage,
+                            FillPercentage = 42,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Core #14" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] }
+                                }
+                            }
+                        },
+                        new DrawingItem_Chart{
+                            AfterNewLine = true,
+                            OverrideHeight = 200,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"CPUId", "CPU Total" }
+                                },
+                                ItemType = ItemType.CpuUsage,
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"DateTime", [
+                                        new MultipleBinding{
+                                            Path = "DateTime"
+                                        },
+                                    ] },
+                                    {"Points", [
+                                        new MultipleBinding{
+                                            Path = "TotalUsage"
+                                        },
+                                    ] },
+                                }
+                            }
+                        }
+                    ]
+                },
+                new DrawingBase{
+                    DrawingTitle = new(){
+                        HasTitle = true,
+                        Text = "内存",
+                        Bold = true,
+                        TextSize = 46,
                     },
-                ],
+                    Content = [
+                        new DrawingItem_Text{
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.MemoryInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "占用率 ({0:f2}%)：{1:f1}GB / {2:f1}GB",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "UsagePercentage"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "Used",
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                        new MultipleBinding{
+                                            Path = "Total",
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_ProgressBar{
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.MemoryInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "UsagePercentage"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Chart{
+                            AfterNewLine = true,
+                            OverrideHeight = 200,
+                            Binding = new(){
+                                Conditions = [],
+                                ItemType = ItemType.MemoryInfo,
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"DateTime", [
+                                        new MultipleBinding{
+                                            Path = "DateTime"
+                                        },
+                                    ] },
+                                    {"Points", [
+                                        new MultipleBinding{
+                                            Path = "UsagePercentage"
+                                        },
+                                    ] },
+                                }
+                            }
+                        }
+
+                    ]
+                },
+                new DrawingBase{
+                    DrawingTitle = new(){
+                        HasTitle = true,
+                        Text = "硬盘",
+                        Bold = true,
+                        TextSize = 46,
+                    },
+                    Content = [
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.DiskInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "磁盘0：{0} 挂载于 {1}",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Model"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "DeviceName"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.DiskInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "运行状态：{0}",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Running"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.DiskInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "温度：{0:f1}°C",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Temperature"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Text = "SMART：Good"
+                        },
+                        new DrawingItem_Text{
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.DiskInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "占用率：{0:f2}GB / {1:f2}GB",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Used",
+                                            NumberConverter = NumberConverter.BytesToGB
+                                        },
+                                        new MultipleBinding{
+                                            Path = "Total",
+                                            NumberConverter = NumberConverter.BytesToGB
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_ProgressBar{
+                            AfterNewLine = true,
+                            VerticalAlignment = DrawingBase.Position.Center,
+                            Binding = new Binding(){
+                                Conditions = [],
+                                ItemType = ItemType.DiskInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"Value", [
+                                        new MultipleBinding{
+                                            Path = "UsedPercent"
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                    ]
+                },
+                    new DrawingBase{
+                    DrawingTitle = new(){
+                        HasTitle = true,
+                        Text = "网络",
+                        Bold = true,
+                        TextSize = 46,
+                    },
+                    Content = [
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = new(){
+                                    {"Name", "WLAN" }
+                                },
+                                ItemType = ItemType.NetworkTrafficInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "{0}：↑{1:f1}Mbps ↓{2:f1}Mbps",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Name"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "TxBytes",
+                                            ValueType = Drawing.ValueType.Diff,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                        new MultipleBinding{
+                                            Path = "RxBytes",
+                                            ValueType = Drawing.ValueType.Diff,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Text{
+                            AfterNewLine = true,
+                            Binding = new Binding(){
+                                Conditions = new(){
+                                    {"Name", "以太网 2" }
+                                },
+                                ItemType = ItemType.NetworkTrafficInfo,
+
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                StringFormat = "{0}：↑{1:f1}Mbps ↓{2:f1}Mbps",
+                                BindingPath = new(){
+                                    {"Text", [
+                                        new MultipleBinding{
+                                            Path = "Name"
+                                        },
+                                        new MultipleBinding{
+                                            Path = "TxBytes",
+                                            ValueType = Drawing.ValueType.Diff,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                        new MultipleBinding{
+                                            Path = "RxBytes",
+                                            ValueType = Drawing.ValueType.Diff,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                    ] }
+                                }
+                            },
+                        },
+                        new DrawingItem_Chart{
+                            AfterNewLine = true,
+                            OverrideHeight = 200,
+                            Binding = new(){
+                                Conditions = new(){
+                                    {"Name", "WLAN" }
+                                },
+                                ItemType = ItemType.NetworkTrafficInfo,
+                                FromTimeRange = TimeRange.Day,
+                                FromTimeValue = 1,
+                                ToTimeRange = TimeRange.Day,
+                                ToTimeValue = 0,
+                                BindingPath = new(){
+                                    {"DateTime", [
+                                        new MultipleBinding{
+                                            Path = "DateTime",
+                                            ValueType = Drawing.ValueType.Diff,
+                                        },
+                                    ] },
+                                    {"Points", [
+                                        new MultipleBinding{
+                                            Path = "TxBytes",
+                                            ValueType = Drawing.ValueType.Diff,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                    ] },
+                                    {"Max", [
+                                        new MultipleBinding{
+                                            Path = "TxBytes",
+                                            ValueType = Drawing.ValueType.DiffMax,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                    ] },
+                                    {"Min", [
+                                        new MultipleBinding{
+                                            Path = "TxBytes",
+                                            ValueType = Drawing.ValueType.DiffMin,
+                                            NumberConverter = NumberConverter.BytesToMB
+                                        },
+                                    ] },
+                                }
+                            }
+                        }
+                    ]
+                },
+            ],
             };
             var paint = style.Draw(1500);
             paint.Save("1.bmp");
-            File.WriteAllText("bindingtest.style", JsonConvert.SerializeObject(style, Formatting.Indented));
+            File.WriteAllText("bindingtest.style", style.Serialize());
         }
 
         static Random Random = new Random();
