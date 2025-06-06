@@ -1,14 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-using static me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.DrawingBase;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
