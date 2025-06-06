@@ -17,5 +17,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public static string ImageDirectory { get; set; }
 
         public static HandlerBase MonitorAPI { get; set; }
+
+        public static List<Commands> Commands { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp.EventArgs;
 using Newtonsoft.Json;
@@ -21,5 +22,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         FunctionResult Execute(CQGroupMessageEventArgs e);
 
         FunctionResult Execute(CQPrivateMessageEventArgs e);
+    }
+
+    public class Commands
+    {
+        public string Command { get; set; }
+
+        public string StylePath { get; set; }
+
+        [JsonIgnore]
+        public DrawingStyle DrawingStyle => DrawingStyle.LoadFromFile(StylePath);
     }
 }

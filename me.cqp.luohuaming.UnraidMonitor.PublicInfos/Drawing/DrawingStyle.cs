@@ -10,6 +10,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
     public class DrawingStyle
     {
+        private static Dictionary<string, DrawingStyle> StyleCache { get; set; } = [];
+
         public enum BackgroundImageScaleType
         {
             Center,
@@ -447,9 +449,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Formatting = Formatting.Indented,
         });
 
-        public static DrawingStyle LoadFromFile(string path) => JsonConvert.DeserializeObject<DrawingStyle>(File.ReadAllText(path), new JsonSerializerSettings()
+        public static DrawingStyle LoadFromFile(string path)
         {
-            TypeNameHandling = TypeNameHandling.Auto,
-        });
+            if (StyleCache.TryGetValue(Path.GetFullPath(path), out var style))
+            {
+                return style;
+            }
+
+            style = JsonConvert.DeserializeObject<DrawingStyle>(File.ReadAllText(path), new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+            });
+            StyleCache.Add(Path.GetFullPath(path), style);
+            return style;
+        }
     }
 }
