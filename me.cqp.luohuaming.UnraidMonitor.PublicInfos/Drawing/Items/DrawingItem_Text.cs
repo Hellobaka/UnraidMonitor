@@ -10,7 +10,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Minimal;
 
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
 
         public bool IsBold { get; set; }
 
@@ -19,6 +19,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public string OverrideFont { get; set; }
 
         public string OverrideColor { get; set; }
+
+        public override void BeforeBinding()
+        {
+            Text = "";
+        }
 
         public override void ApplyBinding()
         {

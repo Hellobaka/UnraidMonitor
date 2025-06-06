@@ -49,6 +49,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public Thickness TextMargin { get; set; } = Thickness.DefaultMargin;
 
+        public override void BeforeBinding()
+        {
+            Header = "";
+            DisplayValue = "";
+            Value = 0;
+            Min = 0;
+            Max = 100;
+        }
+
         public override void ApplyBinding()
         {
             base.ApplyBinding();

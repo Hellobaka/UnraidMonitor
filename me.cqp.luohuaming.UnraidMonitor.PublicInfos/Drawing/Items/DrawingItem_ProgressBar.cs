@@ -20,6 +20,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override float OverrideHeight { get; set; }
 
         public override Thickness Margin { get; set; } = new();
+      
+        public override void BeforeBinding()
+        {
+            Value = 0;
+            Min = 0;
+            Max = 100;
+        }
 
         public override void ApplyBinding()
         {

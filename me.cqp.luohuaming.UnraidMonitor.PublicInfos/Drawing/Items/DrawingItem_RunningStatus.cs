@@ -1,11 +1,14 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json.Linq;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using static me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.DrawingBase;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -17,7 +20,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public int TextSize { get; set; } = 26;
 
-        public string Title { get; set; }
+        public string Title { get; set; } = "";
 
         public bool IsTitleBold { get; set; }
 
@@ -29,9 +32,53 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public bool RunningStatusHasIcon { get; set; } = true;
 
-        public string ImagePath { get; set; }
+        public string ImagePath { get; set; } = "images\\default.png";
 
         public bool HasImage { get; set; }
+
+        public Converter RunningConverter { get; set; }
+
+        public override void BeforeBinding()
+        {
+            Title = string.Empty;
+            RunningText = "运行中";
+            NotRunningText = "已停止";
+            ImagePath = "images\\default.png";
+            Running = false;
+        }
+
+        public override void ApplyBinding()
+        {
+            base.ApplyBinding();
+            if (Binding == null)
+            {
+                return;
+            }
+            if (Binding.Value.TryGetValue("Title", out var data))
+            {
+                Title = data.FormattedString;
+            }
+            if (Binding.Value.TryGetValue("RunningText", out data))
+            {
+                RunningText = data.FormattedString;
+            }
+            if (Binding.Value.TryGetValue("NotRunningText", out data))
+            {
+                NotRunningText = data.FormattedString;
+            }
+            if (Binding.Value.TryGetValue("ImagePath", out data))
+            {
+                ImagePath = data.FormattedString;
+            }
+            if (Binding.Value.TryGetValue("Running", out data))
+            {
+                var item = data.FormattedString;
+                if (RunningConverter != null)
+                {
+                    Running = RunningConverter.Running == item;
+                }
+            }
+        }
 
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
@@ -111,6 +158,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 Size = new SKSize(textPainting.Width, textPainting.Height)
             });
             return (new(textPoint.X + textPainting.Width, textPoint.Y + textPainting.Height), textPoint.X + textPainting.Width, textPainting.Height);
+        }
+
+        public class Converter
+        {
+            public string Running { get; set; }
+
+            public string NotRunning { get; set; }
         }
     }
 }

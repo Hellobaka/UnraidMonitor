@@ -14,7 +14,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Remaining;
 
-        [JsonIgnore]
         public (DateTime time, double value)[] Points { get; set; } = [];
 
         public double Min { get; set; } = 0;
@@ -46,6 +45,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 OverrideHeight = 100;
             }
             return base.CalcHeight(theme);
+        }
+
+        public override void BeforeBinding()
+        {
+            Points = [];
+            Min = 0;
+            Max = 100;
         }
 
         public override void ApplyBinding()

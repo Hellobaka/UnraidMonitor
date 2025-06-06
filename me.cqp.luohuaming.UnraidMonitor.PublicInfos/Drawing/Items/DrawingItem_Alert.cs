@@ -15,11 +15,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public DrawingBase.AlertType AlertType { get; set; } = DrawingBase.AlertType.Info;
 
-        public string Header { get; set; }
+        public string Header { get; set; } = "";
 
         public bool IsHeaderBold { get; set; }
 
-        public string Content { get; set; }
+        public string Content { get; set; } = "";
 
         public string OverrideFont { get; set; }
 
@@ -28,6 +28,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public Thickness Padding { get; set; } = new Thickness(16);
 
         public Converter AlertTypeConverter { get; set; }
+
+        public override void BeforeBinding()
+        {
+            Header = string.Empty;
+            Content = string.Empty;
+            AlertType = DrawingBase.AlertType.Info;
+        }
 
         public override void ApplyBinding()
         {

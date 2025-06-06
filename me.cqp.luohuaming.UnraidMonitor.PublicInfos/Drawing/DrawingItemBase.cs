@@ -59,6 +59,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public Binding Binding { get; set; }
 
+        public virtual void BeforeBinding()
+        {
+        }
+
         public virtual void ApplyBinding()
         {
             Binding?.Get();

@@ -168,7 +168,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             preDraw.Add(currentLine);
             foreach (var item in Content)
             {
-                item.ApplyBinding();
+                if (item.Binding != null)
+                {
+                    item.BeforeBinding();
+                    item.ApplyBinding();
+                }
                 float desireWidth = width;
                 // 计算宽度
                 if (item.Layout == Layout.Percentage)
