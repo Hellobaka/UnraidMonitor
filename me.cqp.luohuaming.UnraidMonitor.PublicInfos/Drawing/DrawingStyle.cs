@@ -451,6 +451,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public static DrawingStyle LoadFromFile(string path)
         {
+            string pathA = Path.Combine(MainSave.AppDirectory, path);
+            string pathB = path;
+            if (File.Exists(pathA))
+            {
+                path = pathA;
+            }
+            else if (File.Exists(pathB))
+            {
+                path = pathB;
+            }
+            else
+            {
+                return null;
+            }
             if (StyleCache.TryGetValue(Path.GetFullPath(path), out var style))
             {
                 return style;
