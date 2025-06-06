@@ -33,6 +33,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
                     }
                 }
             }
+            Directory.CreateDirectory(MainSave.UnraidMonitorImageSavePath);
 
             e.CQLog.Info("初始化", "加载配置");
             AppConfig appConfig = new(Path.Combine(MainSave.AppDirectory, "Config.json"));
@@ -41,7 +42,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             CommandIntervalConfig intervalConfig = new(Path.Combine(MainSave.AppDirectory, "Interval.json"));
             intervalConfig.LoadConfig();
             intervalConfig.EnableAutoReload();
-
+            if (!Directory.Exists(Path.Combine(MainSave.AppDirectory, "images")))
+            {
+                e.CQLog.Warning("初始化", $"图片文件夹缺失，可能没有放置数据包");
+            }
             e.CQLog.Info("初始化", "加载指令");
             string path = Path.Combine(MainSave.AppDirectory, "Commands.json");
             if (File.Exists(path))
@@ -56,25 +60,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
                 }
             }
 
-            if (MainSave.Commands == null || MainSave.Commands.Count == 0)
+            e.CQLog.Info("初始化", $"加载了 {MainSave.Commands?.Count ?? 0} 条指令");
+
+            e.CQLog.Info("初始化", "启动数据采集线程");
+            try
             {
-                e.CQLog.Warning("初始化", $"无有效指令");
+                if (AppConfig.MonitorOSType.Equals("Linux", StringComparison.OrdinalIgnoreCase))
+                {
+                    MainSave.MonitorAPI = new Linux();
+                }
+                else if (AppConfig.MonitorOSType.Equals("Windows", StringComparison.OrdinalIgnoreCase))
+                {
+                    MainSave.MonitorAPI = new Windows();
+                }
+                else
+                {
+                    e.CQLog.Error("初始化", $"不支持的操作系统类型 {AppConfig.MonitorOSType}，插件不能使用");
+                }
+                MainSave.MonitorAPI?.StartMonitor();
             }
-            e.CQLog.Info("初始化", "启动监控线程");
-            if (AppConfig.MonitorOSType.Equals("Linux", StringComparison.OrdinalIgnoreCase))
+            catch (Exception ex)
             {
-                MainSave.MonitorAPI = new Linux();
-            }
-            else if (AppConfig.MonitorOSType.Equals("Windows", StringComparison.OrdinalIgnoreCase))
-            {
-                MainSave.MonitorAPI = new Windows();
-            }
-            else
-            {
-                e.CQLog.Error("初始化", $"不支持的操作系统类型 {AppConfig.MonitorOSType}，插件不能使用");
+                e.CQLog.Error("初始化", $"加载数据采集时发生异常：{ex}");
             }
             e.CQLog.Info("初始化", "加载Alarm规则");
             AlarmManager.LoadRules(Path.Combine(MainSave.AppDirectory, "AlarmRules.json"));
+            e.CQLog.Info("初始化", $"加载了 {AlarmManager.Instance.Rules.Count} 条Alarm规则");
             e.CQLog.InfoSuccess("初始化", "初始化完成");
         }
     }
