@@ -134,6 +134,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alarm.cs" />
     <Compile Include="CommonHelper.cs" />
     <Compile Include="ConfigBase.cs" />
     <Compile Include="AppConfig.cs" />

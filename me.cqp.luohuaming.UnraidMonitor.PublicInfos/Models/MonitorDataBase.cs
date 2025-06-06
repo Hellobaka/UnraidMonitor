@@ -5,8 +5,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class MonitorDataBase
     {
-        public int Id { get; set; }
-
         public DateTime DateTime { get; set; } = DateTime.Now;
+
+        public void CheckAlarms()
+        {
+            AlarmManager.Instance.Check(this);
+        }
     }
 }
