@@ -18,7 +18,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             ProgressRing,
             Chart,
             Alert,
-            Image
+            Image,
+            RunningStatus
         }
 
         /// <summary>
