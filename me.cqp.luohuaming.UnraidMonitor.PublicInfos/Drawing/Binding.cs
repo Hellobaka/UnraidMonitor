@@ -172,7 +172,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         private List<T> GetDataFromDB<T>() where T : MonitorDataBase, new()
         {
-            return MonitorDataBase.GetDataRange<T>(From, To);
+            return [];
         }
 
         private List<T> GetDataFromCache<T>()

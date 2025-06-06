@@ -25,7 +25,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             intervalConfig.LoadConfig();
             intervalConfig.EnableAutoReload();
 
-            DBHelper.Init();
             var handler = new Windows();
             //MonitorTest();
             LoadStyleTest();

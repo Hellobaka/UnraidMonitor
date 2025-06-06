@@ -216,10 +216,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler
         public void InsertData(MonitorDataBase[] data)
         {
             CacheData(data);
-            foreach(var item in data)
-            {
-                item.Insert();
-            }
         }
 
         private void CacheData(MonitorDataBase[] data)
