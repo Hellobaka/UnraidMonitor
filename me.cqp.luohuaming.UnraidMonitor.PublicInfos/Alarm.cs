@@ -20,9 +20,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         private List<AlarmRuleBase> Rules { get; set; } = [];
 
-        public static void LoadRules()
+        public static void LoadRules(string path)
         {
-            string path = Path.Combine(MainSave.AppDirectory, "AlarmRules.json");
             try
             {
                 List<AlarmRuleBase> rules = JsonConvert.DeserializeObject<List<AlarmRuleBase>>(File.ReadAllText(path));
