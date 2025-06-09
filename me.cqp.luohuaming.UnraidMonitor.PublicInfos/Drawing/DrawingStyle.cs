@@ -127,6 +127,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public Colors Palette { get; set; } = new();
 
+        public bool LayoutDebug { get; set; }
+
         public static Colors GetThemeDefaultColor(Theme theme, bool dark) => (theme, dark) switch
         {
             (Theme.WinUI3, true) => new Colors(),
@@ -289,7 +291,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                     var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
-                    //drawHeight += actualHeight;
+                    if (LayoutDebug)
+                    {
+                        contentPainting.DrawRectangle(new()
+                        {
+                            Location = startPoint,
+                            Size = new(desireWidth, actualHeight)
+                        }, SKColors.Transparent, SKColors.White, 1, null, 0);
+                        contentPainting.DrawRectangle(new()
+                        {
+                            Location = new(startPoint.X - item.Margin.Left, startPoint.Y - item.Margin.Top),
+                            Size = new(desireWidth + item.Margin.Left + item.Margin.Right, actualHeight + item.Margin.Top + item.Margin.Bottom)
+                        }, SKColors.Transparent, SKColors.IndianRed, 1, null, 0);
+                    }
                     // 记录子项的模糊区域
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
@@ -307,12 +321,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                         case DrawingBase.Layout.Minimal:
                             // 填充模式为最小宽度，X加Margin
-                            startPoint = new(endPoint.X + item.Margin.Right, startPoint.Y);
+                            startPoint = new(endPoint.X + item.Margin.Right, startPoint.Y - item.Margin.Top);
                             break;
 
                         case DrawingBase.Layout.FixedWidth:
                             // 填充模式为固定宽度，X为起始坐标+Margin+Width
-                            startPoint = new(startPoint.X + item.FixedWidth + item.Margin.Right, startPoint.Y);
+                            startPoint = new(startPoint.X + item.FixedWidth + item.Margin.Right, startPoint.Y - item.Margin.Top);
                             break;
 
                         case DrawingBase.Layout.Percentage:
@@ -323,7 +337,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                             }
                             else
                             {
-                                startPoint = new(startPoint.X + desireWidth + item.Margin.Right, startPoint.Y);
+                                startPoint = new(startPoint.X + desireWidth + item.Margin.Right, startPoint.Y - item.Margin.Top);
                                 fillPercentage += item.FillPercentage;
                             }
                             break;
@@ -338,7 +352,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 {
                     hasNewLine = true;
                     float maxHeight = currentRowHeights.Count > 0 ? currentRowHeights.Max() : 0;
-                    drawHeight += maxHeight + margin.Bottom;
+                    drawHeight += maxHeight + margin.Bottom + margin.Top;
                     startPoint = new(0, startPoint.Y + maxHeight + margin.Bottom);
                     fillPercentage = 0;
                     currentRowHeights = [];

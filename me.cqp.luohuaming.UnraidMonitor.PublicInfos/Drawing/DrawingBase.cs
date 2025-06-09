@@ -266,7 +266,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         painting.DrawRectangle(new()
                         {
                             Location = new(drawPoint.X - item.item.Margin.Left, drawPoint.Y - item.item.Margin.Top),
-                            Size = new(drawWidth + item.item.Margin.Left + item.item.Margin.Right, drawHeight + +item.item.Margin.Top + item.item.Margin.Bottom)
+                            Size = new(drawWidth + item.item.Margin.Left + item.item.Margin.Right, drawHeight + item.item.Margin.Top + item.item.Margin.Bottom)
                         }, SKColors.Transparent, SKColors.IndianRed, 1, null, 0);
                     }
                     canvas.Dispose();
