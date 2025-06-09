@@ -18,6 +18,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             };
             try
             {
+                if (AppConfig.GroupList.Contains(e.FromGroup) is false)
+                {
+                    return new();
+                }
+                if (AppConfig.BlackList.Contains(e.FromQQ))
+                {
+                    return new();
+                }
                 foreach (var item in MainSave.Instances.OrderByDescending(x => x.Priority)
                     .Where(item => item.CanExecute(e.Message.Text)))
                 {

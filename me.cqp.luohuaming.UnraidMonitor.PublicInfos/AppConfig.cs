@@ -36,6 +36,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
        
         public static string FallbackFont { get; set; }
 
+        public static List<long> GroupList { get; set; } = new List<long>();
+
+        public static List<long> BlackList { get; set; } = new List<long>();
+
+        public static List<long> PersonList { get; set; } = new List<long>();
+
         public override void LoadConfig()
         {
             DisableAutoReload();
@@ -49,6 +55,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             DrawingWidth = GetConfig("DrawingWidth", 1000);
             FallbackFont = GetConfig("FallbackFont", "微软雅黑");
             CacheKeepSeconds = GetConfig("CacheKeepSeconds", (int)TimeSpan.FromDays(1).TotalSeconds);
+            GroupList = GetConfig("GroupList", new List<long>());
+            PersonList = GetConfig("PersonList", new List<long>());
+            BlackList = GetConfig("BlackList", new List<long>());
             EnableAutoReload();
         }
     }

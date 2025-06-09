@@ -18,6 +18,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             };
             try
             {
+                if (AppConfig.PersonList.Contains(e.FromQQ) is false)
+                {
+                    return new();
+                }
                 foreach (var item in MainSave.Instances.OrderByDescending(x => x.Priority)
                     .Where(item => item.CanExecute(e.Message.Text)))
                 {
