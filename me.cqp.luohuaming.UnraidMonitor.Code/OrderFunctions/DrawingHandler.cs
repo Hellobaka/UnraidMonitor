@@ -66,7 +66,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code.OrderFunctions
                 return null;
             }
             var path = Path.Combine(MainSave.UnraidMonitorImageSavePath, $"{DateTime.Now:yyyyMMddHHmmss}.png");
-            command.DrawingStyle.Draw(AppConfig.DrawingWidth).Save(path);
+            command.DrawingStyle.Draw(command.DrawingStyle.Width).Save(path);
 
             return CQApi.CQCode_Image(Path.Combine("UnraidMonitor", Path.GetFileName(path))).ToSendString();
         }

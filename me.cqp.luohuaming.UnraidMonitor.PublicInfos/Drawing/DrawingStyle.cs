@@ -129,6 +129,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public bool LayoutDebug { get; set; }
 
+        public int Width { get; set; } = 1000;
+
         public static Colors GetThemeDefaultColor(Theme theme, bool dark) => (theme, dark) switch
         {
             (Theme.WinUI3, true) => new Colors(),

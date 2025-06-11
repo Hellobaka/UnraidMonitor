@@ -30,8 +30,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
       
         public static int SSHCommandTimeout { get; set; } = 10;
       
-        public static int DrawingWidth { get; set; } = 1000;
-      
         public static int CacheKeepSeconds { get; set; } = (int)TimeSpan.FromDays(1).TotalSeconds;
        
         public static string FallbackFont { get; set; }
@@ -52,7 +50,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             SSHUserName = GetConfig("SSHUserName", "");
             SSHPassword = GetConfig("SSHPassword", "");
             SSHCommandTimeout = GetConfig("SSHCommandTimeout", 10);
-            DrawingWidth = GetConfig("DrawingWidth", 1000);
             FallbackFont = GetConfig("FallbackFont", "微软雅黑");
             CacheKeepSeconds = GetConfig("CacheKeepSeconds", (int)TimeSpan.FromDays(1).TotalSeconds);
             GroupList = GetConfig("GroupList", new List<long>());
