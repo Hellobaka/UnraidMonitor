@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Settings"
@@ -139,12 +140,13 @@
             <TabItem Header="API轮询配置">
                 <ScrollViewer>
                     <StackPanel x:Name="APIContainer" Margin="16,16,22,16">
-                        <Label
+                        <Border
                             Margin="0,0,0,5"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Content="单位均为毫秒（ms）填 0 时表示只查询一次 填 -1 时表示不启用"
-                            Style="{StaticResource LabelInfo}" />
+                            Style="{StaticResource BorderTipInfo}">
+                            <TextBlock>单位均为毫秒（ms）填 0 时表示只查询一次 填 -1 时表示不启用</TextBlock>
+                        </Border>
                         <TextBlock VerticalAlignment="Center">CPU 信息:</TextBlock>
                         <TextBox x:Name="CpuInfo" Margin="0,5,0,0" />
 
@@ -197,10 +199,48 @@
 
             </TabItem>
             <TabItem Header="指令配置">
-                <ScrollViewer>
-                    <StackPanel x:Name="CommandContainer" Margin="16,16,22,16" />
-                </ScrollViewer>
-
+                <Grid Margin="16,16,22,16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <hc:UniformSpacingPanel Margin="0,0,0,10" Spacing="10">
+                        <Button
+                            Name="StyleCommandNewButton"
+                            Width="100"
+                            Click="StyleCommandNewButton_Click"
+                            Content="新建"
+                            Style="{StaticResource ButtonPrimary}" />
+                        <Button
+                            Name="StyleCommandEditButton"
+                            Width="100"
+                            Click="StyleCommandEditButton_Click"
+                            Content="编辑" />
+                        <Button
+                            Name="StyleCommandDeleteButton"
+                            Width="100"
+                            Click="StyleCommandDeleteButton_Click"
+                            Content="删除"
+                            Style="{StaticResource ButtonDanger}" />
+                    </hc:UniformSpacingPanel>
+                    <ListBox
+                        Name="StyleCommandList"
+                        Grid.Row="1"
+                        ItemsSource="{Binding StyleCommands}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="5,0"
+                                        Style="{StaticResource TextBlockDefaultBold}"
+                                        Text="{Binding Command}" />
+                                    <TextBlock Margin="5,0" Text="-&gt;" />
+                                    <TextBlock Margin="5,0" Text="{Binding StylePath}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
             </TabItem>
         </TabControl>
         <Button
