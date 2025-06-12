@@ -16,8 +16,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static AppConfig Instance { get; private set; }
 
-        public static string CommandStatus { get; set; } = "";
-
         public static string MonitorOSType { get; set; } = "";
 
         public static string SSHHost { get; set; } = "";
@@ -43,7 +41,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public override void LoadConfig()
         {
             DisableAutoReload();
-            CommandStatus = GetConfig("CommandStatus", "系统状态");
             MonitorOSType = GetConfig("MonitorOSType", "Linux");
             SSHHost = GetConfig("SSHHost", "");
             SSHPort = GetConfig("SSHPort", 22);
