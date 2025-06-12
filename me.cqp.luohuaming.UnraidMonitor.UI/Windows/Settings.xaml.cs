@@ -21,7 +21,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Settings : Window, INotifyPropertyChanged
+    public partial class Settings : HandyControl.Controls.Window, INotifyPropertyChanged
     {
         public Settings()
         {

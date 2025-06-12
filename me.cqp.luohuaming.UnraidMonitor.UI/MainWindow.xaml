@@ -12,7 +12,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="680"
     d:DesignWidth="1024"
-    Background="White"
+    Background="{DynamicResource RegionBrush}"
     Style="{StaticResource WindowWin10}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
