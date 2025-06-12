@@ -80,7 +80,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
 
         private void CreateFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            CreateStyle createStyle = new();
+            createStyle.Owner = this;
+            Hide();
+            createStyle.ShowDialog();
+            if (createStyle.DialogResult ?? false)
+            {
 
+            }
+            else
+            {
+                Show();
+            }
         }
 
         private void SettingButton_Click(object sender, System.Windows.RoutedEventArgs e)

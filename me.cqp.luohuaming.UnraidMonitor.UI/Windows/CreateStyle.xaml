@@ -1,0 +1,133 @@
+﻿<hc:Window
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Windows.CreateStyle"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Models"
+    Title="创建一个新样式"
+    Width="800"
+    Height="600"
+    d:DataContext="{d:DesignInstance Type=local:CreateStyle,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="1000"
+    d:DesignWidth="800"
+    Background="{DynamicResource RegionBrush}"
+    Loaded="Window_Loaded"
+    Style="{StaticResource WindowWin10}"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <hc:StepBar HorizontalAlignment="Center" StepIndex="{Binding CurrentStep}">
+            <hc:StepBarItem Content="名称" />
+            <hc:StepBarItem Content="基础样式" />
+            <hc:StepBarItem Content="设置" />
+        </hc:StepBar>
+        <!--  Step1  -->
+        <Grid Grid.Row="1" Visibility="{Binding Step1Visibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Text="请为新样式起一个名字：" />
+            <hc:TextBox
+                Grid.Row="1"
+                Width="300"
+                Margin="0,5" Name="StyleNameInput" TextChanged="StyleNameInput_TextChanged"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <hc:TextBox.Text>
+                    <Binding
+                        Path="NameInput"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True"
+                        ValidatesOnExceptions="True">
+                        <Binding.ValidationRules>
+                            <models:NotEmptyValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </hc:TextBox.Text>
+            </hc:TextBox>
+        </Grid>
+        <!--  Step2  -->
+        <hc:UniformSpacingPanel
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Orientation="Vertical"
+            Spacing="10"
+            Visibility="{Binding Step2Visibility}">
+            <Image
+                Width="400"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="{Binding SelectedTheme.Preview}" />
+            <ComboBox
+                hc:InfoElement.Title="选择一个主题："
+                hc:InfoElement.TitlePlacement="Left"
+                hc:InfoElement.TitleWidth="90"
+                ItemsSource="{Binding ThemeList}"
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"
+                Style="{StaticResource ComboBoxExtend}"
+                TextSearch.TextPath="Name" />
+        </hc:UniformSpacingPanel>
+        <!--  Step3  -->
+        <Grid Grid.Row="1" Visibility="{Binding Step3Visibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Text="画布宽度：" />
+            <hc:TextBox
+                Grid.Row="1"  Name="StyleWidthInput"
+                Width="300"
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <hc:TextBox.Text>
+                    <Binding
+                        Path="WidthInput"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True"
+                        ValidatesOnExceptions="True">
+                        <Binding.ValidationRules>
+                            <hc:RegexRule Type="Int" />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </hc:TextBox.Text>
+            </hc:TextBox>
+        </Grid>
+        <hc:UniformSpacingPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Spacing="10">
+            <Button
+                Width="100"
+                Click="LastStep_Click"
+                Content="上一步"
+                IsEnabled="{Binding CanLastStep}"
+                Style="{StaticResource ButtonPrimary}" />
+            <Button
+                Width="100"
+                Click="NextStep_Click"
+                Content="下一步"
+                IsEnabled="{Binding CanNextStep}"
+                Style="{StaticResource ButtonPrimary}" />
+        </hc:UniformSpacingPanel>
+    </Grid>
+</hc:Window>

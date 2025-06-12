@@ -6,6 +6,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
@@ -1145,14 +1146,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             File.WriteAllText("bindingtest.style", style.Serialize());
         }
 
-        static Random Random = new Random();
+        static Random Random = new Random(114);
 
         static (DateTime, double)[] MockChartValue(int count)
         {
             var list = new List<(DateTime, double)>();
+            var time = new DateTime().AddDays(1).AddHours(2);
             for (int i = 0; i < count; i++)
             {
-                list.Add((DateTime.Now.AddSeconds(-1 * (count - i)), Random.Next(0, 100)));
+                list.Add((time.AddSeconds(-1 * (count - i)), Random.Next(0, 100)));
             }
             return list.ToArray();
         }

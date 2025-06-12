@@ -1,0 +1,30 @@
+﻿<hc:Window
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Windows.Workbench"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Workbench"
+    Width="800"
+    Height="600"
+    d:DesignHeight="800"
+    d:DesignWidth="1500"
+    Background="{DynamicResource RegionBrush}"
+    Loaded="Window_Loaded"
+    Style="{StaticResource WindowWin10}"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <GridSplitter
+            Grid.Column="0"
+            Width="4"
+            HorizontalAlignment="Right"
+            Background="Transparent" />
+    </Grid>
+</hc:Window>

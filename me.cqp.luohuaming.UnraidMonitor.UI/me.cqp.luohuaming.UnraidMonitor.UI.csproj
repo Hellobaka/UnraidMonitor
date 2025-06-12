@@ -91,9 +91,17 @@
     </Compile>
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\StyleCommandWrapper.cs" />
+    <Compile Include="Models\ThemeItem.cs" />
+    <Compile Include="Models\Validations.cs" />
     <Compile Include="ViewModels\AddOrUpdateStyleCommandViewModel.cs" />
+    <Compile Include="Windows\CreateStyle.xaml.cs">
+      <DependentUpon>CreateStyle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Workbench.xaml.cs">
+      <DependentUpon>Workbench.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\AddOrUpdateStyleCommand.xaml">
       <SubType>Designer</SubType>
@@ -116,7 +124,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\CreateStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Workbench.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -160,10 +176,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Converters\" />
     <Folder Include="Pages\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\MaterialDesign2-Dark.bmp" />
+    <Resource Include="Resources\Images\MaterialDesign2-Light.bmp" />
+    <Resource Include="Resources\Images\MaterialDesign3-Dark.bmp" />
+    <Resource Include="Resources\Images\MaterialDesign3-Light.bmp" />
+    <Resource Include="Resources\Images\Unraid-Dark.bmp" />
+    <Resource Include="Resources\Images\Unraid-Light.bmp" />
+    <Resource Include="Resources\Images\WinUI3-Dark.bmp" />
+    <Resource Include="Resources\Images\WinUI3-Light.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.6.4\build\Fody.targets" Condition="Exists('..\packages\Fody.6.6.4\build\Fody.targets')" />
