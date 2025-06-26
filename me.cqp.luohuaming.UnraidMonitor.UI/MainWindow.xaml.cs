@@ -3,9 +3,14 @@ using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using me.cqp.luohuaming.UnraidMonitor.UI.Windows;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI
@@ -13,7 +18,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public MainWindow()
         {
@@ -23,6 +28,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             {
                 LoadDebug();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void LoadDebug()
@@ -75,7 +87,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
 
         private void OpenFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            OpenFileDialog dialog = new();
+            dialog.Title = "打开样式文件";
+            dialog.Filter = "样式文件|*.style|所有文件|*.*";
+            if (dialog.ShowDialog() ?? false)
+            {
+                string path = dialog.FileName;
+                SaveActiveHistory(new StyleHistoryItem
+                {
+                    DateTime = DateTime.Now,
+                    FileName = Path.GetFileName(path),
+                    FullPath = path
+                });
+                LoadWorkbench(path);
+            }
         }
 
         private void CreateFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -86,7 +111,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             createStyle.ShowDialog();
             if (createStyle.DialogResult ?? false)
             {
-
+                string path = createStyle.SavedStylePath;
+                LoadWorkbench(path);
             }
             else
             {
@@ -105,8 +131,68 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
         {
             if (StyleHistoryListBox.SelectedItem is StyleHistoryItem item)
             {
+                SaveActiveHistory(item);
+                LoadWorkbench(item.FullPath);
                 StyleHistoryListBox.SelectedItem = null;
             }
+        }
+
+        private async Task LoadActiveHistory()
+        {
+            StyleHistories = [];
+
+            string historyFilePath = Path.Combine(MainSave.AppDirectory, "history.json");
+            if (File.Exists(historyFilePath))
+            {
+                List<StyleHistoryItem> historyItems = await Task.Run(() =>
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(historyFilePath);
+                        return JsonConvert.DeserializeObject<List<StyleHistoryItem>>(json) ?? [];
+                    }
+                    catch { }
+                    return [];
+                });
+                foreach (var item in historyItems.OrderByDescending(x => x.DateTime))
+                {
+                    StyleHistories.Add(item);
+                }
+            }
+        }
+
+        private void SaveActiveHistory(StyleHistoryItem item)
+        {
+            item.DateTime = DateTime.Now;
+            if (StyleHistories.Contains(item))
+            {
+                OnPropertyChanged(nameof(StyleHistories));
+            }
+            else
+            {
+                StyleHistories.Add(item);
+            }
+
+            try
+            {
+                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "history.json"), JsonConvert.SerializeObject(StyleHistories));
+            }
+            catch (Exception e)
+            {
+                ShowError($"保存历史记录时发生错误: {e.Message}");
+            }
+        }
+
+        private void LoadWorkbench(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+            {
+                ShowError("样式文件不存在或路径无效");
+                return;
+            }
+            Workbench workbench = new(path);
+            Hide();
+            workbench.Show();
         }
 
         public static void ShowInfo(string content)
@@ -130,6 +216,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             });
 
             return tcs.Task;
+        }
+
+        private async void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await LoadActiveHistory();
+            EmptyHint.Visibility = StyleHistories.Count > 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
         }
     }
 }
