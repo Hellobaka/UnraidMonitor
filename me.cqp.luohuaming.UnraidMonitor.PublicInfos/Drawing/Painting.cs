@@ -575,6 +575,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             MainCanvas.Restore();
         }
 
+        public byte[] Encode()
+        {
+            return SnapShot().Encode(SKEncodedImageFormat.Png, 100).ToArray();
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!Disposing)
