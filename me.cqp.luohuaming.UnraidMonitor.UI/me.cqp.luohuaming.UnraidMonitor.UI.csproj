@@ -89,11 +89,16 @@
     <Compile Include="Controls\AddOrUpdateStyleCommand.xaml.cs">
       <DependentUpon>AddOrUpdateStyleCommand.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NonClientAreaContent.xaml.cs">
+      <DependentUpon>NonClientAreaContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\SKImageToImageSource.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\StyleCommandWrapper.cs" />
     <Compile Include="Models\ThemeItem.cs" />
     <Compile Include="Models\Validations.cs" />
     <Compile Include="ViewModels\AddOrUpdateStyleCommandViewModel.cs" />
+    <Compile Include="ViewModels\WorkbenchViewModel.cs" />
     <Compile Include="Windows\CreateStyle.xaml.cs">
       <DependentUpon>CreateStyle.xaml</DependentUpon>
     </Compile>
@@ -104,6 +109,10 @@
       <DependentUpon>Workbench.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\AddOrUpdateStyleCommand.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NonClientAreaContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,7 +185,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converters\" />
     <Folder Include="Pages\" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +199,18 @@
     <Resource Include="Resources\Images\Unraid-Light.bmp" />
     <Resource Include="Resources\Images\WinUI3-Dark.bmp" />
     <Resource Include="Resources\Images\WinUI3-Light.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\cloud.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\create.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\dashboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\datatable.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.6.4\build\Fody.targets" Condition="Exists('..\packages\Fody.6.6.4\build\Fody.targets')" />
