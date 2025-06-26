@@ -1,7 +1,10 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.UI.Models;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -40,48 +43,66 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public string WidthInput { get; set; }
 
+        public string SavedStylePath { get; set; } = "";
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ThemeList = [];
             ThemeList.Add(new ThemeItem
             {
                 Name = "WinUI3 - Light",
-                Preview = "pack://application:,,,/Resources/Images/WinUI3-Light.bmp"
+                Preview = "pack://application:,,,/Resources/Images/WinUI3-Light.bmp",
+                Theme = DrawingStyle.Theme.WinUI3,
+                DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "WinUI3 - Dark",
-                Preview = "pack://application:,,,/Resources/Images/WinUI3-Dark.bmp"
+                Preview = "pack://application:,,,/Resources/Images/WinUI3-Dark.bmp",
+                Theme = DrawingStyle.Theme.WinUI3,
+                DarkMode = true,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign2 - Light",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign2-Light.bmp"
+                Preview = "pack://application:,,,/Resources/Images/MaterialDesign2-Light.bmp",
+                Theme = DrawingStyle.Theme.MaterialDesign2,
+                DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign2 - Dark",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign2-Dark.bmp"
+                Preview = "pack://application:,,,/Resources/Images/MaterialDesign2-Dark.bmp",
+                Theme = DrawingStyle.Theme.MaterialDesign2,
+                DarkMode = true,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign3 - Light",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign3-Light.bmp"
+                Preview = "pack://application:,,,/Resources/Images/MaterialDesign3-Light.bmp",
+                Theme = DrawingStyle.Theme.MaterialDesign3,
+                DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign3 - Dark",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign3-Dark.bmp"
+                Preview = "pack://application:,,,/Resources/Images/MaterialDesign3-Dark.bmp",
+                Theme = DrawingStyle.Theme.MaterialDesign3,
+                DarkMode = true,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "Unraid - Light",
-                Preview = "pack://application:,,,/Resources/Images/Unraid-Light.bmp"
+                Preview = "pack://application:,,,/Resources/Images/Unraid-Light.bmp",
+                Theme = DrawingStyle.Theme.Unraid,
+                DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "Unraid - Dark",
-                Preview = "pack://application:,,,/Resources/Images/Unraid-Dark.bmp"
+                Preview = "pack://application:,,,/Resources/Images/Unraid-Dark.bmp",
+                Theme = DrawingStyle.Theme.Unraid,
+                DarkMode = true,
             });
         }
 
@@ -125,8 +146,31 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 if (await MainWindow.ShowConfirmAsync("快速设置完成，点击确定以保存文件并进入工作台"))
                 {
                     var dialog = new SaveFileDialog();
-                    dialog.ShowDialog();
-                    DialogResult = true;
+                    dialog.Filter = "样式文件|*.style|所有文件|*.*";
+                    dialog.FileName = $"{NameInput}.style";
+                    if (dialog.ShowDialog() ?? false)
+                    {
+                        SavedStylePath = dialog.FileName;
+                        try
+                        {
+                            DrawingStyle style = new()
+                            {
+                                Name = NameInput,
+                                Width = int.Parse(WidthInput),
+                                ItemTheme = SelectedTheme.Theme,
+                                CreateTime = DateTime.Now,
+                                ModifyTime = DateTime.Now,
+                                Palette = DrawingStyle.GetThemeDefaultColor(SelectedTheme.Theme, SelectedTheme.DarkMode),
+                            };
+                            File.WriteAllText(dialog.FileName, style.Serialize());
+                            DialogResult = true;
+                            Close();
+                        }
+                        catch (Exception exc)
+                        {
+                            MainWindow.ShowError($"保存样式文件时出错：{exc.Message}");
+                        }
+                    }
                 }
                 return;
             }
