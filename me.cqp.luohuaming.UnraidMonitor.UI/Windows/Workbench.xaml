@@ -34,6 +34,16 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
+                <Border
+                    Margin="12,12,0,0"
+                    Padding="8,2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Panel.ZIndex="9"
+                    Background="{DynamicResource RegionBrush}"
+                    CornerRadius="2">
+                    <TextBlock x:Name="DrawTimeText" Text="0 ms" />
+                </Border>
                 <ScrollViewer
                     x:Name="ImageScrollViewer"
                     CanContentScroll="False"

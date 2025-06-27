@@ -3,7 +3,7 @@ using me.cqp.luohuaming.UnraidMonitor.UI.Controls;
 using me.cqp.luohuaming.UnraidMonitor.UI.Converters;
 using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
 using System;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +24,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             ViewModel = new WorkbenchViewModel();
             DataContext = ViewModel;
         }
-     
+
+        public Workbench(string? path)
+        {
+            InitializeComponent();
+            ViewModel = new WorkbenchViewModel();
+            DataContext = ViewModel;
+            ViewModel.CurrentStylePath = path;
+        }
+
         private Point ScrollStartPoint { get; set; }
      
         private Point ScrollStartOffset { get; set; }
@@ -36,14 +44,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         private CancellationTokenSource DebounceCancel { get; set; }
 
         private WorkbenchViewModel ViewModel { get; set; }
-
-        public Workbench(string? path)
-        {
-            InitializeComponent();
-            ViewModel = new WorkbenchViewModel();
-            DataContext = ViewModel;
-            ViewModel.CurrentStylePath = path;
-        }
 
         private async Task<DrawingStyle?> LoadStyleFromFile(string path)
         {
@@ -187,6 +187,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         private async Task CallStyleRedraw()
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
                 ViewModel.Debouncing = true;
@@ -227,6 +228,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             finally
             {
                 ViewModel.Debouncing = false;
+                DrawTimeText.Text = $"{stopwatch.ElapsedMilliseconds} ms";
             }
         }
     }
