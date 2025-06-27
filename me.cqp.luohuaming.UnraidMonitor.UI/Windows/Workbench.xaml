@@ -2,6 +2,7 @@
     x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Windows.Workbench"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
@@ -23,9 +24,10 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <controls:StylePropertyEditor x:Name="StyleEditor" />
         <GridSplitter
             Grid.Column="0"
-            Width="4"
+            Width="2"
             HorizontalAlignment="Right"
             Background="{DynamicResource RegionBrush}" />
         <Grid Grid.Column="1">

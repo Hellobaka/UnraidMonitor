@@ -3,8 +3,10 @@ using me.cqp.luohuaming.UnraidMonitor.UI.Controls;
 using me.cqp.luohuaming.UnraidMonitor.UI.Converters;
 using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -76,10 +78,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 }
                 else
                 {
+                    StyleEditor.DataContext = ViewModel;
                     MainWindow.ShowInfo($"{ViewModel.CurrentStyle.Name} 样式加载成功");
                 }
+                ViewModel.ApplyMonitor();
+                ViewModel.OnPropertyChangedDetail += ViewModel_OnPropertyChangedDetail;
             }
         }
+
+        private void ViewModel_OnPropertyChangedDetail(System.Reflection.PropertyInfo propertyInfo, System.Reflection.PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            DebounceStyleRedraw_Click(null, null);
+        }
+
         private void MainImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (MainImage.Source == null)

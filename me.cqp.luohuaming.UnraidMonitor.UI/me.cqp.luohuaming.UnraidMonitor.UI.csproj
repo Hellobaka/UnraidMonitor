@@ -89,9 +89,23 @@
     <Compile Include="Controls\AddOrUpdateStyleCommand.xaml.cs">
       <DependentUpon>AddOrUpdateStyleCommand.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NonClientAreaContent.xaml.cs">
       <DependentUpon>NonClientAreaContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StyleControls\Palette.xaml.cs">
+      <DependentUpon>Palette.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Style.xaml.cs">
+      <DependentUpon>Style.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StylePropertyEditor.xaml.cs">
+      <DependentUpon>StylePropertyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ControlWithTitle.cs" />
+    <Compile Include="Converters\EnumToItemsSourceConverter.cs" />
     <Compile Include="Converters\SKImageToImageSource.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\StyleCommandWrapper.cs" />
@@ -112,7 +126,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\NonClientAreaContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Palette.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Style.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StylePropertyEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

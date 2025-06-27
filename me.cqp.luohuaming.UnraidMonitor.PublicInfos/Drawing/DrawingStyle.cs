@@ -1,32 +1,43 @@
 ﻿using Newtonsoft.Json;
+using PropertyChanged;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Net;
+using System.Reflection;
+using static me.cqp.luohuaming.UnraidMonitor.PublicInfos.MainSave;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
-    public class DrawingStyle
+    public class DrawingStyle : INotifyPropertyChanged
     {
         private static Dictionary<string, DrawingStyle> StyleCache { get; set; } = [];
 
         public enum BackgroundImageScaleType
         {
+            [Description("居中绘制")]
             Center,
 
+            [Description("拉伸填充")]
             Stretch,
 
+            [Description("平铺背景")]
             Tile,
 
+            [Description("填充背景")]
             Fill
         }
 
         public enum BackgroundType
         {
+            [Description("纯色背景")]
             Color,
 
+            [Description("随机背景图片")]
             Image
         }
 
@@ -42,7 +53,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// WinUI3 Dark
         /// </summary>
-        public class Colors
+        public class Colors : INotifyPropertyChanged
         {
             /// <summary>
             /// 主题色
@@ -73,6 +84,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public string InfoIconColor { get; set; } = "#75B6E7";
 
             public string FatalIconColor { get; set; } = "#FF99A4";
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            public event PropertyChangeEventArg OnPropertyChangedDetail;
+
+            protected void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
+            }
         }
 
         /// <summary>
@@ -130,6 +150,26 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public bool LayoutDebug { get; set; }
 
         public int Width { get; set; } = 1000;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangeEventArg OnPropertyChangedDetail;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
+        }
+
+        public void Init()
+        {
+            Palette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
+            Palette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
+        }
+
+        private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Palette)), newValue, oldValue);
+        }
 
         public static Colors GetThemeDefaultColor(Theme theme, bool dark) => (theme, dark) switch
         {
@@ -491,6 +531,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 TypeNameHandling = TypeNameHandling.Auto,
             });
             StyleCache.Add(Path.GetFullPath(path), style);
+            style.Init();
             return style;
         }
     }

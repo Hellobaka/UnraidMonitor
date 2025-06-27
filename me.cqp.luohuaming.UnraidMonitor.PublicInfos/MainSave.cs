@@ -1,7 +1,9 @@
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 {
@@ -20,5 +22,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         public static HandlerBase MonitorAPI { get; set; }
 
         public static List<Commands> Commands { get; set; }
+
+        public delegate void PropertyChangeEventArg(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue);
     }
 }

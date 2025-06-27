@@ -1,0 +1,51 @@
+﻿<UserControl
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Palette"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+        <controls:ControlWithTitle Title="主题色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.AccentColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="主题渐变色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.Accent2Color, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="背景色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.BackgroundColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="文本色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.TextColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="成功色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.SuccessColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="成功图标色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.SuccessIconColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="警告色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.WarningColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="警告图标色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.WarningIconColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="失败色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.FatalColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="失败图标色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.FatalIconColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="提示色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.InfoColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="提示图标色" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:ColorPicker Color="{Binding Colors.InfoIconColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+    </hc:UniformSpacingPanel>
+</UserControl>
