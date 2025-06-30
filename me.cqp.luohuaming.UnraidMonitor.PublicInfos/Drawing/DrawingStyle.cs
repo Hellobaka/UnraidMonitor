@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
-using PropertyChanged;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Management;
-using System.Net;
 using System.Reflection;
-using static me.cqp.luohuaming.UnraidMonitor.PublicInfos.MainSave;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
@@ -86,7 +82,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public string FatalIconColor { get; set; } = "#FF99A4";
 
             public event PropertyChangedEventHandler PropertyChanged;
-            public event PropertyChangeEventArg OnPropertyChangedDetail;
+            public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
             protected void OnPropertyChanged(string propertyName)
             {
@@ -152,7 +148,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public int Width { get; set; } = 1000;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangeEventArg OnPropertyChangedDetail;
+        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
         protected void OnPropertyChanged(string propertyName)
         {
@@ -505,7 +501,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Formatting = Formatting.Indented,
         });
 
-        public static DrawingStyle LoadFromFile(string path)
+        public static DrawingStyle LoadFromFile(string path, bool useCache = true)
         {
             string pathA = Path.Combine(MainSave.AppDirectory, path);
             string pathB = path;
@@ -521,7 +517,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 return null;
             }
-            if (StyleCache.TryGetValue(Path.GetFullPath(path), out var style))
+            if (useCache && StyleCache.TryGetValue(Path.GetFullPath(path), out var style))
             {
                 return style;
             }
@@ -530,7 +526,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 TypeNameHandling = TypeNameHandling.Auto,
             });
-            StyleCache.Add(Path.GetFullPath(path), style);
+            if (useCache)
+            {
+                StyleCache.Add(Path.GetFullPath(path), style);
+            }
             style.Init();
             return style;
         }

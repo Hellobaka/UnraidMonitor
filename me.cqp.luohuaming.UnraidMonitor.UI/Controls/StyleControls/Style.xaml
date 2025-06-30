@@ -56,7 +56,7 @@
                 </Border>
             </Expander>
             <controls:ControlWithTitle Title="背景色" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <controls:ColorPicker Color="{Binding CurrentStyle.BackgroundColor}" />
+                <controls:ColorPicker Color="{Binding CurrentStyle.BackgroundColor, Mode=TwoWay}" />
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="背景高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.BackgroundBlur}" />

@@ -55,7 +55,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
             try
             {
-                DrawingStyle style = await Task.Run(() => DrawingStyle.LoadFromFile(path));
+                DrawingStyle style = await Task.Run(() => DrawingStyle.LoadFromFile(path, false));
                 Title = $"{style.Name} - 样式编辑器";
                 return style;
             }

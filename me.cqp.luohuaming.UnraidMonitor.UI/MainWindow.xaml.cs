@@ -191,6 +191,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
                 return;
             }
             Workbench workbench = new(path);
+            workbench.Closed += (_, _) => Show();
             Hide();
             workbench.Show();
         }

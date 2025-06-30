@@ -74,10 +74,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
 
         private static void OnColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!TryParseColorFromHexString((string)e.NewValue, out Color c)
-                || d is not ColorPicker colorPicker)
+            if (d is not ColorPicker colorPicker)
             {
                 return;
+            }
+            if (!TryParseColorFromHexString((string)e.NewValue, out Color c))
+            {
+                c = Colors.Transparent;
             }
             colorPicker.ColorPreview = new SolidColorBrush(c);
             colorPicker.ColorText.Text = c.ToString().Replace("#FF", "#");
@@ -119,8 +122,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
             }
             if (!TryParseColorFromHexString(ColorText.Text, out Color c))
             {
-                MainWindow.ShowError($"颜色无效：{ColorText.Text}");
-                return;
+                MainWindow.ShowError($"颜色无效：{ColorText.Text}，已替换为默认颜色");
+                c = Colors.Transparent;
+                ColorText.Text = c.ToString();
             }
             ColorPickerDialog.SelectedBrush = new SolidColorBrush(c);
             ColorPickerPopup.IsOpen = true;
