@@ -36,16 +36,37 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Border
-                    Margin="12,12,0,0"
-                    Padding="8,2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Panel.ZIndex="9"
-                    Background="{DynamicResource RegionBrush}"
-                    CornerRadius="2">
-                    <TextBlock x:Name="DrawTimeText" Text="0 ms" />
-                </Border>
+                <Grid Margin="12,12,0,0" Panel.ZIndex="9">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <ToggleButton
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Panel.ZIndex="9"
+                        hc:ToggleButtonAttach.ShowLabel="True"
+                        hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                        Content="自动刷新画布"
+                        IsChecked="{Binding AutoRedraw, Mode=TwoWay}"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                    <Border
+                        Grid.Column="1"
+                        Margin="10,0,10,0"
+                        Padding="8,4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Panel.ZIndex="9"
+                        Background="{DynamicResource RegionBrush}"
+                        CornerRadius="2">
+                        <TextBlock x:Name="DrawTimeText" Text="0 ms" />
+                    </Border>
+                    <Button Grid.Column="2" Click="DebounceStyleRedraw_Click">重绘</Button>
+                </Grid>
                 <ScrollViewer
                     x:Name="ImageScrollViewer"
                     CanContentScroll="False"
@@ -86,7 +107,6 @@
                             IsHitTestVisible="False"
                             Text="{Binding ElementName=ImageScale, Path=ScaleX, StringFormat={}{0:P1}}" />
                     </Border>
-                    <Button Click="DebounceStyleRedraw_Click">Draw</Button>
                     <Button
                         x:Name="ResetButton"
                         Margin="10,0,0,0"
