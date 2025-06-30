@@ -41,7 +41,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         private bool IsDragging { get; set; } = false;
 
-        private int DebounceRedrawTime { get; set; } = 3000;
+        private int DebounceRedrawTime { get; set; } = 1500;
 
         private CancellationTokenSource DebounceCancel { get; set; }
 
@@ -82,6 +82,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 {
                     StyleEditor.DataContext = ViewModel;
                     MainWindow.ShowInfo($"{ViewModel.CurrentStyle.Name} 样式加载成功");
+                    await CallStyleRedraw();
                 }
                 ViewModel.ApplyMonitor();
                 ViewModel.OnPropertyChangedDetail += ViewModel_OnPropertyChangedDetail;

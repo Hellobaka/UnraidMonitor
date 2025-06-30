@@ -191,7 +191,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
                 return;
             }
             Workbench workbench = new(path);
-            workbench.Closed += (_, _) => Show();
+            workbench.Closed += async (_, _) =>
+            {
+                await LoadActiveHistory();
+                Show();
+            };
             Hide();
             workbench.Show();
         }

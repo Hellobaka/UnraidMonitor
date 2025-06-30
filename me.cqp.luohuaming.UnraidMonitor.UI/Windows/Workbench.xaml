@@ -37,7 +37,7 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Grid Margin="12,12,0,0" Panel.ZIndex="9">
+                <Grid Margin="5,5,0,0" Panel.ZIndex="9">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24" />
                     </Grid.RowDefinitions>
@@ -70,6 +70,7 @@
                 </Grid>
                 <ScrollViewer
                     x:Name="ImageScrollViewer"
+                    Margin="0,34,0,0"
                     CanContentScroll="False"
                     HorizontalScrollBarVisibility="Auto"
                     PanningMode="Both"
