@@ -31,7 +31,7 @@
                         Command="{Binding SaveCommand}"
                         Header="保存"
                         InputGestureText="Ctrl+S" />
-                    <MenuItem Header="-" />
+                    <Separator />
                     <MenuItem Header="退出" />
                 </MenuItem>
                 <MenuItem Header="操作">

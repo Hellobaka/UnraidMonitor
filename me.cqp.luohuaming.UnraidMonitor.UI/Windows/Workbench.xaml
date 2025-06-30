@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels"
+    Title="样式编辑器"
     Width="1200"
     Height="800"
     d:DataContext="{d:DesignInstance Type=vm:WorkbenchViewModel,
