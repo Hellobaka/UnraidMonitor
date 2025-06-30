@@ -3,10 +3,8 @@ using me.cqp.luohuaming.UnraidMonitor.UI.Controls;
 using me.cqp.luohuaming.UnraidMonitor.UI.Converters;
 using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,6 +23,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             InitializeComponent();
             ViewModel = new WorkbenchViewModel();
             DataContext = ViewModel;
+            UpdateKeyBinding();
         }
 
         public Workbench(string? path)
@@ -33,12 +32,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             ViewModel = new WorkbenchViewModel();
             DataContext = ViewModel;
             ViewModel.CurrentStylePath = path;
+            UpdateKeyBinding();
         }
 
         private Point ScrollStartPoint { get; set; }
-     
+
         private Point ScrollStartOffset { get; set; }
-     
+
         private bool IsDragging { get; set; } = false;
 
         private int DebounceRedrawTime { get; set; } = 3000;
@@ -68,6 +68,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             NonClientAreaContent = new NonClientAreaContent();
+            (NonClientAreaContent as NonClientAreaContent).DataContext = ViewModel;
 
             if (!string.IsNullOrEmpty(ViewModel.CurrentStylePath))
             {
@@ -86,9 +87,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
         }
 
+        private void UpdateKeyBinding()
+        {
+            InputBindings.Add(new KeyBinding(ViewModel.SaveCommand, Key.S, ModifierKeys.Control));
+            InputBindings.Add(new KeyBinding(ViewModel.NewCommand, Key.N, ModifierKeys.Control));
+            InputBindings.Add(new KeyBinding(ViewModel.OpenCommand, Key.O, ModifierKeys.Control));
+            InputBindings.Add(new KeyBinding(ViewModel.UndoCommand, Key.Z, ModifierKeys.Control));
+            InputBindings.Add(new KeyBinding(ViewModel.RedoCommand, Key.Y, ModifierKeys.Control));
+
+            CommandBindings.Add(new CommandBinding(ViewModel.SaveCommand, (_, _) => ViewModel.SaveCommand.Execute(null)));
+            CommandBindings.Add(new CommandBinding(ViewModel.NewCommand, (_, _) => ViewModel.NewCommand.Execute(null)));
+            CommandBindings.Add(new CommandBinding(ViewModel.OpenCommand, (_, _) => ViewModel.OpenCommand.Execute(null)));
+            CommandBindings.Add(new CommandBinding(ViewModel.UndoCommand, (_, _) => ViewModel.UndoCommand.Execute(null)));
+            CommandBindings.Add(new CommandBinding(ViewModel.RedoCommand, (_, _) => ViewModel.RedoCommand.Execute(null)));
+        }
+
         private void ViewModel_OnPropertyChangedDetail(System.Reflection.PropertyInfo propertyInfo, System.Reflection.PropertyInfo parentPropertyType, object newValue, object oldValue)
         {
-            DebounceStyleRedraw_Click(null, null);
+            if (ViewModel.AutoRedraw)
+            {
+                DebounceStyleRedraw_Click(null, null);
+            }
         }
 
         private void MainImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -227,7 +246,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
                         double offsetX = (imageWidth - viewportWidth) / 2;
                         double offsetY = (imageHeight - viewportHeight) / 2;
-                        
+
                         // 居中
                         ImageScrollViewer.ScrollToHorizontalOffset(offsetX);
                         ImageScrollViewer.ScrollToVerticalOffset(offsetY);
