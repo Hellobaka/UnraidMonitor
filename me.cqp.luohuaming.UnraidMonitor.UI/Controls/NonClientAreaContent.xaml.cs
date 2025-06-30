@@ -25,9 +25,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
         public NonClientAreaContent()
         {
             InitializeComponent();
-            DataContext = this;
         }
-
-        public string VersionInfo { get; set; } = "插件版本 v1.0.0";
     }
 }
