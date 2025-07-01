@@ -1,13 +1,14 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
-    public class DrawingBase
+    public class DrawingBase : INotifyPropertyChanged
     {
         public class Title
         {
@@ -114,7 +115,76 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public virtual Thickness Padding { get; set; } = Thickness.DefaultPadding;
 
+        [JsonIgnore]
+        public SKRect Boundary { get; set; }
+
         public bool LayoutDebug { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
+        }
+
+        public void SubscribePropertyChangedEvents()
+        {
+            foreach(var item in Content)
+            {
+                item.PropertyChanged -= NotifyPropertyChanged;
+                item.PropertyChanged += NotifyPropertyChanged;
+
+                item.OnPropertyChangedDetail -= DrawingItemBase_NotifyPropertyChangedDetail;
+                item.OnPropertyChangedDetail += DrawingItemBase_NotifyPropertyChangedDetail;
+                item.SubscribePropertyChangedEvents();
+            }
+
+            Margin.PropertyChanged -= NotifyPropertyChanged;
+            Margin.PropertyChanged += NotifyPropertyChanged;
+            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
+            Margin.OnPropertyChangedDetail += Margin_NotifyPropertyChangedDetail;
+
+            Padding.PropertyChanged -= NotifyPropertyChanged;
+            Padding.PropertyChanged += NotifyPropertyChanged;
+            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
+            Padding.OnPropertyChangedDetail += Padding_NotifyPropertyChangedDetail;
+        }
+
+        public void UnsubscribePropertyChangedEvents()
+        {
+            foreach (var item in Content)
+            {
+                item.PropertyChanged -= NotifyPropertyChanged;
+                item.OnPropertyChangedDetail -= DrawingItemBase_NotifyPropertyChangedDetail;
+                item.UnsubscribePropertyChangedEvents();
+            }
+            Margin.PropertyChanged -= NotifyPropertyChanged;
+            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
+            Padding.PropertyChanged -= NotifyPropertyChanged;
+            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
+        }
+
+        private void DrawingItemBase_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(DrawingItemBase)), newValue, oldValue);
+        }
+
+        private void Padding_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
+        }
+
+        private void Margin_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Margin)), newValue, oldValue);
+        }
+
+        private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
+        }
 
         /// <summary>
         /// 遍历绘制所有Item
@@ -200,18 +270,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     }
                     continue;
                 }
-                Painting itemCanvas = new((int)Math.Ceiling(desireWidth), 1000);
-                var (endPoint, actualWidth, actualHeight) = item.Draw(itemCanvas, new(), desireWidth, item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.OverrideTheme, item.OverridePalette ?? palette);
-                itemCanvas.Resize((int)Math.Ceiling(actualWidth), (int)Math.Ceiling(actualHeight));
-                currentLine.Add((itemCanvas, item, actualWidth, actualHeight));
-                if (item.AfterNewLine)
+                else
                 {
-                    currentLine = new();
-                    preDraw.Add(currentLine);
+                    // 其余填充模式，可直接绘制
+                    Painting itemCanvas = new((int)Math.Ceiling(desireWidth), 1000);
+                    var (endPoint, actualWidth, actualHeight) = item.Draw(itemCanvas, new(), desireWidth, item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.OverrideTheme, item.OverridePalette ?? palette);
+                    itemCanvas.Resize((int)Math.Ceiling(actualWidth), (int)Math.Ceiling(actualHeight));
+                    currentLine.Add((itemCanvas, item, actualWidth, actualHeight));
+                    if (item.AfterNewLine)
+                    {
+                        currentLine = new();
+                        preDraw.Add(currentLine);
+                    }
                 }
             }
             SKPoint startPoint = new(currentPoint.X, currentPoint.Y);
-            foreach(var line in preDraw)
+            foreach (var line in preDraw)
             {
                 if (line.Count == 0)
                 {
@@ -235,7 +309,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     float drawHeight = item.height;
                     if (item.item.Layout == Layout.Remaining)
                     {
+                        // Remaining模式后置绘制
+                        // 计算无Margin的宽度
                         float widthWithoutMargin = remainingItemWidth - item.item.Margin.Left - item.item.Margin.Right;
+                        // 生成一个新画布，用于绘制此元素
                         canvas = new((int)Math.Ceiling(widthWithoutMargin), 1000);
                         var (_, w, h) = item.item.Draw(canvas, new(), widthWithoutMargin, item.item.OverrideTheme == DrawingStyle.Theme.Unknown ? theme : item.item.OverrideTheme, item.item.OverridePalette ?? palette);
                         canvas.Resize((int)Math.Ceiling(w), (int)Math.Ceiling(h));
@@ -256,6 +333,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         Location = drawPoint,
                         Size = new(drawWidth, drawHeight)
                     });
+                    // 更新边界
+                    item.item.Boundary = new()
+                    {
+                        Location = drawPoint,
+                        Size = new(drawWidth, drawHeight)
+                    };
                     if (LayoutDebug)
                     {
                         painting.DrawRectangle(new()

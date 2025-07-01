@@ -1,7 +1,9 @@
-﻿using SkiaSharp;
+﻿using PropertyChanged;
+using SkiaSharp;
 using SkiaSharp.HarfBuzz;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -593,7 +595,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         }
     }
 
-    public struct Thickness
+    public class Thickness : INotifyPropertyChanged
     {
         public float Left { get; set; }
 
@@ -625,6 +627,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Top = top;
             Right = left;
             Bottom = top;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
         }
 
         public static Thickness Empty => new(0);

@@ -1,15 +1,11 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
+﻿using Newtonsoft.Json;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
-    public class DrawingItemBase
+    public class DrawingItemBase : INotifyPropertyChanged
     {
         public enum ItemType
         {
@@ -44,6 +40,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual Thickness Margin { get; set; } = Thickness.DefaultMargin;
 
+        public virtual Thickness Padding { get; set; } = Thickness.Empty;
+
         public virtual bool AfterNewLine { get; set; }
 
         /// <summary>
@@ -58,6 +56,66 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
 
         public Binding Binding { get; set; }
+
+        [JsonIgnore]
+        public SKRect Boundary { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
+        }
+
+        public void SubscribePropertyChangedEvents()
+        {
+            Margin.PropertyChanged -= NotifyPropertyChanged;
+            Margin.PropertyChanged += NotifyPropertyChanged;
+            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
+            Margin.OnPropertyChangedDetail += Margin_NotifyPropertyChangedDetail;
+
+            Padding.PropertyChanged -= NotifyPropertyChanged;
+            Padding.PropertyChanged += NotifyPropertyChanged;
+            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
+            Padding.OnPropertyChangedDetail += Padding_NotifyPropertyChangedDetail;
+
+            OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
+            OverridePalette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
+            OverridePalette.PropertyChanged -= NotifyPropertyChanged;
+            OverridePalette.PropertyChanged += NotifyPropertyChanged;
+        }
+
+        public void UnsubscribePropertyChangedEvents()
+        {
+            Margin.PropertyChanged -= NotifyPropertyChanged;
+            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
+            Padding.PropertyChanged -= NotifyPropertyChanged;
+            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
+            OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
+            OverridePalette.PropertyChanged -= NotifyPropertyChanged;
+        }
+
+        private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(OverridePalette)), newValue, oldValue);
+        }
+
+        private void Padding_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
+        }
+
+        private void Margin_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Margin)), newValue, oldValue);
+        }
+
+        private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
+        }
 
         public virtual void BeforeBinding()
         {

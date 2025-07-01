@@ -147,6 +147,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public int Width { get; set; } = 1000;
 
+        [JsonIgnore]
+        public SKRect Boundary { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
@@ -156,10 +159,67 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
         }
 
-        public void Init()
+        /// <summary>
+        /// 仅UI使用，用于构建属性变化通知
+        /// </summary>
+        public void SubscribePropertyChangedEvents()
         {
             Palette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
             Palette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
+            Palette.PropertyChanged -= NotifyPropertyChanged;
+            Palette.PropertyChanged += NotifyPropertyChanged;
+
+            Padding.OnPropertyChangedDetail -= Padding_OnPropertyChangedDetail;
+            Padding.OnPropertyChangedDetail += Padding_OnPropertyChangedDetail;
+            Padding.PropertyChanged -= NotifyPropertyChanged;
+            Padding.PropertyChanged += NotifyPropertyChanged;
+
+            foreach (var item in Content)
+            {
+                item.PropertyChanged -= NotifyPropertyChanged;
+                item.PropertyChanged += NotifyPropertyChanged;
+
+                item.OnPropertyChangedDetail -= DrawingBase_NotifyPropertyChangedDetail;
+                item.OnPropertyChangedDetail += DrawingBase_NotifyPropertyChangedDetail;
+                item.SubscribePropertyChangedEvents();
+            }
+        }
+
+        /// <summary>
+        /// 清理属性变化通知
+        /// </summary>
+        public void UnsubscribePropertyChangedEvents()
+        {
+            Palette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
+            Palette.PropertyChanged -= NotifyPropertyChanged;
+
+            Padding.OnPropertyChangedDetail -= Padding_OnPropertyChangedDetail;
+            Padding.PropertyChanged -= NotifyPropertyChanged;
+
+            if (Content != null)
+            {
+                foreach (var item in Content)
+                {
+                    item.PropertyChanged -= NotifyPropertyChanged;
+                    item.OnPropertyChangedDetail -= DrawingBase_NotifyPropertyChangedDetail;
+                    item.UnsubscribePropertyChangedEvents();
+                }
+            }
+        }
+
+        private void DrawingBase_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(DrawingBase)), newValue, oldValue);
+        }
+
+        private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
+        }
+
+        private void Padding_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
         }
 
         private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
@@ -329,6 +389,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
                     var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
                     currentRowHeights.Add(actualHeight);
+                    // 更新边界
+                    item.Boundary = new()
+                    {
+                        Location = startPoint,
+                        Size = new(desireWidth, actualHeight)
+                    };
                     if (LayoutDebug)
                     {
                         contentPainting.DrawRectangle(new()
@@ -346,7 +412,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
                         Location = new(startPoint.X, startPoint.Y),
-                        Size = new(desireWidth + item.Margin.Left, actualHeight + item.Margin.Top)
+                        Size = new(desireWidth + item.Margin.Left + item.Margin.Right, actualHeight + item.Margin.Top + item.Margin.Bottom)
                     }, item.Radius), item.BackgroundBlur));
                     // 根据填充类型计算下一个开始坐标
                     switch (item.DrawingLayout)
@@ -490,6 +556,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Location = new(Padding.Left, Padding.Top),
                 Size = new(contentPainting.Width, contentPainting.Height)
             });
+            Boundary = new()
+            {
+                Location = new(Padding.Left, Padding.Top),
+                Size = new(contentPainting.Width, contentPainting.Height)
+            };
             contentPainting.Dispose();
             // 返回画布
             return painting;
@@ -530,7 +601,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             {
                 StyleCache.Add(Path.GetFullPath(path), style);
             }
-            style.Init();
             return style;
         }
     }

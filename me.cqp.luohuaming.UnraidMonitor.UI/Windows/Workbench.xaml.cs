@@ -73,13 +73,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
             if (!string.IsNullOrEmpty(ViewModel.CurrentStylePath))
             {
-                ViewModel.CurrentStyle = await LoadStyleFromFile(ViewModel.CurrentStylePath);
-                if (ViewModel.CurrentStyle == null)
+                var style = await LoadStyleFromFile(ViewModel.CurrentStylePath);
+                if (style == null)
                 {
                     MainWindow.ShowError($"无法加载样式文件: {ViewModel.CurrentStylePath}");
                 }
                 else
                 {
+                    ViewModel.CurrentStyle?.UnsubscribePropertyChangedEvents();
+
+                    ViewModel.CurrentStyle = style;
+                    ViewModel.CurrentStyle.SubscribePropertyChangedEvents();
+
                     StyleEditor.DataContext = ViewModel;
                     MainWindow.ShowInfo($"{ViewModel.CurrentStyle.Name} 样式加载成功");
                     await CallStyleRedraw();

@@ -85,6 +85,15 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </controls:ControlWithTitle>
+            <Expander Background="{StaticResource RegionBrush}" Header="内边距(Padding)">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <local:Margin Margin="16" Thickness="{Binding CurrentStyle.Padding}" />
+                </Border>
+            </Expander>
             <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <ToggleButton
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"

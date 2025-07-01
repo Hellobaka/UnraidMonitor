@@ -95,6 +95,9 @@
     <Compile Include="Controls\NonClientAreaContent.xaml.cs">
       <DependentUpon>NonClientAreaContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StyleControls\Margin.xaml.cs">
+      <DependentUpon>Margin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StyleControls\Palette.xaml.cs">
       <DependentUpon>Palette.xaml</DependentUpon>
     </Compile>
@@ -131,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\NonClientAreaContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Margin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -47,7 +47,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public DrawingBase.Position ValuePosition { get; set; } = DrawingBase.Position.Center;
 
-        public Thickness TextMargin { get; set; } = Thickness.DefaultMargin;
+        /// <summary>
+        /// 文本外边距
+        /// </summary>
+        public override Thickness Padding { get; set; } = Thickness.DefaultMargin;
 
         public override void BeforeBinding()
         {
@@ -116,25 +119,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             var font = Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme));
             if (ShowHeader && HeaderPosition == DrawingBase.Position.Top)
             {
-                startPoint.Y += TextMargin.Top;
+                startPoint.Y += Padding.Top;
                 var size = Painting.MeasureString(Header, HeaderFontSize, font);
                 var textCenter = new SKPoint(startPoint.X + desireWidth / 2, startPoint.Y + size.Height / 2);
                 var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, startPoint.Y);
                 painting.DrawText(Header, Painting.Anywhere, textStartPoint, SKColor.Parse(palette.TextColor), null, HeaderFontSize, font, HeaderFontBold);
 
-                startPoint.Y += size.Height + TextMargin.Bottom;
+                startPoint.Y += size.Height + Padding.Bottom;
             }
 
             if (ShowValue && ValuePosition == DrawingBase.Position.Top)
             {
-                startPoint.Y += TextMargin.Top;
+                startPoint.Y += Padding.Top;
                 var size = Painting.MeasureString(DisplayValue, HeaderFontSize, font);
                 var textCenter = new SKPoint(startPoint.X + desireWidth / 2, startPoint.Y + size.Height / 2);
                 var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, startPoint.Y);
                 painting.DrawText(DisplayValue, Painting.Anywhere, textStartPoint, SKColor.Parse(palette.TextColor), null, HeaderFontSize, font, HeaderFontBold);
 
                 startPoint.Y += size.Height;
-                startPoint.Y += size.Height + TextMargin.Bottom;
+                startPoint.Y += size.Height + Padding.Bottom;
             }
 
             var r = theme switch
@@ -149,7 +152,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 var size = Painting.MeasureString(Header, HeaderFontSize, font);
                 if (HeaderPosition == DrawingBase.Position.Bottom)
                 {
-                    var textCenter = new SKPoint(startPoint.X + desireWidth / 2, r.endPoint.Y + TextMargin.Top + size.Height / 2);
+                    var textCenter = new SKPoint(startPoint.X + desireWidth / 2, r.endPoint.Y + Padding.Top + size.Height / 2);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);
                     var endPoint = painting.DrawText(Header, Painting.Anywhere, textStartPoint, SKColor.Parse(palette.TextColor), null, HeaderFontSize, font, HeaderFontBold);
 
@@ -167,7 +170,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 var size = Painting.MeasureString(DisplayValue, HeaderFontSize, font);
                 if (ValuePosition == DrawingBase.Position.Bottom)
                 {
-                    var textCenter = new SKPoint(startPoint.X + desireWidth / 2, r.endPoint.Y + TextMargin.Top + size.Height / 2);
+                    var textCenter = new SKPoint(startPoint.X + desireWidth / 2, r.endPoint.Y + Padding.Top + size.Height / 2);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);
                     var endPoint = painting.DrawText(DisplayValue, Painting.Anywhere, textStartPoint, SKColor.Parse(palette.TextColor), null, HeaderFontSize, font, HeaderFontBold);
 

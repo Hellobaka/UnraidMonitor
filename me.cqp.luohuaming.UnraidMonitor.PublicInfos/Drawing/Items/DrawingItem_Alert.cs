@@ -25,9 +25,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public float TextSize { get; set; } = 26;
 
-        public Thickness Padding { get; set; } = new Thickness(16);
+        public override Thickness Padding { get; set; } = new Thickness(16);
 
-        public Converter AlertTypeConverter { get; set; }
+        private Converter AlertTypeConverter { get; set; }
 
         public override void BeforeBinding()
         {

@@ -19,7 +19,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override float OverrideHeight { get; set; }
 
-        public override Thickness Margin { get; set; } = new();
+        public override Thickness Margin { get; set; } = Thickness.Empty;
       
         public override void BeforeBinding()
         {
