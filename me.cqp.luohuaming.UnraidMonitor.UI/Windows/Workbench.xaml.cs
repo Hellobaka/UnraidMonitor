@@ -228,7 +228,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             try
             {
                 ViewModel.Debouncing = true;
-                using var img = await Task.Run(() => ViewModel.CurrentStyle?.Draw(ViewModel.CurrentStyle.Width));
+                using var img = await Task.Run(async () =>
+                {
+                    try
+                    {
+                        return ViewModel.CurrentStyle?.Draw(ViewModel.CurrentStyle.Width);
+                    }
+                    catch (Exception e)
+                    {
+                        await Dispatcher.InvokeAsync(() =>
+                        {
+                            MainWindow.ShowError($"绘制时发生异常：{e}");
+                        });
+                        return null;
+                    }
+                });
                 if (img != null)
                 {
                     var bitmapSource = (BitmapSource)SKImageToImageSource.Convert(img);
@@ -261,7 +275,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     MainImage.Source = bitmapSource;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                MainWindow.ShowError($"绘制时发生异常：{e}");
+            }
             finally
             {
                 ViewModel.Debouncing = false;
