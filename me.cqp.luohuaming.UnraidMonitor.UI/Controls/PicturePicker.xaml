@@ -1,0 +1,74 @@
+﻿<UserControl
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Controls.PicturePicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <hc:Boolean2VisibilityReConverter x:Key="InverseBoolToVisibilityConverter" />
+        <converters:StringToImageSourceConverter x:Key="StringToImageSourceConverter" />
+    </UserControl.Resources>
+
+    <ItemsControl ItemsSource="{Binding PictureItems, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Grid
+                    Width="100"
+                    Height="100"
+                    Margin="10,10"
+                    Cursor="Hand"
+                    MouseDown="AddButton_Click"
+                    Tag="{Binding}">
+                    <Rectangle
+                        Fill="Transparent"
+                        Opacity="0.8"
+                        RadiusX="5"
+                        RadiusY="5"
+                        Stroke="{StaticResource PrimaryBrush}"
+                        StrokeDashArray="4,2"
+                        StrokeThickness="2" />
+                    <Rectangle
+                        Width="2"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Fill="{StaticResource PrimaryBrush}"
+                        Opacity="0.8"
+                        Visibility="{Binding IsAddButton, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                    <Rectangle
+                        Width="30"
+                        Height="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Fill="{StaticResource PrimaryBrush}"
+                        Opacity="0.8"
+                        Visibility="{Binding IsAddButton, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                    <Image
+                        x:Name="PictureImage"
+                        MouseDown="PictureImage_MouseDown"
+                        Source="{Binding ImagePath, Converter={StaticResource StringToImageSourceConverter}}"
+                        Stretch="UniformToFill"
+                        Visibility="{Binding IsAddButton, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                    <Button
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        hc:IconElement.Geometry="{StaticResource DeleteGeometry}"
+                        Click="DeleteButton_Click"
+                        Foreground="{StaticResource PrimaryBrush}"
+                        Style="{StaticResource ButtonIcon}"
+                        Visibility="{Binding IsAddButton, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

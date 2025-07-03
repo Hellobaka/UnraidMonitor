@@ -60,14 +60,36 @@
     <Reference Include="HandyControl, Version=3.5.1.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.5.1\lib\net48\HandyControl.dll</HintPath>
     </Reference>
+    <Reference Include="HarfBuzzSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\HarfBuzzSharp.7.3.0.3\lib\net462\HarfBuzzSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PropertyChanged, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.4.1.0\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
+    <Reference Include="SkiaSharp, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.2.88.9\lib\net462\SkiaSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp.HarfBuzz, Version=2.88.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.HarfBuzz.2.88.9\lib\net462\SkiaSharp.HarfBuzz.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -95,6 +117,15 @@
     <Compile Include="Controls\NonClientAreaContent.xaml.cs">
       <DependentUpon>NonClientAreaContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PicturePicker.xaml.cs">
+      <DependentUpon>PicturePicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Canvas.xaml.cs">
+      <DependentUpon>Canvas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Size.xaml.cs">
+      <DependentUpon>Size.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StyleControls\Margin.xaml.cs">
       <DependentUpon>Margin.xaml</DependentUpon>
     </Compile>
@@ -110,6 +141,7 @@
     <Compile Include="Controls\ControlWithTitle.cs" />
     <Compile Include="Converters\EnumToItemsSourceConverter.cs" />
     <Compile Include="Converters\SKImageToImageSource.cs" />
+    <Compile Include="Models\PictureItem.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\StyleCommandWrapper.cs" />
     <Compile Include="Models\ThemeItem.cs" />
@@ -136,6 +168,18 @@
     <Page Include="Controls\NonClientAreaContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PicturePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Canvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Size.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\StyleControls\Margin.xaml">
       <SubType>Designer</SubType>
@@ -257,5 +301,13 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Fody.6.6.4\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.6.4\build\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\PropertyChanged.Fody.4.1.0\build\PropertyChanged.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PropertyChanged.Fody.4.1.0\build\PropertyChanged.Fody.props'))" />
+    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets'))" />
+    <Error Condition="!Exists('..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets'))" />
+    <Error Condition="!Exists('..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets'))" />
+    <Error Condition="!Exists('..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets'))" />
   </Target>
+  <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.9\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />
+  <Import Project="..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.Win32.2.88.9\build\net462\SkiaSharp.NativeAssets.Win32.targets')" />
+  <Import Project="..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\HarfBuzzSharp.NativeAssets.macOS.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.macOS.targets')" />
+  <Import Project="..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets" Condition="Exists('..\packages\HarfBuzzSharp.NativeAssets.Win32.7.3.0.3\build\net462\HarfBuzzSharp.NativeAssets.Win32.targets')" />
 </Project>

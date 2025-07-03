@@ -11,95 +11,114 @@
     xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:WorkbenchViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="250"
-    d:DesignWidth="300"
+    d:DesignHeight="950"
+    d:DesignWidth="400"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
         <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
     </UserControl.Resources>
+    <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
 
-    <Expander Background="{StaticResource RegionBrush}" Header="基础设置">
-        <hc:UniformSpacingPanel
-            Margin="16"
-            Orientation="Vertical"
-            Spacing="10">
-            <controls:ControlWithTitle Title="样式名称" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <TextBox Text="{Binding CurrentStyle.Name}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="创建时间" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <TextBox
-                    IsEnabled="False"
-                    IsReadOnly="True"
-                    Text="{Binding CurrentStyle.CreateTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="画布宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <hc:NumericUpDown Increment="10" Value="{Binding CurrentStyle.Width}" />
-            </controls:ControlWithTitle>
+        <Expander Background="{StaticResource RegionBrush}" Header="基础设置">
+            <hc:UniformSpacingPanel
+                Margin="16"
+                Orientation="Vertical"
+                Spacing="10">
+                <controls:ControlWithTitle Title="样式名称" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <TextBox Text="{Binding CurrentStyle.Name}" />
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="创建时间" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <TextBox
+                        IsEnabled="False"
+                        IsReadOnly="True"
+                        Text="{Binding CurrentStyle.CreateTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" />
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="画布宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <hc:NumericUpDown Increment="10" Value="{Binding CurrentStyle.Width}" />
+                </controls:ControlWithTitle>
 
-            <controls:ControlWithTitle Title="主题" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ComboBox ItemsSource="{Binding ThemeValues, Converter={StaticResource EnumToItemsSourceConverter}}" SelectedItem="{Binding CurrentStyle.ItemTheme, Mode=TwoWay}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="深色模式" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton
-                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                    IsChecked="True"
-                    Style="{StaticResource ToggleButtonSwitch}" />
-            </controls:ControlWithTitle>
-            <Expander Background="{StaticResource RegionBrush}" Header="调色板">
-                <Border
-                    Background="{DynamicResource RegionBrush}"
-                    BorderBrush="{DynamicResource BorderBrush}"
-                    BorderThickness="1,0,1,1"
-                    CornerRadius="0,0,4,4">
-                    <local:Palette Margin="16" Colors="{Binding CurrentStyle.Palette}" />
-                </Border>
-            </Expander>
-            <controls:ControlWithTitle Title="背景色" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <controls:ColorPicker Color="{Binding CurrentStyle.BackgroundColor, Mode=TwoWay}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="背景高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.BackgroundBlur}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="内容高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.ContentBlur}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="内容容器圆角" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.ContentRadius}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="背景图片绘制模式" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ComboBox ItemsSource="{Binding DrawBackgroundImageScaleTypeValues}" SelectedItem="{Binding CurrentStyle.DrawBackgroundImageScaleType, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="背景绘制模式" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ComboBox ItemsSource="{Binding DrawBackgroundTypeValues}" SelectedItem="{Binding CurrentStyle.DrawBackgroundType, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </controls:ControlWithTitle>
-            <Expander Background="{StaticResource RegionBrush}" Header="内边距(Padding)">
-                <Border
-                    Background="{DynamicResource RegionBrush}"
-                    BorderBrush="{DynamicResource BorderBrush}"
-                    BorderThickness="1,0,1,1"
-                    CornerRadius="0,0,4,4">
-                    <local:Margin Margin="16" Thickness="{Binding CurrentStyle.Padding}" />
-                </Border>
-            </Expander>
-            <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton
-                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                    IsChecked="{Binding CurrentStyle.LayoutDebug}"
-                    Style="{StaticResource ToggleButtonSwitch}" />
-            </controls:ControlWithTitle>
-        </hc:UniformSpacingPanel>
-    </Expander>
+                <controls:ControlWithTitle Title="主题" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <ComboBox ItemsSource="{Binding ThemeValues, Converter={StaticResource EnumToItemsSourceConverter}}" SelectedItem="{Binding CurrentStyle.ItemTheme, Mode=TwoWay}" />
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="深色模式" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <ToggleButton
+                        hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                        IsChecked="True"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                </controls:ControlWithTitle>
+                <Expander Background="{StaticResource RegionBrush}" Header="调色板">
+                    <Border
+                        Background="{DynamicResource RegionBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1,0,1,1"
+                        CornerRadius="0,0,4,4">
+                        <local:Palette Margin="16" Colors="{Binding CurrentStyle.Palette}" />
+                    </Border>
+                </Expander>
+                <controls:ControlWithTitle Title="背景色" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <controls:ColorPicker Color="{Binding CurrentStyle.BackgroundColor, Mode=TwoWay}" />
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="背景高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.BackgroundBlur}" />
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="内容高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.ContentBlur}" />
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="内容容器圆角" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <hc:NumericUpDown Maximum="100" Value="{Binding CurrentStyle.ContentRadius}" />
+                </controls:ControlWithTitle>
+                <Expander Background="{StaticResource RegionBrush}" Header="背景图片">
+                    <Border
+                        Margin="10"
+                        Background="{DynamicResource RegionBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1,0,1,1"
+                        CornerRadius="0,0,4,4">
+                        <controls:PicturePicker MultiSelect="True" PicturePaths="{Binding CurrentStyle.BackgroundImages}" />
+                    </Border>
+                </Expander>
+                <controls:ControlWithTitle Title="背景图片绘制模式" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <ComboBox ItemsSource="{Binding DrawBackgroundImageScaleTypeValues}" SelectedItem="{Binding CurrentStyle.DrawBackgroundImageScaleType, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </controls:ControlWithTitle>
+                <controls:ControlWithTitle Title="背景绘制模式" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <ComboBox ItemsSource="{Binding DrawBackgroundTypeValues}" SelectedItem="{Binding CurrentStyle.DrawBackgroundType, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </controls:ControlWithTitle>
+                <Expander Background="{StaticResource RegionBrush}" Header="内边距(Padding)">
+                    <Border
+                        Background="{DynamicResource RegionBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1,0,1,1"
+                        CornerRadius="0,0,4,4">
+                        <local:Margin Margin="16" Thickness="{Binding CurrentStyle.Padding}" />
+                    </Border>
+                </Expander>
+                <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
+                    <ToggleButton
+                        hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                        IsChecked="{Binding CurrentStyle.LayoutDebug}"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                </controls:ControlWithTitle>
+            </hc:UniformSpacingPanel>
+        </Expander>
+        <ItemsControl ItemsSource="{Binding CurrentStyle.Content}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:Canvas DataContext="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </hc:UniformSpacingPanel>
 </UserControl>

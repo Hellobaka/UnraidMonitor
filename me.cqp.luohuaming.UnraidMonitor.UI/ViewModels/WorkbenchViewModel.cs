@@ -4,6 +4,7 @@ using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
@@ -106,8 +107,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
                         {
                             if (nestedProperty.CanRead && nestedProperty.CanWrite)
                             {
-                                var nestedValue = nestedProperty.GetValue(value);
-                                StylePropertyValues[$"{property.Name}.{nestedProperty.Name}"] = nestedValue;
+                                //var nestedValue = nestedProperty.GetValue(value);
+                                //StylePropertyValues[$"{property.Name}.{nestedProperty.Name}"] = nestedValue;
                             }
                         }
                     }
@@ -198,7 +199,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             else
             {
                 value = null;
-                Debugger.Break();
+                // Debugger.Break();
                 Debug.WriteLine($"{propertyName} Changed To {newValue}, but not found in StylePropertyValues");
             }
             OnPropertyChangedDetail?.Invoke(propertyInfo, parentType, newValue, value);

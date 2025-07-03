@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
 {
@@ -68,4 +70,34 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
         }
 
     }
+
+    public class StringToImageSourceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is string path && !string.IsNullOrEmpty(path))
+            {
+                try
+                {
+                    var image = new BitmapImage();
+                    image.BeginInit();
+                    image.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                    return image;
+                }
+                catch
+                {
+                    return DependencyProperty.UnsetValue;
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }

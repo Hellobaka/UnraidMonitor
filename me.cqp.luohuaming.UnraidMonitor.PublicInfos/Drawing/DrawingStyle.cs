@@ -2,6 +2,7 @@
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -104,7 +105,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 随机背景图片
         /// </summary>
-        public string[] BackgroundImages { get; set; } = [];
+        public ObservableCollection<string> BackgroundImages { get; set; } = [];
 
         public DrawingCanvas[] Content { get; set; }
 
@@ -174,15 +175,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Padding.PropertyChanged -= NotifyPropertyChanged;
             Padding.PropertyChanged += NotifyPropertyChanged;
 
-            foreach (var item in Content)
-            {
-                item.PropertyChanged -= NotifyPropertyChanged;
-                item.PropertyChanged += NotifyPropertyChanged;
+            BackgroundImages.CollectionChanged -= BackgroundImages_CollectionChanged;
+            BackgroundImages.CollectionChanged += BackgroundImages_CollectionChanged;
 
-                item.OnPropertyChangedDetail -= DrawingBase_NotifyPropertyChangedDetail;
-                item.OnPropertyChangedDetail += DrawingBase_NotifyPropertyChangedDetail;
-                item.SubscribePropertyChangedEvents();
+            if (Content != null)
+            {
+                foreach (var item in Content)
+                {
+                    item.PropertyChanged -= NotifyPropertyChanged;
+                    item.PropertyChanged += NotifyPropertyChanged;
+
+                    item.OnPropertyChangedDetail -= DrawingBase_NotifyPropertyChangedDetail;
+                    item.OnPropertyChangedDetail += DrawingBase_NotifyPropertyChangedDetail;
+                    item.SubscribePropertyChangedEvents();
+                }
             }
+        }
+
+        private void BackgroundImages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(BackgroundImages));
+            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(nameof(BackgroundImages)), null, e.NewItems, e.OldItems);
         }
 
         /// <summary>
@@ -195,6 +208,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             Padding.OnPropertyChangedDetail -= Padding_OnPropertyChangedDetail;
             Padding.PropertyChanged -= NotifyPropertyChanged;
+
+            BackgroundImages.CollectionChanged -= BackgroundImages_CollectionChanged;
 
             if (Content != null)
             {
