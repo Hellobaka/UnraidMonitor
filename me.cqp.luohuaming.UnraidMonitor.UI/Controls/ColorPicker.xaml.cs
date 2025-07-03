@@ -81,9 +81,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
             if (!TryParseColorFromHexString((string)e.NewValue, out Color c))
             {
                 c = Colors.Transparent;
+                colorPicker.Color = c.ToString().Replace("#FF", "#"); ;
             }
             colorPicker.ColorPreview = new SolidColorBrush(c);
-            colorPicker.ColorText.Text = c.ToString().Replace("#FF", "#");
             colorPicker.OnPropertyChanged(nameof(ColorPreview));
         }
 

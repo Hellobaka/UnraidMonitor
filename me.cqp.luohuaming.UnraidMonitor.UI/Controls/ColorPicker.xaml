@@ -39,10 +39,12 @@
         <Popup
             x:Name="ColorPickerPopup"
             CacheMode="BitmapCache"
+            Closed="ColorPickerDialog_Canceled"
             Focusable="True"
             Placement="Bottom"
             PlacementTarget="{Binding ElementName=ColorText}"
-            PopupAnimation="Fade">
+            PopupAnimation="Fade"
+            StaysOpen="False">
             <hc:ColorPicker
                 x:Name="ColorPickerDialog"
                 Canceled="ColorPickerDialog_Canceled"
