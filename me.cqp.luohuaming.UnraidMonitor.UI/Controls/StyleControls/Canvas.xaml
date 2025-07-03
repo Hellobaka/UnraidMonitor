@@ -1,0 +1,167 @@
+﻿<UserControl
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Canvas"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
+    xmlns:converter="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;assembly=me.cqp.luohuaming.UnraidMonitor.PublicInfos"
+    xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;assembly=me.cqp.luohuaming.UnraidMonitor.UI"
+    d:DataContext="{d:DesignInstance Type=model:DrawingCanvas,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="450"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
+        <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <converter:SingleToArraySourceConverter x:Key="SingleToArraySourceConverter" />
+    </UserControl.Resources>
+
+    <Expander Background="{StaticResource RegionBrush}" Header="{Binding Name, StringFormat=画布 {0}}">
+        <hc:UniformSpacingPanel
+            Margin="16"
+            Orientation="Vertical"
+            Spacing="10">
+            <controls:ControlWithTitle Title="画布名称" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <TextBox Text="{Binding Name, Mode=TwoWay}" />
+            </controls:ControlWithTitle>
+            <Expander Background="{StaticResource RegionBrush}" Header="画布标题">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <hc:UniformSpacingPanel
+                        Margin="16"
+                        Orientation="Vertical"
+                        Spacing="10">
+                        <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <ToggleButton
+                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                                IsChecked="{Binding DrawingTitle.HasTitle}"
+                                Style="{StaticResource ToggleButtonSwitch}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="标题文本" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <TextBox Text="{Binding DrawingTitle.Text, Mode=TwoWay}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="文本字体" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <controls:FontPicker CustomFont="{Binding DrawingTitle.OverrideFont}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="文本字体大小" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <hc:NumericUpDown Maximum="100" Value="{Binding DrawingTitle.TextSize}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="文本字体粗体" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <ToggleButton
+                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                                IsChecked="{Binding DrawingTitle.Bold}"
+                                Style="{StaticResource ToggleButtonSwitch}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="覆盖主题色" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <controls:ColorPicker Color="{Binding DrawingTitle.OverrideColor}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="覆盖主题渐变色" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <controls:ColorPicker Color="{Binding DrawingTitle.OverrideColor2}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="显示图标" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <ToggleButton
+                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                                IsChecked="{Binding DrawingTitle.HasIcon}"
+                                Style="{StaticResource ToggleButtonSwitch}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="图标文件" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <controls:PicturePicker MultiSelect="False" PicturePaths="{Binding DrawingTitle.IconPath, Converter={StaticResource SingleToArraySourceConverter}}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="图标尺寸" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <local:Size SKSize="{Binding DrawingTitle.IconSize}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="图标间距" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <local:Margin Thickness="{Binding DrawingTitle.IconMargin}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="标题与底部间距" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <hc:NumericUpDown Maximum="100" Value="{Binding DrawingTitle.TitleMarginBottom}" />
+                        </controls:ControlWithTitle>
+                    </hc:UniformSpacingPanel>
+                </Border>
+            </Expander>
+            <Expander Background="{StaticResource RegionBrush}" Header="画布边框">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <hc:UniformSpacingPanel
+                        Margin="16"
+                        Orientation="Vertical"
+                        Spacing="10">
+                        <controls:ControlWithTitle Title="显示边框" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <ToggleButton
+                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                                IsChecked="{Binding DrawingBorder.HasBorder}"
+                                Style="{StaticResource ToggleButtonSwitch}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="边框宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <hc:NumericUpDown Maximum="100" Value="{Binding DrawingBorder.BorderWidth}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="边框圆角" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <hc:NumericUpDown Maximum="100" Value="{Binding DrawingBorder.BorderRadius}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="边框颜色" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <controls:ColorPicker Color="{Binding DrawingBorder.BorderColor}" />
+                        </controls:ControlWithTitle>
+                    </hc:UniformSpacingPanel>
+                </Border>
+            </Expander>
+            <controls:ControlWithTitle Title="背景高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <hc:NumericUpDown Maximum="100" Value="{Binding BackgroundBlur}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="内容容器圆角" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <hc:NumericUpDown Maximum="100" Value="{Binding Radius}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="布局方式" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ComboBox ItemsSource="{Binding DataContext.LayoutTypeValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}}" SelectedItem="{Binding DrawingLayout, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="百分比占比" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <controls:ControlWithTitle.Style>
+                    <Style BasedOn="{StaticResource {x:Type controls:ControlWithTitle}}" TargetType="controls:ControlWithTitle">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DrawingLayout}" Value="Percentage">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:ControlWithTitle.Style>
+                <hc:NumericUpDown Maximum="100" Value="{Binding FillPercentage, Mode=TwoWay}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="固定宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <controls:ControlWithTitle.Style>
+                    <Style BasedOn="{StaticResource {x:Type controls:ControlWithTitle}}" TargetType="controls:ControlWithTitle">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DrawingLayout}" Value="FixedWidth">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:ControlWithTitle.Style>
+                <hc:NumericUpDown Value="{Binding FixedWidth, Mode=TwoWay}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ToggleButton
+                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                    IsChecked="{Binding LayoutDebug}"
+                    Style="{StaticResource ToggleButtonSwitch}" />
+            </controls:ControlWithTitle>
+        </hc:UniformSpacingPanel>
+    </Expander>
+</UserControl>

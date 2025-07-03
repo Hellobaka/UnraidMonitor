@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -69,6 +71,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
             return null;
         }
 
+    }
+
+    public class SingleToArraySourceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string str)
+            {
+                return new ObservableCollection<string>() { str };
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ObservableCollection<string> arr)
+            {
+                return arr.FirstOrDefault() ?? DependencyProperty.UnsetValue;
+            }
+            return DependencyProperty.UnsetValue;
+        }
     }
 
     public class StringToImageSourceConverter : IValueConverter

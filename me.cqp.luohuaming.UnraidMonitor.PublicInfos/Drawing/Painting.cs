@@ -47,7 +47,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 : SKTypeface.Default;
             if (font != null)
             {
-                FontCache.Add(fontPathOrName, font);
+                if (!string.IsNullOrEmpty(fontPathOrName))
+                {
+                    FontCache.Add(fontPathOrName, font);
+                }
                 return font;
             }
             else

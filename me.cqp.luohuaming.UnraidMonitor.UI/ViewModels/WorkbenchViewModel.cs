@@ -60,6 +60,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public Array DrawBackgroundTypeValues => Enum.GetValues(typeof(DrawingStyle.BackgroundType));
 
+        public Array LayoutTypeValues => Enum.GetValues(typeof(DrawingCanvas.Layout));
+
         private Stack<(PropertyInfo property, object parent, object oldValue, object newValue)> ActionHistories { get; set; } = [];
 
         private int ActionCurrentIndex { get; set; }

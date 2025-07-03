@@ -50,28 +50,47 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public enum Position
         {
+            [Description("顶部")]
             Top,
+
+            [Description("居中")]
             Center,
+
+            [Description("底部")]
             Bottom,
         }
 
         public enum Layout
         {
+            [Description("百分比")]
             Percentage,
+
+            [Description("填充")]
             Remaining,
+
+            [Description("最小")]
             Minimal,
+
+            [Description("固定宽度")]
             FixedWidth
         }
 
         public enum AlertType
         {
+            [Description("提示")]
             Info,
+            
+            [Description("警告")]
             Warning,
+            
+            [Description("错误")]
             Fatal,
+           
+            [Description("成功")]
             Success
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
         /// <summary>
         /// 填充模式的百分比占比
@@ -133,7 +152,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public void SubscribePropertyChangedEvents()
         {
-            foreach(var item in Content)
+            foreach (var item in Content)
             {
                 item.PropertyChanged -= NotifyPropertyChanged;
                 item.PropertyChanged += NotifyPropertyChanged;
