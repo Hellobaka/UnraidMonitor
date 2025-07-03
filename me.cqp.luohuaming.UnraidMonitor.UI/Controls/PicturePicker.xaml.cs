@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -69,13 +70,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
 
             if (PicturePaths != null)
             {
-                foreach (var path in PicturePaths)
+                foreach (var path in PicturePaths.Where(x => !string.IsNullOrEmpty(x)))
                 {
-                    PictureItems.Add(new PictureItem
+                    if (File.Exists(path))
                     {
-                        ImagePath = path,
-                        IsAddButton = false
-                    });
+                        PictureItems.Add(new PictureItem
+                        {
+                            ImagePath = path,
+                            IsAddButton = false
+                        });
+                    }
+                    else
+                    {
+                        MainWindow.ShowError($"图片 {path} 路径文件不存在");
+                    }
                 }
             }
             if (PictureItems.Count == 0 || MultiSelect)
