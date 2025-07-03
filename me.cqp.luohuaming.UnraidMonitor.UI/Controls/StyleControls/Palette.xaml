@@ -7,7 +7,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
+    d:DesignHeight="750"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
@@ -46,6 +46,35 @@
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="提示图标色" TitleWidth="{StaticResource GlobalTitleWidth}">
             <controls:ColorPicker Color="{Binding Colors.InfoIconColor, RelativeSource={RelativeSource AncestorType=local:Palette, Mode=FindAncestor}, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="颜色模板" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    主题
+                </TextBlock>
+                <ComboBox Name="PaletteTemplateSeletor" SelectedIndex="0">
+                    <ComboBoxItem>WinUI3</ComboBoxItem>
+                    <ComboBoxItem>MaterialDesign2</ComboBoxItem>
+                    <ComboBoxItem>MaterialDesign3</ComboBoxItem>
+                    <ComboBoxItem>Unraid</ComboBoxItem>
+                </ComboBox>
+                <TextBlock Margin="10,0" VerticalAlignment="Center">深色模式</TextBlock>
+                <ToggleButton
+                    x:Name="PaletteTemplateDarkMode"
+                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                    Style="{StaticResource ToggleButtonSwitch}" />
+                <Button
+                    x:Name="PaletteTemplateButton"
+                    Width="70"
+                    Margin="10,0"
+                    Click="PaletteTemplateButton_Click"
+                    Style="{StaticResource ButtonPrimary}">
+                    套用
+                </Button>
+            </StackPanel>
         </controls:ControlWithTitle>
     </hc:UniformSpacingPanel>
 </UserControl>

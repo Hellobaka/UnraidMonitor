@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
 {
@@ -46,6 +37,49 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             if (d is Palette palette && e.NewValue is PublicInfos.Drawing.DrawingStyle.Colors colors)
             {
                 palette.OnPropertyChanged(nameof(Colors));
+            }
+        }
+
+        private void PaletteTemplateButton_Click(object sender, RoutedEventArgs e)
+        {
+            var darkMode = PaletteTemplateDarkMode.IsChecked ?? false;
+            DrawingStyle.Colors color = null;
+            switch (PaletteTemplateSeletor.SelectedIndex)
+            {
+                case 0:
+                    color = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, darkMode);
+                    break;
+
+                case 1:
+                    color = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.MaterialDesign2, darkMode);
+                    break;
+
+                case 2:
+                    color = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.MaterialDesign3, darkMode);
+                    break;
+
+                case 3:
+                    color = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.Unraid, darkMode);
+                    break;
+
+                default:
+                    MainWindow.ShowError("颜色模板无效");
+                    break;
+            }
+            if (color != null)
+            {
+                Colors.AccentColor = color.AccentColor;
+                Colors.Accent2Color = color.Accent2Color;
+                Colors.BackgroundColor = color.BackgroundColor;
+                Colors.TextColor = color.TextColor;
+                Colors.SuccessColor = color.SuccessColor;
+                Colors.SuccessIconColor = color.SuccessIconColor;
+                Colors.FatalColor = color.FatalColor;
+                Colors.FatalIconColor = color.FatalIconColor;
+                Colors.InfoColor = color.InfoColor;
+                Colors.InfoIconColor = color.InfoIconColor;
+                Colors.WarningColor = color.WarningColor;
+                Colors.WarningIconColor = color.WarningIconColor;
             }
         }
     }
