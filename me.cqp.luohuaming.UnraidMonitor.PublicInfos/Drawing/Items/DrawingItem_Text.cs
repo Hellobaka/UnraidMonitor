@@ -8,7 +8,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.Text;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Minimal;
+        public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Minimal;
 
         public string Text { get; set; } = "";
 
@@ -43,7 +43,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
             var endPoint = painting.DrawText(Text, Painting.Anywhere, startPoint, SKColor.Parse(string.IsNullOrEmpty(OverrideColor) ? palette.TextColor : OverrideColor), null, TextSize, font, IsBold);
             var size = Painting.MeasureString(Text, TextSize, font);
-            return (endPoint, Layout == DrawingBase.Layout.Minimal ? size.Width : desireWidth, size.Height);
+            return (endPoint, Layout == DrawingCanvas.Layout.Minimal ? size.Width : desireWidth, size.Height);
         }
     }
 }

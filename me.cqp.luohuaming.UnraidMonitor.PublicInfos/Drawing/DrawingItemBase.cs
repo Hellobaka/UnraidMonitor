@@ -26,7 +26,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 子内容的布局
         /// </summary>
-        public virtual DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Minimal;
+        public virtual DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Minimal;
 
         /// <summary>
         /// 填充模式的百分比占比
@@ -53,7 +53,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual DrawingStyle.Colors OverridePalette { get; set; }
 
-        public virtual DrawingBase.Position VerticalAlignment { get; set; } = DrawingBase.Position.Top;
+        public virtual DrawingCanvas.Position VerticalAlignment { get; set; } = DrawingCanvas.Position.Top;
 
         public Binding Binding { get; set; }
 
@@ -81,10 +81,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
             Padding.OnPropertyChangedDetail += Padding_NotifyPropertyChangedDetail;
 
-            OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
-            OverridePalette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
-            OverridePalette.PropertyChanged -= NotifyPropertyChanged;
-            OverridePalette.PropertyChanged += NotifyPropertyChanged;
+            if (OverridePalette != null)
+            {
+                OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
+                OverridePalette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
+                OverridePalette.PropertyChanged -= NotifyPropertyChanged;
+                OverridePalette.PropertyChanged += NotifyPropertyChanged;
+            }
         }
 
         public void UnsubscribePropertyChangedEvents()
@@ -93,8 +96,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
             Padding.PropertyChanged -= NotifyPropertyChanged;
             Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
-            OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
-            OverridePalette.PropertyChanged -= NotifyPropertyChanged;
+            if (OverridePalette != null)
+            {
+                OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
+                OverridePalette.PropertyChanged -= NotifyPropertyChanged;
+            }
         }
 
         private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)

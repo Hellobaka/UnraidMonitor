@@ -106,7 +106,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public string[] BackgroundImages { get; set; } = [];
 
-        public DrawingBase[] Content { get; set; }
+        public DrawingCanvas[] Content { get; set; }
 
         /// <summary>
         /// 主内容对背景的高斯模糊
@@ -209,7 +209,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         private void DrawingBase_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
         {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(DrawingBase)), newValue, oldValue);
+            OnPropertyChangedDetail?.Invoke(propertyInfo, GetType().GetProperty(nameof(DrawingCanvas)), newValue, oldValue);
         }
 
         private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -219,12 +219,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         private void Padding_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
         {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
+            OnPropertyChangedDetail?.Invoke(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
         }
 
         private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
         {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Palette)), newValue, oldValue);
+            OnPropertyChangedDetail?.Invoke(propertyInfo, GetType().GetProperty(nameof(Palette)), newValue, oldValue);
         }
 
         public static Colors GetThemeDefaultColor(Theme theme, bool dark) => (theme, dark) switch
@@ -367,7 +367,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     startPoint.Y += item.Margin.Top;
                     float desireWidth = contentPainting.Width;
                     // 检查宽度是否溢出
-                    if (item.DrawingLayout == DrawingBase.Layout.Percentage)
+                    if (item.DrawingLayout == DrawingCanvas.Layout.Percentage)
                     {
                         if (fillPercentage + item.FillPercentage > 100)
                         {
@@ -376,12 +376,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         }
                         desireWidth = contentPainting.Width / 100f * item.FillPercentage;
                     }
-                    else if (item.DrawingLayout == DrawingBase.Layout.FixedWidth)
+                    else if (item.DrawingLayout == DrawingCanvas.Layout.FixedWidth)
                     {
                         desireWidth = item.FixedWidth;
                     }
-                    else if (item.DrawingLayout == DrawingBase.Layout.Remaining
-                        || item.DrawingLayout == DrawingBase.Layout.Minimal)
+                    else if (item.DrawingLayout == DrawingCanvas.Layout.Remaining
+                        || item.DrawingLayout == DrawingCanvas.Layout.Minimal)
                     {
                         desireWidth = contentPainting.Width - startPoint.X;
                     }
@@ -418,22 +418,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     switch (item.DrawingLayout)
                     {
                         default:
-                        case DrawingBase.Layout.Remaining:
+                        case DrawingCanvas.Layout.Remaining:
                             // 填充模式为剩余所有空间，换行
                             NewLine(item.Margin);
                             break;
 
-                        case DrawingBase.Layout.Minimal:
+                        case DrawingCanvas.Layout.Minimal:
                             // 填充模式为最小宽度，X加Margin
                             startPoint = new(endPoint.X + item.Margin.Right, startPoint.Y - item.Margin.Top);
                             break;
 
-                        case DrawingBase.Layout.FixedWidth:
+                        case DrawingCanvas.Layout.FixedWidth:
                             // 填充模式为固定宽度，X为起始坐标+Margin+Width
                             startPoint = new(startPoint.X + item.FixedWidth + item.Margin.Right, startPoint.Y - item.Margin.Top);
                             break;
 
-                        case DrawingBase.Layout.Percentage:
+                        case DrawingCanvas.Layout.Percentage:
                             // 填充模式为百分比宽度，若填充百分比+当前行宽度大于100，则换行
                             if (fillPercentage + item.FillPercentage >= 100)
                             {

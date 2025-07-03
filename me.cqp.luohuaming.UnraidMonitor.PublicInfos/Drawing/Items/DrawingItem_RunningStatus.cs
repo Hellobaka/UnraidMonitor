@@ -8,7 +8,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.RunningStatus;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Minimal;
+        public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Minimal;
 
         public int TextSize { get; set; } = 26;
 

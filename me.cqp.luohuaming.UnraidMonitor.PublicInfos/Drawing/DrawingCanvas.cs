@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
-    public class DrawingBase : INotifyPropertyChanged
+    public class DrawingCanvas : INotifyPropertyChanged
     {
         public class Title
         {
@@ -70,6 +70,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Fatal,
             Success
         }
+
+        public string Name { get; set; }
 
         /// <summary>
         /// 填充模式的百分比占比

@@ -140,7 +140,7 @@
     <Compile Include="AppConfig.cs" />
     <Compile Include="Drawing\Binding.cs" />
     <Compile Include="Drawing\DrawingStyle.cs" />
-    <Compile Include="Drawing\DrawingBase.cs" />
+    <Compile Include="Drawing\DrawingCanvas.cs" />
     <Compile Include="Drawing\DrawingItemBase.cs" />
     <Compile Include="Drawing\Icons\SVG.cs" />
     <Compile Include="Drawing\Items\DrawingItem_Chart.cs" />

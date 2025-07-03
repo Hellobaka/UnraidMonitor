@@ -11,9 +11,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.Alert;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Remaining;
+        public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Remaining;
 
-        public DrawingBase.AlertType AlertType { get; set; } = DrawingBase.AlertType.Info;
+        public DrawingCanvas.AlertType AlertType { get; set; } = DrawingCanvas.AlertType.Info;
 
         public string Header { get; set; } = "";
 
@@ -33,7 +33,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             Header = string.Empty;
             Content = string.Empty;
-            AlertType = DrawingBase.AlertType.Info;
+            AlertType = DrawingCanvas.AlertType.Info;
         }
 
         public override void ApplyBinding()
@@ -58,19 +58,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 {
                     if (AlertTypeConverter.Info == item)
                     {
-                        AlertType = DrawingBase.AlertType.Info;
+                        AlertType = DrawingCanvas.AlertType.Info;
                     }
                     else if (AlertTypeConverter.Success == item)
                     {
-                        AlertType = DrawingBase.AlertType.Success;
+                        AlertType = DrawingCanvas.AlertType.Success;
                     }
                     else if (AlertTypeConverter.Warning == item)
                     {
-                        AlertType = DrawingBase.AlertType.Warning;
+                        AlertType = DrawingCanvas.AlertType.Warning;
                     }
                     else if (AlertTypeConverter.Fatal == item)
                     {
-                        AlertType = DrawingBase.AlertType.Fatal;
+                        AlertType = DrawingCanvas.AlertType.Fatal;
                     }
                 }
             }
@@ -94,23 +94,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             float width = desireWidth - Padding.Left - Padding.Right;
             SKColor iconColor = SKColor.Parse(AlertType switch
             {
-                DrawingBase.AlertType.Warning => palette.WarningIconColor,
-                DrawingBase.AlertType.Fatal => palette.FatalIconColor,
-                DrawingBase.AlertType.Success => palette.SuccessIconColor,
+                DrawingCanvas.AlertType.Warning => palette.WarningIconColor,
+                DrawingCanvas.AlertType.Fatal => palette.FatalIconColor,
+                DrawingCanvas.AlertType.Success => palette.SuccessIconColor,
                 _ => palette.InfoIconColor,
             });
             SKColor backgroundColor = SKColor.Parse(AlertType switch
             {
-                DrawingBase.AlertType.Warning => palette.WarningColor,
-                DrawingBase.AlertType.Fatal => palette.FatalColor,
-                DrawingBase.AlertType.Success => palette.SuccessColor,
+                DrawingCanvas.AlertType.Warning => palette.WarningColor,
+                DrawingCanvas.AlertType.Fatal => palette.FatalColor,
+                DrawingCanvas.AlertType.Success => palette.SuccessColor,
                 _ => palette.InfoColor,
             });
             string alertChar = AlertType switch
             {
-                DrawingBase.AlertType.Warning => "\uE814",
-                DrawingBase.AlertType.Fatal => "\uEB90",
-                DrawingBase.AlertType.Success => "\uEC61",
+                DrawingCanvas.AlertType.Warning => "\uE814",
+                DrawingCanvas.AlertType.Fatal => "\uEB90",
+                DrawingCanvas.AlertType.Success => "\uEC61",
                 _ => "\uF167",
             };
             using Painting content = new((int)Math.Ceiling(desireWidth), 1000);
@@ -156,23 +156,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             float width = desireWidth - Padding.Left - Padding.Right;
             SKColor iconColor = SKColor.Parse(AlertType switch
             {
-                DrawingBase.AlertType.Warning => palette.WarningIconColor,
-                DrawingBase.AlertType.Fatal => palette.FatalIconColor,
-                DrawingBase.AlertType.Success => palette.SuccessIconColor,
+                DrawingCanvas.AlertType.Warning => palette.WarningIconColor,
+                DrawingCanvas.AlertType.Fatal => palette.FatalIconColor,
+                DrawingCanvas.AlertType.Success => palette.SuccessIconColor,
                 _ => palette.InfoIconColor,
             });
             SKColor backgroundColor = SKColor.Parse(AlertType switch
             {
-                DrawingBase.AlertType.Warning => palette.WarningColor,
-                DrawingBase.AlertType.Fatal => palette.FatalColor,
-                DrawingBase.AlertType.Success => palette.SuccessColor,
+                DrawingCanvas.AlertType.Warning => palette.WarningColor,
+                DrawingCanvas.AlertType.Fatal => palette.FatalColor,
+                DrawingCanvas.AlertType.Success => palette.SuccessColor,
                 _ => palette.InfoColor,
             });
             string alertSvg = AlertType switch
             {
-                DrawingBase.AlertType.Warning => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Warning : SVG.MD3_Warning, iconColor.ToString()),
-                DrawingBase.AlertType.Fatal => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Fatal : SVG.MD3_Fatal, iconColor.ToString()),
-                DrawingBase.AlertType.Success => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Success : SVG.MD3_Success, iconColor.ToString()),
+                DrawingCanvas.AlertType.Warning => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Warning : SVG.MD3_Warning, iconColor.ToString()),
+                DrawingCanvas.AlertType.Fatal => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Fatal : SVG.MD3_Fatal, iconColor.ToString()),
+                DrawingCanvas.AlertType.Success => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Success : SVG.MD3_Success, iconColor.ToString()),
                 _ => SVG.ChangeFillColor(theme == DrawingStyle.Theme.MaterialDesign2 ? SVG.MD2_Info : SVG.MD3_Info, iconColor.ToString()),
             };
             using Painting content = new((int)Math.Ceiling(desireWidth), 1000);
@@ -219,16 +219,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             float width = desireWidth - Padding.Left - Padding.Right;
             SKColor iconColor = SKColor.Parse(AlertType switch
             {
-                DrawingBase.AlertType.Warning => palette.WarningIconColor,
-                DrawingBase.AlertType.Fatal => palette.FatalIconColor,
-                DrawingBase.AlertType.Success => palette.SuccessIconColor,
+                DrawingCanvas.AlertType.Warning => palette.WarningIconColor,
+                DrawingCanvas.AlertType.Fatal => palette.FatalIconColor,
+                DrawingCanvas.AlertType.Success => palette.SuccessIconColor,
                 _ => palette.InfoIconColor,
             });
             SKColor backgroundColor = SKColor.Parse(AlertType switch
             {
-                DrawingBase.AlertType.Warning => palette.WarningColor,
-                DrawingBase.AlertType.Fatal => palette.FatalColor,
-                DrawingBase.AlertType.Success => palette.SuccessColor,
+                DrawingCanvas.AlertType.Warning => palette.WarningColor,
+                DrawingCanvas.AlertType.Fatal => palette.FatalColor,
+                DrawingCanvas.AlertType.Success => palette.SuccessColor,
                 _ => palette.InfoColor,
             });
             using Painting content = new((int)Math.Ceiling(desireWidth), 1000);

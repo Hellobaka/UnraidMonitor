@@ -12,7 +12,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
     {
         public override ItemType Type { get; set; } = ItemType.Chart;
 
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Remaining;
+        public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Remaining;
 
         public (DateTime time, double value)[] Points { get; set; } = [];
 

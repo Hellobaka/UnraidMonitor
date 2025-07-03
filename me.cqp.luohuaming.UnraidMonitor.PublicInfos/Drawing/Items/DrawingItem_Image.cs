@@ -10,7 +10,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
     public class DrawingItem_Image : DrawingItemBase
     {
-        public override DrawingBase.Layout Layout { get; set; } = DrawingBase.Layout.Minimal;
+        public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Minimal;
 
         public override ItemType Type { get; set; } = ItemType.Image;
 

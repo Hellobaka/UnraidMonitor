@@ -597,6 +597,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
     public class Thickness : INotifyPropertyChanged
     {
+        public Thickness()
+        {
+            
+        }
+
         public float Left { get; set; }
 
         public float Top { get; set; }

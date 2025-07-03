@@ -56,8 +56,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 Padding = new Thickness(16),
                 Palette = DrawingStyle.GetThemeDefaultColor(DrawingStyle.Theme.WinUI3, true),
                 Content = [
-                    new DrawingBase{
-                    DrawingLayout = DrawingBase.Layout.Percentage,
+                    new DrawingCanvas{
+                    DrawingLayout = DrawingCanvas.Layout.Percentage,
                     FillPercentage = 50,
                     DrawingTitle = new(){
                         HasTitle = true,
@@ -108,8 +108,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                     ]
                 },
-                new DrawingBase{
-                    DrawingLayout = DrawingBase.Layout.Percentage,
+                new DrawingCanvas{
+                    DrawingLayout = DrawingCanvas.Layout.Percentage,
                     FillPercentage = 50,
                     DrawingTitle = new(){
                         HasTitle = true,
@@ -175,7 +175,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                     ]
                 },
-                new DrawingBase{
+                new DrawingCanvas{
                     BackgroundBlur = 0,
                     DrawingBorder = new()
                     {
@@ -184,7 +184,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         BorderWidth = 1,
                         HasBorder = false,
                     },
-                    DrawingLayout = DrawingBase.Layout.Percentage,
+                    DrawingLayout = DrawingCanvas.Layout.Percentage,
                     DrawingTitle = new()
                     {
                         HasTitle = true,
@@ -256,8 +256,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Remaining,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Remaining,
                             Binding = new(){
                                 Conditions = new(){
                                     {"CPUId", "CPU Total" }
@@ -279,12 +279,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU1:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -307,13 +307,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU2:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -336,12 +336,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU3:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -364,13 +364,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU4:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -393,12 +393,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU5:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -421,13 +421,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU6:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -450,12 +450,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU7:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -478,13 +478,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU8:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -507,12 +507,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU9:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -535,13 +535,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU10:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -564,12 +564,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU11:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -592,13 +592,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU12:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -621,12 +621,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU13:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -649,13 +649,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU14:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -678,12 +678,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU15:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -706,13 +706,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU16:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -736,12 +736,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
                         new DrawingItem_Text {
                             Text = "CPU17:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -764,13 +764,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_Text {
                             Text = "CPU18:",
-                            Layout = DrawingBase.Layout.Percentage,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
-                            Layout = DrawingBase.Layout.Percentage,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
                                 Conditions = new(){
@@ -819,7 +819,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         }
                     ]
                 },
-                new DrawingBase{
+                new DrawingCanvas{
                     DrawingTitle = new(){
                         HasTitle = true,
                         Text = "内存",
@@ -856,7 +856,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar{
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
                             Binding = new Binding(){
                                 Conditions = [],
                                 ItemType = ItemType.MemoryInfo,
@@ -901,7 +901,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
                     ]
                 },
-                new DrawingBase{
+                new DrawingCanvas{
                     DrawingTitle = new(){
                         HasTitle = true,
                         Text = "硬盘",
@@ -1002,7 +1002,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar{
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingBase.Position.Center,
+                            VerticalAlignment = DrawingCanvas.Position.Center,
                             Binding = new Binding(){
                                 Conditions = [],
                                 ItemType = ItemType.DiskInfo,
@@ -1022,7 +1022,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                     ]
                 },
-                    new DrawingBase{
+                    new DrawingCanvas{
                     DrawingTitle = new(){
                         HasTitle = true,
                         Text = "网络",
