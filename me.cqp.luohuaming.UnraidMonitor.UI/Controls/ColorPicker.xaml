@@ -21,6 +21,8 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Background="{Binding ColorPreview, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
             CornerRadius="5"
             Cursor="Hand"
             MouseDown="Border_MouseDown" />

@@ -42,7 +42,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
 
         public event Action<Color, string> OnColorOutputChanged;
 
-        public Brush ColorPreview { get; set; }
+        public Brush ColorPreview { get; set; } = Brushes.White;
 
         public Visibility DropperVisibility { get; set; }
 
