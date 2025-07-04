@@ -176,6 +176,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             return (new SKPoint(startPoint.X + desireWidth, startPoint.Y + OverrideHeight), desireWidth, OverrideHeight);
         }
 
+        public static DrawingItem_Chart Create() => new()
+        {
+            Points = [],
+        };
+
         private SKPoint[] ConvertDataPointToSKPoints(float chartHeight, float chartWidth, float paddingLeft, float paddingTop)
         {
             SKPoint[] skPoints = new SKPoint[Points.Length];

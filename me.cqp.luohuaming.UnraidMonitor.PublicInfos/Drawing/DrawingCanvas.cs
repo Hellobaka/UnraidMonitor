@@ -423,5 +423,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             currentPoint.Y += DrawingTitle.TitleMarginBottom;
             return currentPoint;
         }
+
+        public DrawingCanvas Clone()
+        {
+            var canvas = JsonConvert.SerializeObject(this);
+            return JsonConvert.DeserializeObject<DrawingCanvas>(canvas);
+        }
     }
 }

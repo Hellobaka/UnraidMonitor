@@ -152,6 +152,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             return (new(textPoint.X + textPainting.Width, textPoint.Y + textPainting.Height), textPoint.X + textPainting.Width, textPainting.Height);
         }
 
+        public static DrawingItem_RunningStatus DefaultConverter => new()
+        {
+        };
+
         public class Converter
         {
             public string Running { get; set; }

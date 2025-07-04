@@ -34,7 +34,8 @@
             <hc:NumericUpDown Value="{Binding StrokeWidth}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="圆头画笔" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding IsRounded, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -44,13 +45,15 @@
         </controls:ControlWithTitle>
 
         <controls:ControlWithTitle Title="透明背景" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding TransparentBackground, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="显示数值" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ShowValue, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -83,14 +86,16 @@
             Title="数值字体粗体"
             TitleWidth="{StaticResource GlobalTitleWidth}"
             Visibility="{Binding ShowValue, Converter={StaticResource Boolean2VisibilityConverter}}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ValueFontBold, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
         </controls:ControlWithTitle>
 
         <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ShowHeader, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -123,7 +128,8 @@
             Title="标题字体粗体"
             TitleWidth="{StaticResource GlobalTitleWidth}"
             Visibility="{Binding ShowHeader, Converter={StaticResource Boolean2VisibilityConverter}}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding HeaderFontBold, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />

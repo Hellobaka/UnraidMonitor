@@ -382,5 +382,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             paint.Dispose();
             return (new(startPoint.X + desireWidth, startPoint.Y + Radius * 2 + StrokeWidth), desireWidth, 0);
         }
+
+        public static DrawingItem_ProgressRing Create() => new()
+        {
+        };
     }
 }

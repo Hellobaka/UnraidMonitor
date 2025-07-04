@@ -107,7 +107,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public ObservableCollection<string> BackgroundImages { get; set; } = [];
 
-        public DrawingCanvas[] Content { get; set; }
+        public ObservableCollection<DrawingCanvas> Content { get; set; } = [];
 
         /// <summary>
         /// 主内容对背景的高斯模糊
@@ -372,7 +372,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             List<float> currentRowHeights = [];
             bool hasNewLine = false;
             // 绘制内容
-            if (Content != null && Content.Length > 0)
+            if (Content != null && Content.Count > 0)
             {
                 SKPoint startPoint = new(0, 0);
                 float fillPercentage = 0;

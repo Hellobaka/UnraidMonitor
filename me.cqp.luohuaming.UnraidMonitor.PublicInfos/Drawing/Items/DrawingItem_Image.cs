@@ -75,5 +75,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 height: OverrideHeight
             );
         }
+
+        public static DrawingItem_Image Create(string source) => new()
+        {
+            Source = source
+        };
     }
 }

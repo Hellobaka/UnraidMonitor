@@ -20,7 +20,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override float OverrideHeight { get; set; }
 
         public override Thickness Margin { get; set; } = Thickness.Empty;
-      
+
         public override void BeforeBinding()
         {
             Value = 0;
@@ -172,5 +172,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
             return (new(startPoint.X + desireWidth, startPoint.Y + barHeight), desireWidth, barHeight);
         }
+
+        public static DrawingItem_ProgressBar Create() => new();
     }
 }

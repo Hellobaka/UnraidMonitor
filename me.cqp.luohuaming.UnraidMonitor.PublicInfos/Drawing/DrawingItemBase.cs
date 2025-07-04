@@ -157,5 +157,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             // 返回结束点和实际高度
             return (SKPoint.Empty, 0, 0);
         }
+
+        public DrawingItemBase Clone()
+        {
+            string item = JsonConvert.SerializeObject(this, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented,
+            });
+            return JsonConvert.DeserializeObject<DrawingItemBase>(item);
+        }
     }
 }

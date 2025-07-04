@@ -52,7 +52,7 @@
             Text="{StaticResource TextTemplate}" />
     </UserControl.Resources>
 
-    <Expander Background="{StaticResource RegionBrush}">
+    <Expander x:Name="DrawingItemExpander" Background="{StaticResource RegionBrush}">
         <Expander.Header>
             <StackPanel Orientation="Horizontal">
                 <Button
@@ -75,9 +75,9 @@
         </Expander.Header>
         <Expander.ContextMenu>
             <ContextMenu Name="ItemContextMenu">
-                <MenuItem Header="删除控件" />
-                <MenuItem Header="复制控件" />
-                <MenuItem Header="清除所有绑定" />
+                <MenuItem Click="DeleteItem_Click" Header="删除控件" />
+                <MenuItem Click="DuplicateItem_Click" Header="复制控件" />
+                <MenuItem Click="ClearBinding_Click" Header="清除所有绑定" />
             </ContextMenu>
         </Expander.ContextMenu>
         <hc:UniformSpacingPanel

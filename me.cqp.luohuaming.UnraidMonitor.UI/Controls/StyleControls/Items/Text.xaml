@@ -22,7 +22,8 @@
             <hc:NumericUpDown Maximum="100" Value="{Binding TextSize, Mode=TwoWay}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="文本粗体" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton HorizontalAlignment="Left"
+            <ToggleButton
+                HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding IsBold, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />

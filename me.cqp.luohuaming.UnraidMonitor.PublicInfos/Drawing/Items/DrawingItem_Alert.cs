@@ -261,6 +261,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             return (new(startPoint.X + desireWidth, startPoint.Y + Padding.Top + textHeight + Padding.Bottom), desireWidth, textHeight + Padding.Top + Padding.Bottom);
         }
 
+        public static DrawingItem_Alert Create() => new()
+        {
+            AlertType = DrawingCanvas.AlertType.Info,
+            Header = "输入标题",
+            Content = "输入内容"
+        };
+
         public class Converter
         {
             public string Info { get; set; }

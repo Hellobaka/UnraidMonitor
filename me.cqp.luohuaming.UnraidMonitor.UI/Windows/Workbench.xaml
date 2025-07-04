@@ -7,6 +7,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:styleControls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
     xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels"
     Title="样式编辑器"
     Width="1200"
@@ -25,7 +26,11 @@
             <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <controls:StylePropertyEditor x:Name="StyleEditor" />
+        <ScrollViewer x:Name="StyleScrollViewer" VerticalScrollBarVisibility="Auto">
+            <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+                <styleControls:Style x:Name="StyleEditor" />
+            </hc:UniformSpacingPanel>
+        </ScrollViewer>
         <GridSplitter
             Grid.Column="0"
             Width="2"

@@ -45,5 +45,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             var size = Painting.MeasureString(Text, TextSize, font);
             return (endPoint, Layout == DrawingCanvas.Layout.Minimal ? size.Width : desireWidth, size.Height);
         }
+
+        public static DrawingItem_Text Create() => new()
+        {
+            Text = "请输入文本"
+        };
     }
 }

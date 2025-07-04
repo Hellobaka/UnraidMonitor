@@ -1,4 +1,7 @@
-﻿using System;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
+using me.cqp.luohuaming.UnraidMonitor.UI.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,11 +28,31 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             InitializeComponent();
         }
 
+        private DrawingStyle CurrentStyle => (DataContext as WorkbenchViewModel).CurrentStyle;
+
         private void OpenContextMenu_Click(object sender, RoutedEventArgs e)
         {
             StyleContextMenu.PlacementTarget = sender as Button;
             StyleContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
             StyleContextMenu.IsOpen = true;
+        }
+
+        private void CreateNewCanvas_Click(object sender, RoutedEventArgs e)
+        {
+            DrawingCanvas canvas = new();
+            canvas.Name = $"新画布";
+            CurrentStyle.Content.Add(canvas);
+
+        }
+
+        private void CollapseAllCanvas_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExpandAllCanvas_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -22,7 +22,7 @@
         VerticalAlignment="Stretch"
         Orientation="Vertical"
         Spacing="10">
-        <Expander Background="{StaticResource RegionBrush}">
+        <Expander x:Name="StyleExpander" Background="{StaticResource RegionBrush}">
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <Button
@@ -36,9 +36,9 @@
 
             <Expander.ContextMenu>
                 <ContextMenu Name="StyleContextMenu">
-                    <MenuItem Header="新建画布" />
-                    <MenuItem Header="折叠所有画布" />
-                    <MenuItem Header="展开所有画布" />
+                    <MenuItem Click="CreateNewCanvas_Click" Header="新建画布" />
+                    <MenuItem Click="CollapseAllCanvas_Click" Header="折叠所有画布" />
+                    <MenuItem Click="ExpandAllCanvas_Click" Header="展开所有画布" />
                 </ContextMenu>
             </Expander.ContextMenu>
             <hc:UniformSpacingPanel
@@ -62,7 +62,8 @@
                     <ComboBox ItemsSource="{Binding ThemeValues, Converter={StaticResource EnumToItemsSourceConverter}}" SelectedItem="{Binding CurrentStyle.ItemTheme, Mode=TwoWay}" />
                 </controls:ControlWithTitle>
                 <controls:ControlWithTitle Title="深色模式" TitleWidth="{StaticResource GlobalTitleWidth}">
-                    <ToggleButton HorizontalAlignment="Left"
+                    <ToggleButton
+                        HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                         IsChecked="True"
                         Style="{StaticResource ToggleButtonSwitch}" />
@@ -126,7 +127,8 @@
                     </Border>
                 </Expander>
                 <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
-                    <ToggleButton HorizontalAlignment="Left"
+                    <ToggleButton
+                        HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                         IsChecked="{Binding CurrentStyle.LayoutDebug, Mode=TwoWay}"
                         Style="{StaticResource ToggleButtonSwitch}" />

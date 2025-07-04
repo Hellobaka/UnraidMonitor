@@ -21,7 +21,7 @@
         <converter:SingleToArraySourceConverter x:Key="SingleToArraySourceConverter" />
     </UserControl.Resources>
 
-    <Expander Background="{StaticResource RegionBrush}">
+    <Expander x:Name="CanvasExpander" Background="{StaticResource RegionBrush}">
         <Expander.Header>
             <StackPanel Orientation="Horizontal">
                 <Button
@@ -35,19 +35,20 @@
         <Expander.ContextMenu>
             <ContextMenu Name="CanvasContextMenu">
                 <MenuItem Header="新建控件">
-                    <MenuItem Header="文本块" />
-                    <MenuItem Header="进度条" />
-                    <MenuItem Header="进度环" />
-                    <MenuItem Header="图表" />
-                    <MenuItem Header="信息块" />
-                    <MenuItem Header="图片" />
-                    <MenuItem Header="双行状态块" />
+                    <MenuItem Click="CreateItem_Text_Click" Header="文本块" />
+                    <MenuItem Click="CreateItem_ProgressBar_Click" Header="进度条" />
+                    <MenuItem Click="CreateItem_ProgressRing_Click" Header="进度环" />
+                    <MenuItem Click="CreateItem_Chart_Click" Header="图表" />
+                    <MenuItem Click="CreateItem_Alert_Click" Header="信息块" />
+                    <MenuItem Click="CreateItem_Image_Click" Header="图片" />
+                    <MenuItem Click="CreateItem_RunningStatus_Click" Header="双行状态块" />
                 </MenuItem>
-                <MenuItem Header="折叠所有控件" />
-                <MenuItem Header="展开所有控件" />
+                <MenuItem Click="CollapseAllItems_Click" Header="折叠所有控件" />
+                <MenuItem Click="ExpandAllItems_Click" Header="展开所有控件" />
                 <Separator />
-                <MenuItem Header="复制画布" />
-                <MenuItem Header="删除画布" />
+                <MenuItem Click="DuplicateCanvasWithItems_Click" Header="复制画布（不带控件）" />
+                <MenuItem Click="DuplicateCanvas_Click" Header="复制画布（带控件）" />
+                <MenuItem Click="DeleteCanvas_Click" Header="删除画布" />
             </ContextMenu>
         </Expander.ContextMenu>
         <hc:UniformSpacingPanel
@@ -58,7 +59,8 @@
                 <TextBox Text="{Binding Name, Mode=TwoWay}" />
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton HorizontalAlignment="Left"
+                <ToggleButton
+                    HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding DrawingTitle.HasTitle, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />
@@ -87,7 +89,8 @@
                             <hc:NumericUpDown Maximum="100" Value="{Binding DrawingTitle.TextSize}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="文本字体粗体" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <ToggleButton HorizontalAlignment="Left"
+                            <ToggleButton
+                                HorizontalAlignment="Left"
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                                 IsChecked="{Binding DrawingTitle.Bold}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -99,7 +102,8 @@
                             <controls:ColorPicker Color="{Binding DrawingTitle.OverrideColor2}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="显示图标" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <ToggleButton HorizontalAlignment="Left"
+                            <ToggleButton
+                                HorizontalAlignment="Left"
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                                 IsChecked="{Binding DrawingTitle.HasIcon, Mode=TwoWay}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -129,7 +133,8 @@
                 </Border>
             </Expander>
             <controls:ControlWithTitle Title="显示边框" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton HorizontalAlignment="Left"
+                <ToggleButton
+                    HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding DrawingBorder.HasBorder, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />
@@ -202,7 +207,8 @@
                 <hc:NumericUpDown Value="{Binding FixedWidth, Mode=TwoWay}" />
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton HorizontalAlignment="Left"
+                <ToggleButton
+                    HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding LayoutDebug, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />

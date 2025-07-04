@@ -163,9 +163,6 @@
     <Compile Include="Controls\StyleControls\Style.xaml.cs">
       <DependentUpon>Style.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\StylePropertyEditor.xaml.cs">
-      <DependentUpon>StylePropertyEditor.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ControlWithTitle.cs" />
     <Compile Include="Converters\DrawingItemSelector.cs" />
     <Compile Include="Converters\EnumToItemsSourceConverter.cs" />
@@ -255,10 +252,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\StyleControls\Style.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\StylePropertyEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

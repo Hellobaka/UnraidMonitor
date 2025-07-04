@@ -1,4 +1,5 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.UI.Models;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
+using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -163,7 +164,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
                 Filter = "图片|*.jpg;*.jpeg;*.png;*.bmp;|所有文件|*.*",
                 CheckFileExists = true,
             };
-            return dialog.ShowDialog() ?? false ? dialog.FileName : null;
+            if (dialog.ShowDialog() ?? false)
+            {
+                return CommonHelper.GetRelativePath(dialog.FileName, MainSave.AppDirectory);
+            }
+            return null;
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

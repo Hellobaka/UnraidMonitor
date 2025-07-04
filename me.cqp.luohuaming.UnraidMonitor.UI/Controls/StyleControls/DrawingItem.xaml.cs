@@ -31,5 +31,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             ItemContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
             ItemContextMenu.IsOpen = true;
         }
+
+        private void DuplicateItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearBinding_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

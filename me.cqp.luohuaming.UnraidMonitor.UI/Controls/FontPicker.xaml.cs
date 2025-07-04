@@ -1,4 +1,5 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.UI.Converters;
 using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
 using Microsoft.Win32;
@@ -53,7 +54,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
                 string fontPath = dialog.FileName;
                 if (File.Exists(fontPath))
                 {
-                    CustomFont = fontPath;
+                    CustomFont = CommonHelper.GetRelativePath(fontPath, MainSave.AppDirectory);
                 }
                 else
                 {
@@ -77,7 +78,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
             FontPreviewPopup.IsOpen = true;
             string font = string.IsNullOrEmpty(CustomFont)
                 ? DrawingStyle.GetThemeDefaultFont(WorkbenchViewModel.Instance.CurrentStyle.ItemTheme)
-                : CustomFont;
+                : Path.Combine(MainSave.AppDirectory, CustomFont);
             using Painting painting = new(500, 100);
             await Task.Run(() =>
             {
