@@ -107,11 +107,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
                 .Select(x => x.ImagePath)
                 .ToList();
 
-            PicturePaths.Clear();
+            ObservableCollection<string> arr = [];
             foreach (var p in newPaths)
             {
-                PicturePaths.Add(p);
+                arr.Add(p);
             }
+            PicturePaths = arr;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
