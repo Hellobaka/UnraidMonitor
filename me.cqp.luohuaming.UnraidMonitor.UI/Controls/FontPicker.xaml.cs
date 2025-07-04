@@ -1,5 +1,6 @@
 ﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.UI.Converters;
+using me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;
 using Microsoft.Win32;
 using PropertyChanged;
 using SkiaSharp;
@@ -74,7 +75,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
             }
             Loading = true;
             FontPreviewPopup.IsOpen = true;
-            string font = CustomFont;
+            string font = string.IsNullOrEmpty(CustomFont)
+                ? DrawingStyle.GetThemeDefaultFont(WorkbenchViewModel.Instance.CurrentStyle.ItemTheme)
+                : CustomFont;
             using Painting painting = new(500, 100);
             await Task.Run(() =>
             {
