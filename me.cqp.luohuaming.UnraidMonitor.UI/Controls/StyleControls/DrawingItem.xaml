@@ -1,0 +1,159 @@
+﻿<UserControl
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.DrawingItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
+    xmlns:converter="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:items="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;assembly=me.cqp.luohuaming.UnraidMonitor.PublicInfos"
+    xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;assembly=me.cqp.luohuaming.UnraidMonitor.UI"
+    d:DataContext="{d:DesignInstance Type=model:DrawingItemBase,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="950"
+    d:DesignWidth="500"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
+        <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <converter:SingleToArraySourceConverter x:Key="SingleToArraySourceConverter" />
+        <DataTemplate x:Key="AlertTemplate">
+            <items:Alert DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ImageTemplate">
+            <items:Image DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ChartTemplate">
+            <items:Chart DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ProgressBarTemplate">
+            <items:ProgressBar DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ProgressRingTemplate">
+            <items:ProgressRing DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="RunningStatusTemplate">
+            <items:RunningStatus DataContext="{Binding}" />
+        </DataTemplate>
+        <DataTemplate x:Key="TextTemplate">
+            <items:Text DataContext="{Binding}" />
+        </DataTemplate>
+        <converter:DrawingItemSelector
+            x:Key="DrawingItemSelector"
+            Alert="{StaticResource AlertTemplate}"
+            Chart="{StaticResource ChartTemplate}"
+            Image="{StaticResource ImageTemplate}"
+            ProgressBar="{StaticResource ProgressBarTemplate}"
+            ProgressRing="{StaticResource ProgressRingTemplate}"
+            RunningStatus="{StaticResource RunningStatusTemplate}"
+            Text="{StaticResource TextTemplate}" />
+    </UserControl.Resources>
+
+    <Expander Background="{StaticResource RegionBrush}">
+        <Expander.Header>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Type, Converter={StaticResource EnumDescriptionConverter}}" />
+                <Ellipse
+                    Width="8"
+                    Height="8"
+                    Margin="5,0"
+                    Fill="{StaticResource PrimaryBrush}"
+                    Stroke="{StaticResource RegionBrush}"
+                    StrokeThickness="1"
+                    ToolTip="此控件已标记换行"
+                    Visibility="{Binding AfterNewLine, Converter={StaticResource Boolean2VisibilityConverter}}" />
+            </StackPanel>
+        </Expander.Header>
+        <hc:UniformSpacingPanel
+            Margin="16"
+            Orientation="Vertical"
+            Spacing="10">
+            <controls:ControlWithTitle Title="元素类型" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ComboBox ItemsSource="{Binding DataContext.ItemTypeValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}}" SelectedItem="{Binding Type, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="换行标记" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ToggleButton
+                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                    IsChecked="{Binding AfterNewLine, Mode=TwoWay}"
+                    Style="{StaticResource ToggleButtonSwitch}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="布局方式" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ComboBox ItemsSource="{Binding DataContext.LayoutTypeValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}}" SelectedItem="{Binding Layout, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="百分比占比" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <controls:ControlWithTitle.Style>
+                    <Style BasedOn="{StaticResource {x:Type controls:ControlWithTitle}}" TargetType="controls:ControlWithTitle">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Layout}" Value="Percentage">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:ControlWithTitle.Style>
+                <hc:NumericUpDown Maximum="100" Value="{Binding FillPercentage, Mode=TwoWay}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="固定宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <controls:ControlWithTitle.Style>
+                    <Style BasedOn="{StaticResource {x:Type controls:ControlWithTitle}}" TargetType="controls:ControlWithTitle">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Layout}" Value="FixedWidth">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:ControlWithTitle.Style>
+                <hc:NumericUpDown Value="{Binding FixedWidth, Mode=TwoWay}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="垂直对齐" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ComboBox ItemsSource="{Binding DataContext.PositionValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}}" SelectedItem="{Binding VerticalAlignment, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="外间距(Margin)" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <local:Margin Thickness="{Binding Margin}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="内间距(Padding)" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <local:Margin Thickness="{Binding Padding}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="自定义高度" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <hc:NumericUpDown Value="{Binding OverrideHeight}" />
+            </controls:ControlWithTitle>
+            <controls:ControlWithTitle Title="自定义主题" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ComboBox ItemsSource="{Binding DataContext.ThemeValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}, Converter={StaticResource EnumToItemsSourceConverter}}" SelectedItem="{Binding OverrideTheme, Mode=TwoWay}" />
+            </controls:ControlWithTitle>
+            <Expander Background="{StaticResource RegionBrush}" Header="自定义调色板">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <local:Palette Margin="16" Colors="{Binding OverridePalette}" />
+                </Border>
+            </Expander>
+
+            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource DrawingItemSelector}" />
+
+        </hc:UniformSpacingPanel>
+    </Expander>
+</UserControl>

@@ -33,6 +33,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             }
 
             ThemeIcon = (Geometry)Application.Current.FindResource("LightModeGeometry");
+            Instance = this;
         }
 
         public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
@@ -62,6 +63,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public Array LayoutTypeValues => Enum.GetValues(typeof(DrawingCanvas.Layout));
 
+        public Array ItemTypeValues => Enum.GetValues(typeof(DrawingItemBase.ItemType));
+
+        public Array PositionValues => Enum.GetValues(typeof(DrawingCanvas.Position));
+
         private Stack<(PropertyInfo property, object parent, object oldValue, object newValue)> ActionHistories { get; set; } = [];
 
         private int ActionCurrentIndex { get; set; }
@@ -89,6 +94,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
         public bool IsDarkMode { get; set; }
 
         public Geometry ThemeIcon { get; set; }
+      
+        public static WorkbenchViewModel Instance { get; private set; }
 
         public void ApplyMonitor()
         {

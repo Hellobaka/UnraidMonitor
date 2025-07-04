@@ -12,7 +12,7 @@
     xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;assembly=me.cqp.luohuaming.UnraidMonitor.UI"
     d:DataContext="{d:DesignInstance Type=model:DrawingCanvas,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="450"
+    d:DesignHeight="950"
     d:DesignWidth="400"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -21,7 +21,10 @@
         <converter:SingleToArraySourceConverter x:Key="SingleToArraySourceConverter" />
     </UserControl.Resources>
 
-    <Expander Background="{StaticResource RegionBrush}" Header="{Binding Name, StringFormat=画布 {0}}">
+    <Expander Background="{StaticResource RegionBrush}">
+        <Expander.Header>
+            <TextBlock Text="{Binding Name, StringFormat=画布 {0}}" />
+        </Expander.Header>
         <hc:UniformSpacingPanel
             Margin="16"
             Orientation="Vertical"
@@ -42,13 +45,13 @@
                         <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <ToggleButton
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                                IsChecked="{Binding DrawingTitle.HasTitle}"
+                                IsChecked="{Binding DrawingTitle.HasTitle, Mode=TwoWay}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="标题文本" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <TextBox Text="{Binding DrawingTitle.Text, Mode=TwoWay}" />
                         </controls:ControlWithTitle>
-                        <controls:ControlWithTitle Title="文本字体" TitleWidth="{StaticResource GlobalTitleWidth}">
+                        <controls:ControlWithTitle Title="文本自定义字体" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <controls:FontPicker CustomFont="{Binding DrawingTitle.OverrideFont}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="文本字体大小" TitleWidth="{StaticResource GlobalTitleWidth}">
@@ -60,20 +63,20 @@
                                 IsChecked="{Binding DrawingTitle.Bold}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
                         </controls:ControlWithTitle>
-                        <controls:ControlWithTitle Title="覆盖主题色" TitleWidth="{StaticResource GlobalTitleWidth}">
+                        <controls:ControlWithTitle Title="自定义主题色" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <controls:ColorPicker Color="{Binding DrawingTitle.OverrideColor}" />
                         </controls:ControlWithTitle>
-                        <controls:ControlWithTitle Title="覆盖主题渐变色" TitleWidth="{StaticResource GlobalTitleWidth}">
+                        <controls:ControlWithTitle Title="自定义主题渐变色" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <controls:ColorPicker Color="{Binding DrawingTitle.OverrideColor2}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="显示图标" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <ToggleButton
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                                IsChecked="{Binding DrawingTitle.HasIcon}"
+                                IsChecked="{Binding DrawingTitle.HasIcon, Mode=TwoWay}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="图标文件" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <controls:PicturePicker MultiSelect="False" PicturePaths="{Binding DrawingTitle.IconPath, Converter={StaticResource SingleToArraySourceConverter}}" />
+                            <controls:PicturePicker MultiSelect="False" PicturePaths="{Binding DrawingTitle.IconPath, Converter={StaticResource SingleToArraySourceConverter}, Mode=TwoWay}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="图标尺寸" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <local:Size SKSize="{Binding DrawingTitle.IconSize}" />
@@ -100,7 +103,7 @@
                         <controls:ControlWithTitle Title="显示边框" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <ToggleButton
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                                IsChecked="{Binding DrawingBorder.HasBorder}"
+                                IsChecked="{Binding DrawingBorder.HasBorder, Mode=TwoWay}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="边框宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
@@ -159,9 +162,27 @@
             <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <ToggleButton
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                    IsChecked="{Binding LayoutDebug}"
+                    IsChecked="{Binding LayoutDebug, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />
             </controls:ControlWithTitle>
+
+            <Expander Background="{StaticResource RegionBrush}" Header="子控件">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <ItemsControl ItemsSource="{Binding Content}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:DrawingItem Margin="5,0" DataContext="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </Border>
+
+            </Expander>
         </hc:UniformSpacingPanel>
     </Expander>
 </UserControl>

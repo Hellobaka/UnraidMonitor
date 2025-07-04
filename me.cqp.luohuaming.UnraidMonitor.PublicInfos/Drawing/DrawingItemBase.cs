@@ -9,12 +9,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
     {
         public enum ItemType
         {
+            [Description("文本块")]
             Text,
+           
+            [Description("进度条")]
             ProgressBar,
+           
+            [Description("进度环")]
             ProgressRing,
+           
+            [Description("图表")]
             Chart,
+            
+            [Description("信息块")]
             Alert,
+           
+            [Description("图片")]
             Image,
+            
+            [Description("双行状态块")]
             RunningStatus
         }
 

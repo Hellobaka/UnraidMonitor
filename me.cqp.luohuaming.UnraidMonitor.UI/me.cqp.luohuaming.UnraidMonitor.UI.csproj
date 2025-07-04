@@ -127,6 +127,30 @@
     <Compile Include="Controls\StyleControls\Canvas.xaml.cs">
       <DependentUpon>Canvas.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\StyleControls\DrawingItem.xaml.cs">
+      <DependentUpon>DrawingItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\Alert.xaml.cs">
+      <DependentUpon>Alert.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\Chart.xaml.cs">
+      <DependentUpon>Chart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\Image.xaml.cs">
+      <DependentUpon>Image.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\ProgressBar.xaml.cs">
+      <DependentUpon>ProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\ProgressRing.xaml.cs">
+      <DependentUpon>ProgressRing.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\RunningStatus.xaml.cs">
+      <DependentUpon>RunningStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StyleControls\Items\Text.xaml.cs">
+      <DependentUpon>Text.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StyleControls\Size.xaml.cs">
       <DependentUpon>Size.xaml</DependentUpon>
     </Compile>
@@ -143,6 +167,7 @@
       <DependentUpon>StylePropertyEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ControlWithTitle.cs" />
+    <Compile Include="Converters\DrawingItemSelector.cs" />
     <Compile Include="Converters\EnumToItemsSourceConverter.cs" />
     <Compile Include="Converters\SKImageToImageSource.cs" />
     <Compile Include="Models\PictureItem.cs" />
@@ -182,6 +207,38 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\StyleControls\Canvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\DrawingItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\Alert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\Chart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\Image.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\ProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\ProgressRing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\RunningStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StyleControls\Items\Text.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
