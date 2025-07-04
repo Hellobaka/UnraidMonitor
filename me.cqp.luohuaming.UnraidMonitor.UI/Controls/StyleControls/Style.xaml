@@ -75,7 +75,7 @@
                         BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="1,0,1,1"
                         CornerRadius="0,0,4,4">
-                        <controls:PicturePicker MultiSelect="True" PicturePaths="{Binding CurrentStyle.BackgroundImages}" />
+                        <controls:PicturePicker MultiSelect="True" PicturePaths="{Binding CurrentStyle.BackgroundImages, Mode=TwoWay}" />
                     </Border>
                 </Expander>
                 <controls:ControlWithTitle Title="背景图片绘制模式" TitleWidth="{StaticResource GlobalTitleWidth}">
@@ -108,7 +108,7 @@
                 <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
                     <ToggleButton
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                        IsChecked="{Binding CurrentStyle.LayoutDebug}"
+                        IsChecked="{Binding CurrentStyle.LayoutDebug, Mode=TwoWay}"
                         Style="{StaticResource ToggleButtonSwitch}" />
                 </controls:ControlWithTitle>
             </hc:UniformSpacingPanel>
