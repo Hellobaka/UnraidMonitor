@@ -25,7 +25,7 @@
             <TextBox Text="{Binding Title, Mode=TwoWay}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="标题字体粗体" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding IsTitleBold, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -34,7 +34,7 @@
             <hc:NumericUpDown Maximum="100" Value="{Binding TextSize}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="展示运行状态" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding RunningStatusHasIcon, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -44,7 +44,7 @@
             Title="正在运行状态"
             TitleWidth="{StaticResource GlobalTitleWidth}"
             Visibility="{Binding RunningStatusHasIcon, Converter={StaticResource Boolean2VisibilityConverter}}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding Running, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -56,7 +56,7 @@
             <TextBox Text="{Binding NotRunningText, Mode=TwoWay}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="展示图标" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding HasImage, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />

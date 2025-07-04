@@ -40,7 +40,7 @@
             <TextBox Text="{Binding Header, Mode=TwoWay}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="提示块标题粗体" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding IsHeaderBold, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />

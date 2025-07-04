@@ -62,7 +62,7 @@
                     <ComboBoxItem>Unraid</ComboBoxItem>
                 </ComboBox>
                 <TextBlock Margin="10,0" VerticalAlignment="Center">深色模式</TextBlock>
-                <ToggleButton
+                <ToggleButton HorizontalAlignment="Left"
                     x:Name="PaletteTemplateDarkMode"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     Style="{StaticResource ToggleButtonSwitch}" />

@@ -20,25 +20,25 @@
             <hc:NumericUpDown Value="{Binding Max}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="显示横向坐标线" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ShowHorizonGridLine, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="显示纵向坐标线" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ShowVerticalGridLine, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="显示 X 轴数值" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ShowHorizonValue, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
         </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="显示 Y 轴数值" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <ToggleButton
+            <ToggleButton HorizontalAlignment="Left"
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding ShowVerticalValue, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
