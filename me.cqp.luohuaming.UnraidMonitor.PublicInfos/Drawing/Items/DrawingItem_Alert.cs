@@ -2,8 +2,6 @@
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Icons;
 using SkiaSharp;
 using System;
-using static System.Net.Mime.MediaTypeNames;
-using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {

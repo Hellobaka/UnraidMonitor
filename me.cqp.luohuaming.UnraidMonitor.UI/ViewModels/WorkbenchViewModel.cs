@@ -67,6 +67,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public Array PositionValues => Enum.GetValues(typeof(DrawingCanvas.Position));
 
+        public Array AlertTypeValues => Enum.GetValues(typeof(DrawingCanvas.AlertType));
+
         private Stack<(PropertyInfo property, object parent, object oldValue, object newValue)> ActionHistories { get; set; } = [];
 
         private int ActionCurrentIndex { get; set; }

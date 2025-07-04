@@ -32,7 +32,17 @@
             <controls:ControlWithTitle Title="画布名称" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <TextBox Text="{Binding Name, Mode=TwoWay}" />
             </controls:ControlWithTitle>
-            <Expander Background="{StaticResource RegionBrush}" Header="画布标题">
+            <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ToggleButton
+                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                    IsChecked="{Binding DrawingTitle.HasTitle, Mode=TwoWay}"
+                    Style="{StaticResource ToggleButtonSwitch}" />
+            </controls:ControlWithTitle>
+
+            <Expander
+                Background="{StaticResource RegionBrush}"
+                Header="画布标题"
+                Visibility="{Binding DrawingTitle.HasTitle, Converter={StaticResource Boolean2VisibilityConverter}}">
                 <Border
                     Background="{DynamicResource RegionBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
@@ -42,12 +52,6 @@
                         Margin="16"
                         Orientation="Vertical"
                         Spacing="10">
-                        <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <ToggleButton
-                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                                IsChecked="{Binding DrawingTitle.HasTitle, Mode=TwoWay}"
-                                Style="{StaticResource ToggleButtonSwitch}" />
-                        </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="标题文本" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <TextBox Text="{Binding DrawingTitle.Text, Mode=TwoWay}" />
                         </controls:ControlWithTitle>
@@ -75,13 +79,22 @@
                                 IsChecked="{Binding DrawingTitle.HasIcon, Mode=TwoWay}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
                         </controls:ControlWithTitle>
-                        <controls:ControlWithTitle Title="图标文件" TitleWidth="{StaticResource GlobalTitleWidth}">
+                        <controls:ControlWithTitle
+                            Title="图标文件"
+                            TitleWidth="{StaticResource GlobalTitleWidth}"
+                            Visibility="{Binding DrawingTitle.HasIcon, Converter={StaticResource Boolean2VisibilityConverter}}">
                             <controls:PicturePicker MultiSelect="False" PicturePaths="{Binding DrawingTitle.IconPath, Converter={StaticResource SingleToArraySourceConverter}, Mode=TwoWay}" />
                         </controls:ControlWithTitle>
-                        <controls:ControlWithTitle Title="图标尺寸" TitleWidth="{StaticResource GlobalTitleWidth}">
+                        <controls:ControlWithTitle
+                            Title="图标尺寸"
+                            TitleWidth="{StaticResource GlobalTitleWidth}"
+                            Visibility="{Binding DrawingTitle.HasIcon, Converter={StaticResource Boolean2VisibilityConverter}}">
                             <local:Size SKSize="{Binding DrawingTitle.IconSize}" />
                         </controls:ControlWithTitle>
-                        <controls:ControlWithTitle Title="图标间距" TitleWidth="{StaticResource GlobalTitleWidth}">
+                        <controls:ControlWithTitle
+                            Title="图标间距"
+                            TitleWidth="{StaticResource GlobalTitleWidth}"
+                            Visibility="{Binding DrawingTitle.HasIcon, Converter={StaticResource Boolean2VisibilityConverter}}">
                             <local:Margin Thickness="{Binding DrawingTitle.IconMargin}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="标题与底部间距" TitleWidth="{StaticResource GlobalTitleWidth}">
@@ -90,7 +103,17 @@
                     </hc:UniformSpacingPanel>
                 </Border>
             </Expander>
-            <Expander Background="{StaticResource RegionBrush}" Header="画布边框">
+            <controls:ControlWithTitle Title="显示边框" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <ToggleButton
+                    hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                    IsChecked="{Binding DrawingBorder.HasBorder, Mode=TwoWay}"
+                    Style="{StaticResource ToggleButtonSwitch}" />
+            </controls:ControlWithTitle>
+
+            <Expander
+                Background="{StaticResource RegionBrush}"
+                Header="画布边框"
+                Visibility="{Binding DrawingBorder.HasBorder, Converter={StaticResource Boolean2VisibilityConverter}}">
                 <Border
                     Background="{DynamicResource RegionBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
@@ -100,12 +123,6 @@
                         Margin="16"
                         Orientation="Vertical"
                         Spacing="10">
-                        <controls:ControlWithTitle Title="显示边框" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <ToggleButton
-                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                                IsChecked="{Binding DrawingBorder.HasBorder, Mode=TwoWay}"
-                                Style="{StaticResource ToggleButtonSwitch}" />
-                        </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="边框宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
                             <hc:NumericUpDown Maximum="100" Value="{Binding DrawingBorder.BorderWidth}" />
                         </controls:ControlWithTitle>

@@ -151,9 +151,7 @@
                     <local:Palette Margin="16" Colors="{Binding OverridePalette}" />
                 </Border>
             </Expander>
-
             <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource DrawingItemSelector}" />
-
         </hc:UniformSpacingPanel>
     </Expander>
 </UserControl>
