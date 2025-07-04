@@ -180,7 +180,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 {
                     var textCenter = new SKPoint(startPoint.X + desireWidth / 2, startPoint.Y + Radius);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);
-                    painting.DrawText(DisplayValue, Painting.Anywhere, textStartPoint, SKColor.Parse(palette.TextColor), null, HeaderFontSize, font, HeaderFontBold);
+                    painting.DrawText(DisplayValue, Painting.Anywhere, textStartPoint, SKColor.Parse(palette.TextColor), null, ValueFontSize, font, ValueFontBold);
                 }
             }
 
