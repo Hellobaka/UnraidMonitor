@@ -2,13 +2,131 @@
     x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items.ProgressRing"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
+    xmlns:converter="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:items="clr-namespace:me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items;assembly=me.cqp.luohuaming.UnraidMonitor.PublicInfos"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
+    xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
+    d:DataContext="{d:DesignInstance Type=items:DrawingItem_ProgressRing}"
+    d:DesignHeight="750"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <TextBlock>ProgressRing</TextBlock>
-    </Grid>
+    <UserControl.Resources>
+        <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
+        <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <converter:SingleToArraySourceConverter x:Key="SingleToArraySourceConverter" />
+    </UserControl.Resources>
+
+    <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+        <controls:ControlWithTitle Title="最小值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding Min}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="最大值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding Max}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="当前值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding Value}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="画笔宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding StrokeWidth}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="圆头画笔" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding IsRounded, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="圆头宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Maximum="100" Value="{Binding Radius}" />
+        </controls:ControlWithTitle>
+
+        <controls:ControlWithTitle Title="透明背景" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding TransparentBackground, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="显示数值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ShowValue, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="数值位置"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowValue, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <ComboBox ItemsSource="{Binding DataContext.PositionValues, RelativeSource={RelativeSource AncestorType=vm:Style, Mode=FindAncestor}}" SelectedItem="{Binding ValuePosition, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="数值内容"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowValue, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <TextBox Text="{Binding DisplayValue, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="数值字体大小"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowValue, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <hc:NumericUpDown Maximum="100" Value="{Binding ValueFontSize}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="数值字体粗体"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowValue, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ValueFontBold, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+
+        <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ShowHeader, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="标题位置"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowHeader, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <ComboBox ItemsSource="{Binding DataContext.PositionValues, RelativeSource={RelativeSource AncestorType=vm:Style, Mode=FindAncestor}}" SelectedItem="{Binding HeaderPosition, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="标题内容"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowHeader, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <TextBox Text="{Binding Header, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="标题字体大小"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowHeader, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <hc:NumericUpDown Maximum="100" Value="{Binding HeaderFontSize}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle
+            Title="标题字体粗体"
+            TitleWidth="{StaticResource GlobalTitleWidth}"
+            Visibility="{Binding ShowHeader, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding HeaderFontBold, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+    </hc:UniformSpacingPanel>
 </UserControl>

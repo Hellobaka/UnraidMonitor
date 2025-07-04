@@ -2,13 +2,62 @@
     x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items.Chart"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:items="clr-namespace:me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items;assembly=me.cqp.luohuaming.UnraidMonitor.PublicInfos"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=items:DrawingItem_Chart}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <TextBlock>Chart</TextBlock>
-    </Grid>
+    <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+        <controls:ControlWithTitle Title="Y 轴最小值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding Min}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="Y 轴最大值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding Max}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="显示横向坐标线" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ShowHorizonGridLine, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="显示纵向坐标线" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ShowVerticalGridLine, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="显示 X 轴数值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ShowHorizonValue, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="显示 Y 轴数值" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ToggleButton
+                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                IsChecked="{Binding ShowVerticalValue, Mode=TwoWay}"
+                Style="{StaticResource ToggleButtonSwitch}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="Y 轴数值数量" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding VerticalValueDisplayCount}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="X 轴数值数量" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding HorizonValueDisplayCount}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="时间自定义格式" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <TextBox Text="{Binding OverrideFormat, Mode=TwoWay}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="自定义字体" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <controls:FontPicker CustomFont="{Binding OverrideFont}" />
+        </controls:ControlWithTitle>
+        <controls:ControlWithTitle Title="文本字体大小" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Maximum="100" Value="{Binding TextSize}" />
+        </controls:ControlWithTitle>
+
+    </hc:UniformSpacingPanel>
 </UserControl>
