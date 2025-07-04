@@ -24,5 +24,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
         {
             InitializeComponent();
         }
+
+        private void OpenContextMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ItemContextMenu.PlacementTarget = sender as Button;
+            ItemContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            ItemContextMenu.IsOpen = true;
+        }
     }
 }

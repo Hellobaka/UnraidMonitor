@@ -18,9 +18,29 @@
         <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
         <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
     </UserControl.Resources>
-    <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+    <hc:UniformSpacingPanel
+        VerticalAlignment="Stretch"
+        Orientation="Vertical"
+        Spacing="10">
+        <Expander Background="{StaticResource RegionBrush}">
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        VerticalAlignment="Center"
+                        hc:IconElement.Geometry="{StaticResource AlignHStretchGeometry}"
+                        Click="OpenContextMenu_Click"
+                        Style="{StaticResource ButtonIcon}" />
+                    <TextBlock VerticalAlignment="Center" Text="基础设置" />
+                </StackPanel>
+            </Expander.Header>
 
-        <Expander Background="{StaticResource RegionBrush}" Header="基础设置">
+            <Expander.ContextMenu>
+                <ContextMenu Name="StyleContextMenu">
+                    <MenuItem Header="新建画布" />
+                    <MenuItem Header="折叠所有画布" />
+                    <MenuItem Header="展开所有画布" />
+                </ContextMenu>
+            </Expander.ContextMenu>
             <hc:UniformSpacingPanel
                 Margin="16"
                 Orientation="Vertical"
@@ -42,7 +62,7 @@
                     <ComboBox ItemsSource="{Binding ThemeValues, Converter={StaticResource EnumToItemsSourceConverter}}" SelectedItem="{Binding CurrentStyle.ItemTheme, Mode=TwoWay}" />
                 </controls:ControlWithTitle>
                 <controls:ControlWithTitle Title="深色模式" TitleWidth="{StaticResource GlobalTitleWidth}">
-                    <ToggleButton
+                    <ToggleButton HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                         IsChecked="True"
                         Style="{StaticResource ToggleButtonSwitch}" />
@@ -106,7 +126,7 @@
                     </Border>
                 </Expander>
                 <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
-                    <ToggleButton
+                    <ToggleButton HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                         IsChecked="{Binding CurrentStyle.LayoutDebug, Mode=TwoWay}"
                         Style="{StaticResource ToggleButtonSwitch}" />

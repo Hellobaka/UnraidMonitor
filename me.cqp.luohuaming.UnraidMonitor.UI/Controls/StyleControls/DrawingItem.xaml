@@ -55,11 +55,17 @@
     <Expander Background="{StaticResource RegionBrush}">
         <Expander.Header>
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Type, Converter={StaticResource EnumDescriptionConverter}}" />
+                <Button
+                    VerticalAlignment="Center"
+                    hc:IconElement.Geometry="{StaticResource AlignHStretchGeometry}"
+                    Click="OpenContextMenu_Click"
+                    Style="{StaticResource ButtonIcon}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Type, Converter={StaticResource EnumDescriptionConverter}}" />
                 <Ellipse
                     Width="8"
                     Height="8"
                     Margin="5,0"
+                    VerticalAlignment="Center"
                     Fill="{StaticResource PrimaryBrush}"
                     Stroke="{StaticResource RegionBrush}"
                     StrokeThickness="1"
@@ -67,6 +73,13 @@
                     Visibility="{Binding AfterNewLine, Converter={StaticResource Boolean2VisibilityConverter}}" />
             </StackPanel>
         </Expander.Header>
+        <Expander.ContextMenu>
+            <ContextMenu Name="ItemContextMenu">
+                <MenuItem Header="删除控件" />
+                <MenuItem Header="复制控件" />
+                <MenuItem Header="清除所有绑定" />
+            </ContextMenu>
+        </Expander.ContextMenu>
         <hc:UniformSpacingPanel
             Margin="16"
             Orientation="Vertical"
@@ -82,6 +95,7 @@
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="换行标记" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <ToggleButton
+                    HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding AfterNewLine, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />

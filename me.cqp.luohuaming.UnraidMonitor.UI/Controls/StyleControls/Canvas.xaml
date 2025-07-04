@@ -23,8 +23,33 @@
 
     <Expander Background="{StaticResource RegionBrush}">
         <Expander.Header>
-            <TextBlock Text="{Binding Name, StringFormat=画布 {0}}" />
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    VerticalAlignment="Center"
+                    hc:IconElement.Geometry="{StaticResource AlignHStretchGeometry}"
+                    Click="OpenContextMenu_Click"
+                    Style="{StaticResource ButtonIcon}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Name, StringFormat=画布 {0}}" />
+            </StackPanel>
         </Expander.Header>
+        <Expander.ContextMenu>
+            <ContextMenu Name="CanvasContextMenu">
+                <MenuItem Header="新建控件">
+                    <MenuItem Header="文本块" />
+                    <MenuItem Header="进度条" />
+                    <MenuItem Header="进度环" />
+                    <MenuItem Header="图表" />
+                    <MenuItem Header="信息块" />
+                    <MenuItem Header="图片" />
+                    <MenuItem Header="双行状态块" />
+                </MenuItem>
+                <MenuItem Header="折叠所有控件" />
+                <MenuItem Header="展开所有控件" />
+                <Separator />
+                <MenuItem Header="复制画布" />
+                <MenuItem Header="删除画布" />
+            </ContextMenu>
+        </Expander.ContextMenu>
         <hc:UniformSpacingPanel
             Margin="16"
             Orientation="Vertical"
@@ -33,7 +58,7 @@
                 <TextBox Text="{Binding Name, Mode=TwoWay}" />
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="显示标题" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton
+                <ToggleButton HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding DrawingTitle.HasTitle, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />
@@ -62,7 +87,7 @@
                             <hc:NumericUpDown Maximum="100" Value="{Binding DrawingTitle.TextSize}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="文本字体粗体" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <ToggleButton
+                            <ToggleButton HorizontalAlignment="Left"
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                                 IsChecked="{Binding DrawingTitle.Bold}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -74,7 +99,7 @@
                             <controls:ColorPicker Color="{Binding DrawingTitle.OverrideColor2}" />
                         </controls:ControlWithTitle>
                         <controls:ControlWithTitle Title="显示图标" TitleWidth="{StaticResource GlobalTitleWidth}">
-                            <ToggleButton
+                            <ToggleButton HorizontalAlignment="Left"
                                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                                 IsChecked="{Binding DrawingTitle.HasIcon, Mode=TwoWay}"
                                 Style="{StaticResource ToggleButtonSwitch}" />
@@ -104,7 +129,7 @@
                 </Border>
             </Expander>
             <controls:ControlWithTitle Title="显示边框" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton
+                <ToggleButton HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding DrawingBorder.HasBorder, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />
@@ -177,7 +202,7 @@
                 <hc:NumericUpDown Value="{Binding FixedWidth, Mode=TwoWay}" />
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="显示布局线" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ToggleButton
+                <ToggleButton HorizontalAlignment="Left"
                     hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                     IsChecked="{Binding LayoutDebug, Mode=TwoWay}"
                     Style="{StaticResource ToggleButtonSwitch}" />
@@ -196,9 +221,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
                 </Border>
-
             </Expander>
         </hc:UniformSpacingPanel>
     </Expander>
