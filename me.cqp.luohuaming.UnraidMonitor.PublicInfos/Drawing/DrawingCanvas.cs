@@ -2,6 +2,7 @@
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -114,7 +115,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         public Layout DrawingLayout { get; set; } = Layout.Percentage;
 
-        public virtual DrawingItemBase[] Content { get; set; } = [];
+        public virtual ObservableCollection<DrawingItemBase> Content { get; set; } = [];
 
         /// <summary>
         /// 若绘制边框, 则使用的圆角
@@ -426,7 +427,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public DrawingCanvas Clone()
         {
-            var canvas = JsonConvert.SerializeObject(this);
+            var canvas = JsonConvert.SerializeObject(this, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented,
+            });
             return JsonConvert.DeserializeObject<DrawingCanvas>(canvas);
         }
     }

@@ -47,12 +47,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
 
         private void CollapseAllCanvas_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (var item in CanvasContainer.Items)
+            {
+                if (CanvasContainer.ItemContainerGenerator.ContainerFromItem(item) is ContentPresenter contentPresenter)
+                {
+                    var canvas = MainWindow.FindVisualChild<Canvas>(contentPresenter);
+                    if (canvas != null)
+                    {
+                        canvas.CanvasExpander.IsExpanded = false;
+                    }
+                }
+            }
         }
 
         private void ExpandAllCanvas_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (var item in CanvasContainer.Items)
+            {
+                if (CanvasContainer.ItemContainerGenerator.ContainerFromItem(item) is ContentPresenter contentPresenter)
+                {
+                    var canvas = MainWindow.FindVisualChild<Canvas>(contentPresenter);
+                    if (canvas != null)
+                    {
+                        canvas.CanvasExpander.IsExpanded = true;
+                    }
+                }
+            }
         }
     }
 }

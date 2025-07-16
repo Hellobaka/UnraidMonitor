@@ -52,7 +52,10 @@
             Text="{StaticResource TextTemplate}" />
     </UserControl.Resources>
 
-    <Expander x:Name="DrawingItemExpander" Background="{StaticResource RegionBrush}">
+    <Expander
+        x:Name="DrawingItemExpander"
+        Background="{StaticResource RegionBrush}"
+        IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
         <Expander.Header>
             <StackPanel Orientation="Horizontal">
                 <Button

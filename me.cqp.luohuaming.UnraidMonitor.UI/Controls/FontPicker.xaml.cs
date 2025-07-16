@@ -75,9 +75,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls
                 return;
             }
             Loading = true;
+            if (Window.GetWindow(this)?.DataContext is not WorkbenchViewModel vm)
+            {
+                MainWindow.ShowError("无法获取主 ViewModel");
+                Loading = false;
+                return;
+            }
             FontPreviewPopup.IsOpen = true;
             string font = string.IsNullOrEmpty(CustomFont)
-                ? DrawingStyle.GetThemeDefaultFont(WorkbenchViewModel.Instance.CurrentStyle.ItemTheme)
+                ? DrawingStyle.GetThemeDefaultFont(vm.CurrentStyle.ItemTheme)
                 : Path.Combine(MainSave.AppDirectory, CustomFont);
             using Painting painting = new(500, 100);
             await Task.Run(() =>

@@ -12,13 +12,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : HandyControl.Controls.Window, INotifyPropertyChanged
     {
         public MainWindow()
         {
@@ -221,6 +223,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             });
 
             return tcs.Task;
+        }
+
+        public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is T t)
+                    return t;
+                else
+                {
+                    T childOfChild = FindVisualChild<T>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
         }
 
         private async void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)

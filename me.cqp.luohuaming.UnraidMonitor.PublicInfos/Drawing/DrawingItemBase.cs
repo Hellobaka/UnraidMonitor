@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PropertyChanged;
 using SkiaSharp;
 using System.ComponentModel;
 using System.Reflection;
@@ -72,6 +73,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         [JsonIgnore]
         public SKRect Boundary { get; set; }
+
+        [JsonIgnore]
+        [DoNotNotify]
+        public bool IsExpanded { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;

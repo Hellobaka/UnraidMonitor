@@ -42,12 +42,14 @@
                     <MenuItem Click="CreateItem_Alert_Click" Header="信息块" />
                     <MenuItem Click="CreateItem_Image_Click" Header="图片" />
                     <MenuItem Click="CreateItem_RunningStatus_Click" Header="双行状态块" />
+                    <Separator />
+                    <MenuItem Click="CreateItem_RunningStatus_Click" Header="从模板创建" />
                 </MenuItem>
                 <MenuItem Click="CollapseAllItems_Click" Header="折叠所有控件" />
                 <MenuItem Click="ExpandAllItems_Click" Header="展开所有控件" />
                 <Separator />
-                <MenuItem Click="DuplicateCanvasWithItems_Click" Header="复制画布（不带控件）" />
-                <MenuItem Click="DuplicateCanvas_Click" Header="复制画布（带控件）" />
+                <MenuItem Click="DuplicateCanvasWithItems_Click" Header="复制画布（带控件）" />
+                <MenuItem Click="DuplicateCanvas_Click" Header="复制画布（不带控件）" />
                 <MenuItem Click="DeleteCanvas_Click" Header="删除画布" />
             </ContextMenu>
         </Expander.ContextMenu>
@@ -214,19 +216,52 @@
                     Style="{StaticResource ToggleButtonSwitch}" />
             </controls:ControlWithTitle>
 
-            <Expander Background="{StaticResource RegionBrush}" Header="子控件">
+            <Expander
+                x:Name="DrawingItemExpander"
+                Background="{StaticResource RegionBrush}"
+                Header="子控件">
                 <Border
                     Background="{DynamicResource RegionBrush}"
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,4,4">
-                    <ItemsControl ItemsSource="{Binding Content}">
-                        <ItemsControl.ItemTemplate>
+                    <ListBox
+                        x:Name="DrawingItemContainer"
+                        MaxHeight="500"
+                        ItemsSource="{Binding Content}"
+                        ScrollViewer.CanContentScroll="True"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <local:DrawingItem Margin="5,0" DataContext="{Binding}" />
+                                <local:DrawingItem
+                                    Margin="5,0"
+                                    CurrentCanvas="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    DataContext="{Binding}" />
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
                 </Border>
             </Expander>
         </hc:UniformSpacingPanel>

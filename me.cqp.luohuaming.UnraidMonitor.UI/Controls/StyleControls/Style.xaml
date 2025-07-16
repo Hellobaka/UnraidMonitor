@@ -135,7 +135,7 @@
                 </controls:ControlWithTitle>
             </hc:UniformSpacingPanel>
         </Expander>
-        <ItemsControl ItemsSource="{Binding CurrentStyle.Content}">
+        <ItemsControl x:Name="CanvasContainer" ItemsSource="{Binding CurrentStyle.Content}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <local:Canvas DataContext="{Binding}" />

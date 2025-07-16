@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
 {
@@ -25,6 +14,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             InitializeComponent();
         }
 
+        public DrawingCanvas CurrentCanvas
+        {
+            get { return (DrawingCanvas)GetValue(CurrentCanvasProperty); }
+            set { SetValue(CurrentCanvasProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentCanvasProperty =
+            DependencyProperty.Register("CurrentCanvas", typeof(DrawingCanvas), typeof(DrawingItem), new PropertyMetadata(null));
+
+        public DrawingItemBase CurrentItem => DataContext as DrawingItemBase;
+
         private void OpenContextMenu_Click(object sender, RoutedEventArgs e)
         {
             ItemContextMenu.PlacementTarget = sender as Button;
@@ -34,12 +34,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
 
         private void DuplicateItem_Click(object sender, RoutedEventArgs e)
         {
-
+            var newItem = CurrentItem.Clone();
+            CurrentCanvas.Content.Add(newItem);
         }
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
         {
-
+            if (CurrentCanvas.Content.Contains(CurrentItem))
+            {
+                CurrentCanvas.Content.Remove(CurrentItem);
+            }
+            else
+            {
+                MainWindow.ShowError("当前项不在画布中，无法删除");
+            }
         }
 
         private void ClearBinding_Click(object sender, RoutedEventArgs e)
