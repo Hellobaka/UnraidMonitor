@@ -167,6 +167,8 @@
     <Compile Include="Converters\DrawingItemSelector.cs" />
     <Compile Include="Converters\EnumToItemsSourceConverter.cs" />
     <Compile Include="Converters\SKImageToImageSource.cs" />
+    <Compile Include="Models\DisplayKeyValuePair.cs" />
+    <Compile Include="Models\FlatMultiBindingItem.cs" />
     <Compile Include="Models\PictureItem.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\StyleCommandWrapper.cs" />
@@ -174,8 +176,17 @@
     <Compile Include="Models\Validations.cs" />
     <Compile Include="ViewModels\AddOrUpdateStyleCommandViewModel.cs" />
     <Compile Include="ViewModels\WorkbenchViewModel.cs" />
+    <Compile Include="Windows\BindingConditionEditor.xaml.cs">
+      <DependentUpon>BindingConditionEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BindingEditor.xaml.cs">
+      <DependentUpon>BindingEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CreateStyle.xaml.cs">
       <DependentUpon>CreateStyle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MultiBindingEditor.xaml.cs">
+      <DependentUpon>MultiBindingEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -272,7 +283,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\BindingConditionEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BindingEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CreateStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MultiBindingEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

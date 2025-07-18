@@ -13,13 +13,13 @@
     xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.ViewModels;assembly=me.cqp.luohuaming.UnraidMonitor.UI"
     d:DataContext="{d:DesignInstance Type=model:DrawingItemBase,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="950"
     d:DesignWidth="500"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
         <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
         <converter:SingleToArraySourceConverter x:Key="SingleToArraySourceConverter" />
+        <converter:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
         <DataTemplate x:Key="AlertTemplate">
             <items:Alert DataContext="{Binding}" />
         </DataTemplate>
@@ -74,13 +74,25 @@
                     StrokeThickness="1"
                     ToolTip="此控件已标记换行"
                     Visibility="{Binding AfterNewLine, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <Ellipse
+                    Width="8"
+                    Height="8"
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    Fill="{StaticResource SuccessBrush}"
+                    Stroke="{StaticResource RegionBrush}"
+                    StrokeThickness="1"
+                    ToolTip="此控件拥有绑定"
+                    Visibility="{Binding Binding, Converter={StaticResource ObjectToVisibilityConverter}}" />
             </StackPanel>
         </Expander.Header>
         <Expander.ContextMenu>
             <ContextMenu Name="ItemContextMenu">
                 <MenuItem Click="DeleteItem_Click" Header="删除控件" />
                 <MenuItem Click="DuplicateItem_Click" Header="复制控件" />
-                <MenuItem Click="ClearBinding_Click" Header="清除所有绑定" />
+                <Separator />
+                <MenuItem Click="ClearBinding_Click" Header="清除绑定" />
+                <MenuItem Click="SetBinding_Click" Header="设置绑定" />
             </ContextMenu>
         </Expander.ContextMenu>
         <hc:UniformSpacingPanel

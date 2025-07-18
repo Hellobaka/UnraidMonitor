@@ -10,7 +10,6 @@
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance Type=items:DrawingItem_ProgressBar}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -12,98 +13,148 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
     public enum NumberConverter
     {
+        [Description("无")]
         None,
+
+        [Description("B 至 TB")]
         BytesToTB,
+
+        [Description("B 至 GB")]
         BytesToGB,
+
+        [Description("B 至 MB")]
         BytesToMB,
+
+        [Description("B 至 KB")]
         BytesToKB,
     }
 
     public enum ValueType
     {
+        [Description("即时")]
         Instant,
 
+        [Description("最大值")]
         Max,
 
+        [Description("最小值")]
         Min,
 
+        [Description("平均值")]
         Avg,
 
+        [Description("加合")]
         Sum,
 
+        [Description("计数")]
         Count,
 
+        [Description("差异_平均值")]
         Diff,
 
+        [Description("差异_最大值")]
         DiffMax,
 
+        [Description("差异_最小值")]
         DiffMin,
     }
 
     public enum ItemType
     {
+        [Description("未设定")]
+        Unknown,
+
+        [Description("CPU 信息")]
         CpuInfo,
 
+        [Description("CPU 占用率")]
         CpuUsage,
 
+        [Description("磁盘占用率")]
         DiskInfo,
 
+        [Description("分区")]
         DiskMountInfo,
 
+        [Description("SMART 信息")]
         DiskSmartInfo,
 
+        [Description("Docker")]
         Dockers,
 
+        [Description("风扇")]
         FanInfo,
 
+        [Description("内存占用率")]
         MemoryInfo,
 
+        [Description("主板信息")]
         MotherboardInfo,
 
+        [Description("网络信息")]
         NetworkInterfaceInfo,
 
+        [Description("网络流量")]
         NetworkTrafficInfo,
 
+        [Description("系统提醒")]
         Notification,
 
+        [Description("系统信息")]
         SystemInfo,
 
+        [Description("系统启动时长")]
         SystemUptime,
 
+        [Description("温度信息")]
         TemperatureInfo,
 
+        [Description("UPS 状态")]
         UPSStatus,
 
+        [Description("虚拟机信息")]
         VirtualMachine,
 
+        [Description("无定义")]
         Custom,
     }
 
     public enum BoolCondition
     {
+        [Description("大于等于")]
         GTE,
 
+        [Description("小于等于")]
         LTE,
 
+        [Description("大于")]
         GT,
 
+        [Description("小于")]
         LT,
 
+        [Description("等于")]
         EQ
     }
 
     public enum TimeRange
     {
+        [Description("秒")]
         Second,
 
+        [Description("分钟")]
         Minute,
 
+        [Description("小时")]
         Hour,
 
+        [Description("天")]
         Day,
 
+        [Description("月")]
         Month,
 
+        [Description("年")]
         Year
     }
 
@@ -114,11 +165,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <summary>
         /// 绑定的路径，格式为：{"Item属性": "Model属性"}
         /// </summary>
-        public Dictionary<string, MultipleBinding[]> BindingPath { get; set; } = [];
+        public Dictionary<string, List<MultipleBinding>> BindingPath { get; set; } = [];
 
-        public Dictionary<string, string> Conditions { get; set; }
+        public Dictionary<string, string> Conditions { get; set; } = [];
 
-        public Dictionary<string, BindingResult> Value { get; set; }
+        public Dictionary<string, BindingResult> Value { get; set; } = [];
 
         public string StringFormat { get; set; } = "";
 
@@ -152,9 +203,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         {
             var name = typeof(T).Name;
             List<T> data = [];
-            if( MonitorDataBase.Cache.TryGetValue(name, out var cache))
+            if (MonitorDataBase.Cache.TryGetValue(name, out var cache))
             {
-                foreach(var item in cache.Where(x => x.cacheTime > From).OrderBy(x => x.cacheTime))
+                foreach (var item in cache.Where(x => x.cacheTime > From).OrderBy(x => x.cacheTime))
                 {
                     if (item.data is Array arr)
                     {
@@ -235,14 +286,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                             }
                         }
                     }
-                    // 解析绑定结果
+                    // 解析绑定结果并填充 result 字典
                     foreach (var bind in BindingPath)
                     {
                         if (!result.TryGetValue(bind.Key, out var resultBinding))
                         {
                             resultBinding = new();
+                            // 用于存储当前绑定项处理后的结果（数值或字符串），用于后续格式化输出和数值解析
                             object[] bindingResult = [];
                             bool hasString = bind.Value.Any(x => !x.IsNumber);
+                            // 遍历每个绑定项，处理数值和字符串类型
                             foreach (var binding in bind.Value)
                             {
                                 if (binding.RawValues.Length > 0)
@@ -250,7 +303,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                                     if (binding.IsNumber)
                                     {
                                         double number = 0;
+                                        // 应用数值转换器
                                         binding.RawValues = ApplyConverter(binding.RawValues, binding.NumberConverter);
+                                        // 差值计算
                                         if (binding.ValueType == ValueType.Diff
                                             || binding.ValueType == ValueType.DiffMin
                                             || binding.ValueType == ValueType.DiffMax)
@@ -263,23 +318,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                                     }
                                     else
                                     {
+                                        // 字符串类型取最后一个值
                                         bindingResult = [.. bindingResult, binding.RawValues.Last()];
                                     }
                                 }
+                                // 累加原始值
                                 resultBinding.RawValues = [.. binding.RawValues, .. resultBinding.RawValues];
                             }
                             try
                             {
                                 if (bindingResult.Length > 0)
                                 {
+                                    // 若有字符串则数值为0，否则取第一个数值
                                     resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
+                                    // 格式化字符串输出
                                     resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
                                 }
                                 else
                                 {
                                     resultBinding.ParsedNumber = 0;
                                     int formatCount = StringFormat.Count(x => x == '{' && x != '}');
-                                    resultBinding.FormattedString = string.Format(StringFormat, new string[formatCount]); ;
+                                    resultBinding.FormattedString = string.Format(StringFormat, new string[formatCount]);
                                 }
                             }
                             catch { }
@@ -348,6 +407,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             }
 
             return diff.ToArray();
+        }
+
+        public Binding Clone()
+        {
+            string item = JsonConvert.SerializeObject(this, new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented,
+            });
+            return JsonConvert.DeserializeObject<Binding>(item);
         }
 
         private static DateTime GetDateTime(TimeRange range, int value)

@@ -159,8 +159,8 @@
     <Compile Include="Handler\Windows.cs" />
     <Compile Include="MainSave.cs" />
     <Compile Include="Interfaces.cs" />
-    <Compile Include="Models\CPUInfo.cs" />
-    <Compile Include="Models\CPUUsage.cs" />
+    <Compile Include="Models\CpuInfo.cs" />
+    <Compile Include="Models\CpuUsage.cs" />
     <Compile Include="Models\DiskMountInfo.cs" />
     <Compile Include="Models\Dockers.cs" />
     <Compile Include="Models\FanInfo.cs" />

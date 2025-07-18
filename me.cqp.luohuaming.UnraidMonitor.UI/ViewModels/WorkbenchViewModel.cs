@@ -52,21 +52,29 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public DrawingStyle? CurrentStyle { get; set; }
 
-        public Array ThemeValues => Enum.GetValues(typeof(DrawingStyle.Theme));
-
         public string VersionInfo { get; set; } = "插件版本 v1.0.0";
 
-        public Array DrawBackgroundImageScaleTypeValues => Enum.GetValues(typeof(DrawingStyle.BackgroundImageScaleType));
+        public Array ThemeValues { get; set; } = Enum.GetValues(typeof(DrawingStyle.Theme));
 
-        public Array DrawBackgroundTypeValues => Enum.GetValues(typeof(DrawingStyle.BackgroundType));
+        public Array DrawBackgroundImageScaleTypeValues { get; set; } = Enum.GetValues(typeof(DrawingStyle.BackgroundImageScaleType));
 
-        public Array LayoutTypeValues => Enum.GetValues(typeof(DrawingCanvas.Layout));
+        public Array DrawBackgroundTypeValues { get; set; } = Enum.GetValues(typeof(DrawingStyle.BackgroundType));
 
-        public Array ItemTypeValues => Enum.GetValues(typeof(DrawingItemBase.ItemType));
+        public Array LayoutTypeValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.Layout));
 
-        public Array PositionValues => Enum.GetValues(typeof(DrawingCanvas.Position));
+        public Array ItemTypeValues { get; set; } = Enum.GetValues(typeof(DrawingItemBase.ItemType));
 
-        public Array AlertTypeValues => Enum.GetValues(typeof(DrawingCanvas.AlertType));
+        public Array PositionValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.Position));
+
+        public Array AlertTypeValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.AlertType));
+
+        public Array BindingBoolConditionValues { get; set; } = Enum.GetValues(typeof(BoolCondition));
+
+        public Array BindingNumberConverterValues { get; set; } = Enum.GetValues(typeof(NumberConverter));
+
+        public Array BindingItemValues { get; set; } = Enum.GetValues(typeof(ItemType));
+
+        public Array BindingTimeRangeValues { get; set; } = Enum.GetValues(typeof(TimeRange));
 
         private Stack<(PropertyInfo property, object parent, object oldValue, object newValue)> ActionHistories { get; set; } = [];
 

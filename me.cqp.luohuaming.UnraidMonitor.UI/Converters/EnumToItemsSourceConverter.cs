@@ -1,4 +1,5 @@
-﻿using System;
+﻿using me.cqp.luohuaming.UnraidMonitor.UI.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
@@ -15,6 +16,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
         {
             Type enumType = value is Array array && array.Length > 0 ? array.GetValue(0)?.GetType() : null;
             return enumType != null && enumType.IsEnum ? Enum.GetValues(enumType) : (object)null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ObjectToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return (value != null) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -71,6 +85,48 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
             return null;
         }
 
+    }
+
+    public class GetDisplayKeyValuePairKeyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DisplayKeyValuePair pair)
+            {
+                return pair.Key;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DisplayKeyValuePair pair)
+            {
+                return pair.Value;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+    }
+
+    public class GetDisplayKeyValuePairValueConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DisplayKeyValuePair pair)
+            {
+                return pair.Value;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is DisplayKeyValuePair pair)
+            {
+                return pair.Key;
+            }
+            return DependencyProperty.UnsetValue;
+        }
     }
 
     public class SingleToArraySourceConverter : IValueConverter

@@ -1,4 +1,5 @@
 ﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.UI.Windows;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -52,7 +53,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
 
         private void ClearBinding_Click(object sender, RoutedEventArgs e)
         {
+            CurrentItem.Binding = null;
+        }
 
+        private void SetBinding_Click(object sender, RoutedEventArgs e)
+        {
+            BindingEditor editor = new(CurrentItem)
+            {
+                Owner = Window.GetWindow(this),
+                CustomBinding = CurrentItem.Binding?.Clone(),
+            };
+            if (editor.ShowDialog() ?? false)
+            {
+                CurrentItem.Binding = editor.CustomBinding;
+            }
         }
     }
 }
