@@ -108,5 +108,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 });
             }
         }
+
+        private void BindingValueType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            DiffUnitContainer.IsEnabled = MultipleBinding.ValueType.ToString().StartsWith("Diff");
+        }
     }
 }
