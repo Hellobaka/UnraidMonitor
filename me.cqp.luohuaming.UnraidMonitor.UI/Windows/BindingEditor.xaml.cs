@@ -1,12 +1,10 @@
-﻿using HandyControl.Controls;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,13 +13,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
     /// <summary>
     /// BindingEditor.xaml 的交互逻辑
     /// </summary>
-    public partial class BindingEditor : System.Windows.Window, INotifyPropertyChanged
+    public partial class BindingEditor : Window, INotifyPropertyChanged
     {
         public BindingEditor(DrawingItemBase itemBase)
         {
             InitializeComponent();
             DataContext = this;
             ItemBase = itemBase;
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -51,7 +50,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             MultiBindingEditor editor = new()
             {
                 DrawingItemBase = ItemBase,
-                MonitorItemType = CustomBinding.ItemType
+                MonitorItemType = CustomBinding.ItemType,
+                Owner = this
             };
             if (editor.ShowDialog() ?? false)
             {
@@ -76,6 +76,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             BindingConditionEditor editor = new()
             {
                 MonitorItemType = CustomBinding.ItemType,
+                Owner = this
             };
             if (editor.ShowDialog() ?? false)
             {
@@ -105,11 +106,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             Close();
         }
 
-        private async void Save_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
             if (CustomBinding.BindingPath?.Count == 0)
             {
-                if (await BindingEditor.ShowConfirmAsync("未设置绑定值，此绑定无法生效，确定要退出？"))
+                if (BindingEditor.ShowConfirmAsync("未设置绑定值，此绑定无法生效，确定要退出？"))
                 {
                     DialogResult = false;
                     Close();
@@ -130,7 +131,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             {
                 DrawingItemBase = ItemBase,
                 MonitorItemType = CustomBinding.ItemType,
-                MultipleBinding = bindingItem.MultipleBinding
+                MultipleBinding = bindingItem.MultipleBinding,
+                Owner = this
             };
             if (editor.ShowDialog() ?? false)
             {
@@ -144,10 +146,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
         }
 
-        private async void DeleteMultiBinding_Click(object sender, RoutedEventArgs e)
+        private void DeleteMultiBinding_Click(object sender, RoutedEventArgs e)
         {
             var bindingItem = (FlatMultiBindingItem)((Button)sender).DataContext;
-            if (await BindingEditor.ShowConfirmAsync($"确定删除绑定 {bindingItem.Key}？") != true)
+            if (BindingEditor.ShowConfirmAsync($"确定删除绑定 {bindingItem.Key}？") != true)
             {
                 return;
             }
@@ -162,7 +164,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             {
                 MonitorItemType = CustomBinding.ItemType,
                 SelectedPath = conditionItem.Key,
-                TargetValue = conditionItem.Value
+                TargetValue = conditionItem.Value,
+                Owner = this
             };
             if (editor.ShowDialog() ?? false)
             {
@@ -187,10 +190,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
         }
 
-        private async void DeleteCondition_Click(object sender, RoutedEventArgs e)
+        private void DeleteCondition_Click(object sender, RoutedEventArgs e)
         {
             var conditionItem = (DisplayKeyValuePair)((Button)sender).DataContext;
-            if (await BindingEditor.ShowConfirmAsync($"确定删除条件 {conditionItem.Key}？") != true)
+            if (BindingEditor.ShowConfirmAsync($"确定删除条件 {conditionItem.Key}？") != true)
             {
                 return;
             }
@@ -259,20 +262,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public static void ShowError(string content)
         {
-            Growl.Error(content);
+            System.Windows.MessageBox.Show(content, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public static Task<bool> ShowConfirmAsync(string content)
+        public static bool ShowConfirmAsync(string content)
         {
-            var tcs = new TaskCompletionSource<bool>();
-
-            Growl.Ask(content, (isConfirmed) =>
-            {
-                tcs.SetResult(isConfirmed);
-                return true;
-            });
-
-            return tcs.Task;
+            return System.Windows.MessageBox.Show(content, "询问", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)

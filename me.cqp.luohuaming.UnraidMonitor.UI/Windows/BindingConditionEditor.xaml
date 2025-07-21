@@ -8,7 +8,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="BindingConditionEditor"
+    Title="编辑绑定条件"
     Width="400"
     Height="160"
     d:DataContext="{d:DesignInstance Type=local:BindingConditionEditor}"
