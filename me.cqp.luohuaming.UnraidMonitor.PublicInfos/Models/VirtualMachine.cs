@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class VirtualMachine : MonitorDataBase
     {
+        [Description("虚拟机助记名称")]
         public string Name { get; set; }
 
+        [Description("运行状态")]
         public bool Running { get; set; }
 
         /// <summary>
         /// name与mac可能为'-'
         /// </summary>
+        [Description("IP 地址")]
         public List<(string name, string mac, IPAddress ip)> Networks { get; set; } = [];
 
+        [Description("虚拟机图标")]
         public string? Icon { get; set; }
 
         public static VirtualMachine[] ParseFromVirsh(string input)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
@@ -18,28 +19,40 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
             Unknown
         }
 
+        [Description("磁盘模式 (Unraid)")]
         public DiskType Type { get; set; } = DiskType.Data;
 
+        [Description("助记名称")]
         public string RemarkName { get; set; } = "";
 
+        [Description("挂载名称")]
         public string DeviceName { get; set; } = "";
 
+        [Description("磁盘型号")]
         public string Model { get; set; } = "";
 
+        [Description("电源状态")]
         public string PowerMode { get; set; } = "";
 
+        [Description("总容量 (KB)")]
         public long Total { get; set; }
 
+        [Description("使用容量 (KB)")]
         public long Used { get; set; }
 
+        [Description("剩余容量 (KB)")]
         public long Free { get; set; }
 
+        [Description("温度 (°C)")]
         public double Temperature { get; set; }
 
+        [Description("文件系统")]
         public string FileSystem { get; set; } = "";
 
+        [Description("运行状态")]
         public bool Running => PowerMode.Contains("-on");
 
+        [Description("容量使用率 (%)")]
         public double UsedPercent => Total == 0 ? 0 : Math.Round((double)Used / Total * 100, 2);
 
         public static DiskInfo[] ParseFromDiskIni(string input)

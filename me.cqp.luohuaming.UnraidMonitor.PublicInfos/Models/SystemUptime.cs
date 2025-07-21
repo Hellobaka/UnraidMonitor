@@ -1,16 +1,21 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class SystemUptime : MonitorDataBase
     {
+        [Description("系统启动天数")]
         public int UpTimeDay { get; set; }
 
+        [Description("系统启动小时数")]
         public int UpTimeHour { get; set; }
 
+        [Description("系统启动分钟数")]
         public int UpTimeMinute { get; set; }
 
+        [Description("系统启动秒数")]
         public int UpTimeSecond { get; set; }
 
         private static Regex UptimeRegexA { get; } = new(@"up\s+(\d+)\s+days?,\s+(\d+):(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

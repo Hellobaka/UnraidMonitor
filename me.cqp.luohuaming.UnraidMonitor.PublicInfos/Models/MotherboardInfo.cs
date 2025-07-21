@@ -1,12 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class MotherboardInfo : MonitorDataBase
     {
+        [Description("制造商")]
         public string Manufacturer { get; set; } = "";
 
+        [Description("型号")]
         public string ProductName { get; set; } = "";
 
         private static Regex ManufacturerRegex { get; } = new(@"Manufacturer:\s*(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

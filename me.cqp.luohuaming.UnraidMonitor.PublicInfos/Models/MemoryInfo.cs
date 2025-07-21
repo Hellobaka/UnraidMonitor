@@ -1,20 +1,27 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class MemoryInfo : MonitorDataBase
     {
+        [Description("可用容量 (KB)")]
         public long Available { get; set; }
 
+        [Description("Buffer 容量 (KB)")]
         public long BuffCache { get; set; }
 
+        [Description("空闲容量 (KB)")]
         public long Free { get; set; }
 
+        [Description("总容量 (KB)")]
         public long Total { get; set; }
 
+        [Description("内存占用率 (%)")]
         public double UsagePercentage => (Total - Available) / (double)Total * 100;
 
+        [Description("已使用容量 (KB)")]
         public long Used { get; set; }
 
         private static Regex MemoryRegex { get; } = new(@"Mem:\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

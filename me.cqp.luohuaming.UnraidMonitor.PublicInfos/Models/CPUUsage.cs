@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,6 +8,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class CpuUsage : MonitorDataBase
     {
+        [Description("传感器名称")]
         public string CPUId { get; set; }
 
         public double HardwareInterrupt { get; set; }
@@ -21,6 +23,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 
         public double System { get; set; }
 
+        [Description("CPU 占用率 (%)")]
         public double TotalUsage => User + System + Nice + Wait + HardwareInterrupt + SoftwareInterrupt + Steal;
 
         public double User { get; set; }

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class FanInfo : MonitorDataBase
     {
+        [Description("传感器组")]
         public string ParentName { get; set; } = "";
 
+        [Description("风扇名称")]
         public string Name { get; set; } = "";
 
+        [Description("风扇转速 (RPM)")]
         public int RPM { get; set; }
 
         public static FanInfo[] ParseFromSensor(string input)

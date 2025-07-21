@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class MonitorDataBase
     {
+        [Description("最后更新时间")]
         public DateTime DateTime { get; set; } = DateTime.Now;
 
         public static Dictionary<string, List<(DateTime cacheTime, object data)>> Cache { get; set; } = [];

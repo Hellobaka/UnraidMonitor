@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class NetworkInterfaceInfo : MonitorDataBase
     {
+        [Description("IPv4 地址")]
         public List<string> IpAddresses { get; set; } = [];
 
+        [Description("IPv6 地址")]
         public List<string> Ipv6Addresses { get; set; } = [];
 
+        [Description("网卡 MAC 地址")]
         public string MacAddress { get; set; } = "";
 
+        [Description("网卡名称")]
         public string Name { get; set; } = "";
 
         private static Regex InterfaceRegex { get; } = new(@"^\d+:\s+([^:]+):", RegexOptions.Compiled | RegexOptions.IgnoreCase);

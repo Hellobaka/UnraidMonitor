@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -8,12 +9,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class Dockers : MonitorDataBase
     {
+        [Description("容器 ID")]
         public string ContainerID { get; set; } = "";
 
+        [Description("容器助记名称")]
         public string Name { get; set; }
 
+        [Description("镜像名称")]
         public string Image { get; set; }
 
+        [Description("容器运行状态")]
         public bool Running { get; set; }
 
         public static Dockers[] ParseFromDockerPs(string input)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,20 +8,28 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class DiskMountInfo : MonitorDataBase
     {
+        [Description("挂载点")]
         public string MountPoint { get; set; } = "";
 
+        [Description("磁盘挂载类型 (Linux) / 文件系统 (Windows)")]
         public string Type { get; set; } = "";
 
+        [Description("助记名称 (Linux) / 盘符 (Windows)")]
         public string Name { get; set; } = "";
 
+        [Description("总容量 (KB)")]
         public string Size { get; set; } = "";
 
+        [Description("助记总容量")]
         public long TotalBytes { get; set; }
 
+        [Description("总容量 (KB)")]
         public long UsedBytes { get; set; }
 
+        [Description("可用容量 (KB)")]
         public long AvailableBytes { get; set; }
 
+        [Description("容量使用率 (%)")]
         public double UsedPercent => TotalBytes == 0 ? 0 : Math.Round((double)UsedBytes / TotalBytes * 100, 2);
 
         private static Regex DiskRegex { get; } = new(@"^\s*([\w\-]+)\s+\d+:\d+\s+\d+\s+([\d.]+[TGMK]?)\s+\d+\s+(\w+)\s+(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

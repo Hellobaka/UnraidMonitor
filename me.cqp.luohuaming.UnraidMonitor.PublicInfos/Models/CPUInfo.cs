@@ -1,18 +1,24 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class CpuInfo : MonitorDataBase
     {
+        [Description("基础频率 (GHz)")]
         public double BaseSpeedGHz { get; set; }
 
+        [Description("逻辑核心数")]
         public int LogicalCores { get; set; }
 
+        [Description("最大加速频率 (GHz)")]
         public double MaxTurboSpeedGHz { get; set; }
 
+        [Description("型号 (GHz)")]
         public string Model { get; set; } = "";
 
+        [Description("物理核心数 (GHz)")]
         public int PhysicalCores { get; set; }
 
         private static Regex BaseSpeedRegex { get; } = new(@"Current Speed:\s*(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class NetworkTrafficInfo : MonitorDataBase
     {
+        [Description("网卡名称")]
         public string Name { get; set; } = "";
 
+        [Description("总接收字节数")]
         public long RxBytes { get; set; }
 
+        [Description("总发送字节数")]
         public long TxBytes { get; set; }
 
         private static Regex InterfaceBlockRegex { get; } = new(@"^\d+:\s*([^\s:]+):.*?(?=^\d+:|\z)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Singleline);

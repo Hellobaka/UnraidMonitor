@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +9,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class SystemInfo : MonitorDataBase
     {
+        [Description("系统软件版本")]
         public string Version { get; set; }
 
+        [Description("系统名称")]
         public string SystemName { get; set; }
 
+        [Description("系统版本")]
         public string SystemEdition { get; set; }
 
         /// <summary>

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class TemperatureInfo : MonitorDataBase
     {
+        [Description("传感器组")]
         public string ParentName { get; set; } = "";
 
+        [Description("传感器名称")]
         public string Name { get; set; } = "";
 
+        [Description("温度 (°C)")]
         public double Temperature { get; set; }
 
         private static Regex TemperatureRegex { get; } = new Regex(@"^([A-Za-z0-9 _\-]+):?\s*([+-]?\d+\.\d)\s*C", RegexOptions.Compiled | RegexOptions.Singleline);

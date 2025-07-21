@@ -1,16 +1,21 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class Notification : MonitorDataBase
     {
+        [Description("事件级别信息")]
         public string Event { get; set; } = "";
 
+        [Description("消息级别信息")]
         public string Message { get; set; } = "";
 
+        [Description("提示级别信息")]
         public string Subject { get; set; } = "";
 
+        [Description("重要级别信息")]
         public string Importance { get; set; } = "";
 
         public static Notification ParseFromUnreadFile(string input)

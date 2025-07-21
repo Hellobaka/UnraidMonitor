@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -30,73 +31,88 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         /// <summary>
         /// InLinux Name(/dev/sdb)
         /// </summary>
+        [Description("助记名称")]
         public string DeviceName { get; set; }
 
         /// <summary>
         /// 型号系列
         /// </summary>
+        [Description("系列")]
         public string ModelFamily { get; set; }
 
         /// <summary>
         /// 设备型号
         /// </summary>
+        [Description("型号")]
         public string DeviceModel { get; set; }
 
         /// <summary>
         /// 序列号
         /// </summary>
+        [Description("序列化")]
         public string SerialNumber { get; set; }
 
         /// <summary>
         /// 字节容量
         /// </summary>
+        [Description("总容量 (KB)")]
         public long CapacityBytes { get; set; }
 
         /// <summary>
         /// 格式化容量
         /// </summary>
+        [Description("助记总容量")]
         public string FormattedCapacity { get; set; }
 
         /// <summary>
         /// 逻辑扇区大小
         /// </summary>
+        [Description("逻辑扇区大小")]
         public int LogicalSectorSize { get; set; }
 
         /// <summary>
         /// 物理扇区大小
         /// </summary>
+        [Description("物理扇区大小")]
         public int PhysicalSectorSize { get; set; }
 
         /// <summary>
         /// 转速/类型
         /// </summary>
+        [Description("转速 (HDD) / SSD")]
         public string RotationRate { get; set; }
 
         /// <summary>
         /// 外形尺寸
         /// </summary>
+        [Description("外形尺寸")]
         public string FormFactor { get; set; }
 
         /// <summary>
         /// ATA版本
         /// </summary>
+        [Description("ATA 版本")]
         public string AtaVersion { get; set; }
 
         /// <summary>
         /// SATA版本
         /// </summary>
+        [Description("SATA 版本")]
         public string SataVersion { get; set; }
 
         /// <summary>
         /// SMART支持状态
         /// </summary>
+        [Description("是否支持 SMART")]
         public bool SmartSupported { get; set; }
 
+        [Description("SMART 健康状态")]
         public DiskHealth HealthStatus => Smart.HealthStatus;
 
         /// <summary>
         /// SMART启用状态
         /// </summary>
+        [Description("是否已启用 SMART")]
         public bool SmartEnabled { get; set; }
 
         public SmartInfo Smart { get; set; }
