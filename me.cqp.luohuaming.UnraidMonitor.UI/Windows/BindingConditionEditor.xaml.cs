@@ -22,6 +22,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             DataContext = this;
         }
 
+        public BindingConditionEditor(string path)
+        {
+            InitializeComponent();
+            DataContext = this;
+            this.path = path;
+        }
+
+        private string path;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
@@ -33,7 +42,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public ObservableCollection<DisplayKeyValuePair> AvailablePath { get; set; } = [];
 
-        public string SelectedPath { get; set; } = "";
+        public DisplayKeyValuePair SelectedPath { get; set; }
 
         public string TargetValue { get; set; } = "";
 
@@ -58,12 +67,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             foreach (PropertyInfo propertyInfo in modelTypes.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 string displayName = Attribute.GetCustomAttribute(propertyInfo, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : propertyInfo.Name;
-
-                AvailablePath.Add(new()
+                var item = new DisplayKeyValuePair()
                 {
                     Key = displayName,
                     Value = propertyInfo.Name
-                });
+                };
+                AvailablePath.Add(item);
+                if(item.Value == path)
+                {
+                    SelectedPath = item;
+                }
             }
         }
 

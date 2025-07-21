@@ -22,6 +22,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             DataContext = this;
         }
 
+        public MultiBindingEditor(string selectedItem, string selectedModel)
+        {
+            InitializeComponent();
+            DataContext = this;
+            this.selectedItem = selectedItem;
+            this.selectedModel = selectedModel;
+        }
+
+        private string selectedItem;
+        private string selectedModel;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
@@ -37,17 +48,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public ItemType MonitorItemType { get; set; } = ItemType.Unknown;
 
-        public MultipleBinding MultipleBinding { get; set; }
-
         public Array BindingNumberConverterValues { get; set; } = Enum.GetValues(typeof(NumberConverter));
-
-        public Array BindingItemValues { get; set; } = Enum.GetValues(typeof(ItemType));
-
-        public Array BindingTimeRangeValues { get; set; } = Enum.GetValues(typeof(TimeRange));
 
         public Array BindingValueTypeValues { get; set; } = Enum.GetValues(typeof(PublicInfos.Drawing.ValueType));
 
-        public string Path { get; set; }
+        public DisplayKeyValuePair SelectedModel { get; set; }
+
+        public DisplayKeyValuePair SelectedItem { get; set; }
+
+        public NumberConverter SelectedNumberConverter { get; set; }
+
+        public PublicInfos.Drawing.ValueType SelectedValueType { get; set; }
+
+        public double SelectedDiffUnit { get; set; }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
@@ -75,7 +88,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 DialogResult = false;
                 Close();
             }
-            MultipleBinding ??= new();
 
             foreach (PropertyInfo propertyInfo in DrawingItemBase.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
@@ -85,12 +97,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     continue;
                 }
                 string displayName = Attribute.GetCustomAttribute(propertyInfo, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : propertyInfo.Name;
-
-                ItemProperties.Add(new()
+                var item = new DisplayKeyValuePair()
                 {
                     Key = displayName,
                     Value = propertyInfo.Name
-                });
+                };
+                ItemProperties.Add(item);
+                if (item.Value == selectedItem)
+                {
+                    SelectedItem = item;
+                }
             }
             var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "me.cqp.luohuaming.UnraidMonitor.PublicInfos");
             var modelTypes = assembly?.GetType($"me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.{MonitorItemType}");
@@ -105,18 +121,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             foreach (PropertyInfo propertyInfo in modelTypes.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 string displayName = Attribute.GetCustomAttribute(propertyInfo, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : propertyInfo.Name;
-
-                ModelProperties.Add(new()
+                var item = new DisplayKeyValuePair()
                 {
                     Key = displayName,
                     Value = propertyInfo.Name
-                });
+                };
+                ModelProperties.Add(item);
+                if (item.Value == selectedModel)
+                {
+                    SelectedModel = item;
+                }
             }
         }
 
         private void BindingValueType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            DiffUnitContainer.IsEnabled = MultipleBinding.ValueType.ToString().StartsWith("Diff");
+            DiffUnitContainer.IsEnabled = SelectedValueType.ToString().StartsWith("Diff");
         }
     }
 }

@@ -55,16 +55,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             };
             if (editor.ShowDialog() ?? false)
             {
-                if (string.IsNullOrWhiteSpace(editor.Path) 
-                    || string.IsNullOrWhiteSpace(editor.MultipleBinding.Path))
+                if (editor.SelectedItem == null)
                 {
                     BindingEditor.ShowError("绑定路径不能为空，请修改后再添加");
                     return;
                 }
                 FlatMultiBindingItems.Add(new FlatMultiBindingItem
                 {
-                    Key = editor.Path,
-                    MultipleBinding = editor.MultipleBinding
+                    Key = editor.SelectedItem.Value,
+                    MultipleBinding = new MultipleBinding()
+                    {
+                        DiffUnit = editor.SelectedDiffUnit,
+                        NumberConverter = editor.SelectedNumberConverter,
+                        Path = editor.SelectedModel.Value,
+                        ValueType = editor.SelectedValueType,
+                    }
                 });
                 UpdateMultiBinding();
                 OnPropertyChanged(nameof(FlatMultiBindingItems));
@@ -80,20 +85,24 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             };
             if (editor.ShowDialog() ?? false)
             {
-                if (Conditions.Any(x => x.Key == editor.SelectedPath))
+                if (Conditions.Any(x => x.Key == editor.SelectedPath.Value))
                 {
                     BindingEditor.ShowError($"条件 {editor.SelectedPath} 已存在，请修改后再添加");
                     return;
                 }
-                if (string.IsNullOrWhiteSpace(editor.SelectedPath)
-                    || string.IsNullOrWhiteSpace(editor.TargetValue))
+                if (editor.SelectedPath == null)
                 {
                     BindingEditor.ShowError("条件路径和值不能为空，请修改后再添加");
                     return;
                 }
+                if (string.IsNullOrWhiteSpace(editor.TargetValue))
+                {
+                    BindingEditor.ShowError("期望值不能为空，请修改后再添加");
+                    return;
+                }
                 Conditions.Add(new DisplayKeyValuePair
                 {
-                    Key = editor.SelectedPath,
+                    Key = editor.SelectedPath.Value,
                     Value = editor.TargetValue
                 });
                 UpdateConditions();
@@ -127,21 +136,28 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         private void EditMultiBinding_Click(object sender, RoutedEventArgs e)
         {
             var bindingItem = (FlatMultiBindingItem)((Button)sender).DataContext;
-            MultiBindingEditor editor = new()
+            MultiBindingEditor editor = new (bindingItem.Key, bindingItem.MultipleBinding.Path)
             {
                 DrawingItemBase = ItemBase,
                 MonitorItemType = CustomBinding.ItemType,
-                MultipleBinding = bindingItem.MultipleBinding,
+                SelectedValueType = bindingItem.MultipleBinding.ValueType,
+                SelectedNumberConverter = bindingItem.MultipleBinding.NumberConverter,
+                SelectedDiffUnit = bindingItem.MultipleBinding.DiffUnit,
                 Owner = this
             };
             if (editor.ShowDialog() ?? false)
             {
-                if (string.IsNullOrWhiteSpace(editor.Path)
-                    || string.IsNullOrWhiteSpace(editor.MultipleBinding.Path))
+                if (editor.SelectedItem == null)
                 {
                     BindingEditor.ShowError("绑定路径不能为空，请修改后再添加");
                     return;
                 }
+                bindingItem.Key = editor.SelectedItem.Value;
+                bindingItem.MultipleBinding.DiffUnit = editor.SelectedDiffUnit;
+                bindingItem.MultipleBinding.NumberConverter = editor.SelectedNumberConverter;
+                bindingItem.MultipleBinding.Path = editor.SelectedModel.Value;
+                bindingItem.MultipleBinding.ValueType = editor.SelectedValueType;
+
                 UpdateMultiBinding();
             }
         }
@@ -160,30 +176,33 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         private void EditCondition_Click(object sender, RoutedEventArgs e)
         {
             var conditionItem = (DisplayKeyValuePair)((Button)sender).DataContext;
-            BindingConditionEditor editor = new()
+            BindingConditionEditor editor = new(conditionItem.Key)
             {
                 MonitorItemType = CustomBinding.ItemType,
-                SelectedPath = conditionItem.Key,
                 TargetValue = conditionItem.Value,
                 Owner = this
             };
             if (editor.ShowDialog() ?? false)
             {
-                if (Conditions.Any(x => x.Key == editor.SelectedPath))
+                if (Conditions.Any(x => x.Equals(editor.SelectedPath) && x.Key == editor.SelectedPath.Value))
                 {
                     BindingEditor.ShowError($"条件 {editor.SelectedPath} 已存在，请修改后再添加");
                     return;
                 }
-                if (string.IsNullOrWhiteSpace(editor.SelectedPath)
-                     || string.IsNullOrWhiteSpace(editor.TargetValue))
+                if (editor.SelectedPath == null)
                 {
                     BindingEditor.ShowError("条件路径和值不能为空，请修改后再添加");
+                    return;
+                }
+                if (string.IsNullOrWhiteSpace(editor.TargetValue))
+                {
+                    BindingEditor.ShowError("期望值不能为空，请修改后再添加");
                     return;
                 }
                 Conditions.Remove(conditionItem);
                 Conditions.Add(new DisplayKeyValuePair
                 {
-                    Key = editor.SelectedPath,
+                    Key = editor.SelectedPath.Value,
                     Value = editor.TargetValue
                 });
                 UpdateConditions();

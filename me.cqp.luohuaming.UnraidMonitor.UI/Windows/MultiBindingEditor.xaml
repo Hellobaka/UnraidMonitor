@@ -45,7 +45,7 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding ItemProperties}"
-                        SelectedItem="{Binding Path, Mode=TwoWay, Converter={StaticResource GetDisplayKeyValuePairValueConverter}}">
+                        SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Key}" />
@@ -62,7 +62,7 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding ModelProperties}"
-                        SelectedItem="{Binding MultipleBinding.Path, Mode=TwoWay, Converter={StaticResource GetDisplayKeyValuePairValueConverter}}">
+                        SelectedItem="{Binding SelectedModel, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Key}" />
@@ -79,7 +79,7 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding BindingValueTypeValues}"
-                        SelectedItem="{Binding MultipleBinding.ValueType, Mode=TwoWay}"
+                        SelectedItem="{Binding SelectedValueType, Mode=TwoWay}"
                         SelectionChanged="BindingValueType_SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -97,7 +97,7 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding BindingNumberConverterValues}"
-                        SelectedItem="{Binding MultipleBinding.NumberConverter, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedNumberConverter, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
@@ -114,7 +114,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="差异步数：" />
-                    <TextBox Grid.Column="1" Text="{Binding MultipleBinding.DiffUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Column="1" Text="{Binding SelectedDiffUnit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </Grid>
         </ScrollViewer>
