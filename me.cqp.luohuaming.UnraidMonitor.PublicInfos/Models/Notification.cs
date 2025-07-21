@@ -6,16 +6,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
 {
     public class Notification : MonitorDataBase
     {
-        [Description("事件级别信息")]
+        [Description("事件类型")]
         public string Event { get; set; } = "";
 
-        [Description("消息级别信息")]
+        [Description("信息内容")]
         public string Message { get; set; } = "";
 
-        [Description("提示级别信息")]
+        [Description("主题")]
         public string Subject { get; set; } = "";
 
-        [Description("重要级别信息")]
+        [Description("事件等级")]
         public string Importance { get; set; } = "";
 
         public static Notification ParseFromUnreadFile(string input)

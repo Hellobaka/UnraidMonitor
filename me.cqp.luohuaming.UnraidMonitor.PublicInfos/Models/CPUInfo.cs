@@ -15,10 +15,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
         [Description("最大加速频率 (GHz)")]
         public double MaxTurboSpeedGHz { get; set; }
 
-        [Description("型号 (GHz)")]
+        [Description("型号")]
         public string Model { get; set; } = "";
 
-        [Description("物理核心数 (GHz)")]
+        [Description("物理核心数")]
         public int PhysicalCores { get; set; }
 
         private static Regex BaseSpeedRegex { get; } = new(@"Current Speed:\s*(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
