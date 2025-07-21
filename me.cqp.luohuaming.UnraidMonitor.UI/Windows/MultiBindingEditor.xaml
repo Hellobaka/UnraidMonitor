@@ -77,9 +77,10 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="绑定类型：" />
                     <ComboBox
-                        Grid.Column="1" SelectionChanged="BindingValueType_SelectionChanged"
+                        Grid.Column="1"
                         ItemsSource="{Binding BindingValueTypeValues}"
-                        SelectedItem="{Binding MultipleBinding.ValueType, Mode=TwoWay}">
+                        SelectedItem="{Binding MultipleBinding.ValueType, Mode=TwoWay}"
+                        SelectionChanged="BindingValueType_SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
@@ -104,7 +105,10 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </Grid>
-                <Grid x:Name="DiffUnitContainer" Grid.Row="4" Margin="0,10,0,0">
+                <Grid
+                    x:Name="DiffUnitContainer"
+                    Grid.Row="4"
+                    Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70" />
                         <ColumnDefinition />

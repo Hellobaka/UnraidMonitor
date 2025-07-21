@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 
@@ -11,10 +12,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Remaining;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("当前值")]
         public float Value { get; set; }
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("最大值")]
         public float Min { get; set; } = 0;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("最小值")]
         public float Max { get; set; } = 100;
 
         public override float OverrideHeight { get; set; }

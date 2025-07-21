@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
@@ -10,6 +11,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Minimal;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("文本内容")]
         public string Text { get; set; } = "";
 
         public bool IsBold { get; set; }

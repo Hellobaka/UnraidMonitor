@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -13,10 +14,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Minimal;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("当前值")]
         public double Value { get; set; }
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("最小值")]
         public double Min { get; set; } = 0;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("最大值")]
         public double Max { get; set; } = 100;
 
         public float StrokeWidth { get; set; } = 10;
@@ -27,6 +34,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public bool TransparentBackground { get; set; } = true;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("标题")]
         public string Header { get; set; }
 
         public bool HeaderFontBold { get; set; }
@@ -35,6 +44,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public bool ShowValue { get; set; }
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("显示值")]
         public string DisplayValue { get; set; }
 
         public bool ValueFontBold { get; set; }

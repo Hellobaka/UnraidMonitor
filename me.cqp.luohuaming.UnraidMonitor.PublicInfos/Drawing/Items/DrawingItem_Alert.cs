@@ -2,6 +2,7 @@
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Icons;
 using SkiaSharp;
 using System;
+using System.ComponentModel;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 {
@@ -11,12 +12,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Remaining;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("消息等级")]
         public DrawingCanvas.AlertType AlertType { get; set; } = DrawingCanvas.AlertType.Info;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("标题")]
         public string Header { get; set; } = "";
 
         public bool IsHeaderBold { get; set; }
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("内容")]
         public string Content { get; set; } = "";
 
         public string OverrideFont { get; set; }

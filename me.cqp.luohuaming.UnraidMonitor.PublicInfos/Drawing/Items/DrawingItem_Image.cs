@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override ItemType Type { get; set; } = ItemType.Image;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("图片相对路径")]
         public string Source { get; set; }
 
         public override void BeforeBinding()

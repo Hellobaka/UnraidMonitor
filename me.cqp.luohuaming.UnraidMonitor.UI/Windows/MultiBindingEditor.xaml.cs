@@ -79,6 +79,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
             foreach (PropertyInfo propertyInfo in DrawingItemBase.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
+                bool canBind = Attribute.GetCustomAttribute(propertyInfo, typeof(BindableAttribute)) is BindableAttribute bindable && bindable.Bindable;
+                if (!canBind)
+                {
+                    continue;
+                }
                 string displayName = Attribute.GetCustomAttribute(propertyInfo, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : propertyInfo.Name;
 
                 ItemProperties.Add(new()

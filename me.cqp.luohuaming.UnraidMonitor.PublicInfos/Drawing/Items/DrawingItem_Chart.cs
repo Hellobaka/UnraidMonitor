@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -14,10 +15,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override DrawingCanvas.Layout Layout { get; set; } = DrawingCanvas.Layout.Remaining;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("散点")]
         public (DateTime time, double value)[] Points { get; set; } = [];
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("最小值")]
         public double Min { get; set; } = 0;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("最大值")]
         public double Max { get; set; } = 100;
 
         public bool ShowHorizonGridLine { get; set; } = true;

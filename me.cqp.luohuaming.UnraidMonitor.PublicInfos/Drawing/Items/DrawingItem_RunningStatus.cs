@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System;
+using System.ComponentModel;
 using System.IO;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
@@ -12,18 +13,28 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public int TextSize { get; set; } = 26;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("标题")]
         public string Title { get; set; } = "";
 
         public bool IsTitleBold { get; set; }
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("运行状态")]
         public bool Running { get; set; }
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("运行中文本")]
         public string RunningText { get; set; } = "运行中";
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("停止运行文本")]
         public string NotRunningText { get; set; } = "已停止";
 
         public bool RunningStatusHasIcon { get; set; } = true;
 
+        [Bindable(BindableSupport.Yes)]
+        [Description("图标相对路径")]
         public string ImagePath { get; set; } = "images\\default.png";
 
         public bool HasImage { get; set; }
