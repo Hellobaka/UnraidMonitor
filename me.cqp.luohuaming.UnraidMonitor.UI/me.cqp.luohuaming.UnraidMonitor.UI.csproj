@@ -167,14 +167,18 @@
     <Compile Include="Converters\DrawingItemSelector.cs" />
     <Compile Include="Converters\EnumToItemsSourceConverter.cs" />
     <Compile Include="Converters\SKImageToImageSource.cs" />
+    <Compile Include="Models\CollectionChangeCommand.cs" />
     <Compile Include="Models\DisplayKeyValuePair.cs" />
     <Compile Include="Models\FlatMultiBindingItem.cs" />
+    <Compile Include="Models\IUndoableCommand.cs" />
     <Compile Include="Models\PictureItem.cs" />
+    <Compile Include="Models\PropertyChangeCommand.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="Models\StyleCommandWrapper.cs" />
     <Compile Include="Models\ThemeItem.cs" />
     <Compile Include="Models\Validations.cs" />
     <Compile Include="ViewModels\AddOrUpdateStyleCommandViewModel.cs" />
+    <Compile Include="ViewModels\UndoRedoManager.cs" />
     <Compile Include="ViewModels\WorkbenchViewModel.cs" />
     <Compile Include="Windows\BindingConditionEditor.xaml.cs">
       <DependentUpon>BindingConditionEditor.xaml</DependentUpon>

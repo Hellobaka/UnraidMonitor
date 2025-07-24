@@ -32,17 +32,19 @@
                         Header="保存"
                         InputGestureText="Ctrl+S" />
                     <Separator />
-                    <MenuItem Header="退出" />
+                    <MenuItem Command="{Binding ExitCommand}" Header="退出" />
                 </MenuItem>
                 <MenuItem Header="操作">
                     <MenuItem
                         Command="{Binding UndoCommand}"
                         Header="撤销"
-                        InputGestureText="Ctrl+Z" />
+                        InputGestureText="Ctrl+Z"
+                        IsEnabled="{Binding CanUndo}" />
                     <MenuItem
                         Command="{Binding RedoCommand}"
                         Header="重做"
-                        InputGestureText="Ctrl+Y" />
+                        InputGestureText="Ctrl+Y"
+                        IsEnabled="{Binding CanRedo}" />
                 </MenuItem>
             </Menu>
             <Border

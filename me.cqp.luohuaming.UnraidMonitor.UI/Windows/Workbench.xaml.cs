@@ -21,7 +21,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         public Workbench()
         {
             InitializeComponent();
-            ViewModel = new WorkbenchViewModel();
+            ViewModel = new WorkbenchViewModel(this);
             DataContext = ViewModel;
             UpdateKeyBinding();
         }
@@ -29,7 +29,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         public Workbench(string? path)
         {
             InitializeComponent();
-            ViewModel = new WorkbenchViewModel();
+            ViewModel = new WorkbenchViewModel(this);
             DataContext = ViewModel;
             ViewModel.CurrentStylePath = path;
             UpdateKeyBinding();
@@ -80,17 +80,35 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 }
                 else
                 {
-                    ViewModel.CurrentStyle?.UnsubscribePropertyChangedEvents();
+                    ViewModel.UnsubscribePropertyChangedEvents();
 
                     ViewModel.CurrentStyle = style;
-                    ViewModel.CurrentStyle.SubscribePropertyChangedEvents();
+                    ViewModel.SubscribePropertyChangedEvents();
 
                     StyleEditor.DataContext = ViewModel;
                     MainWindow.ShowInfo($"{ViewModel.CurrentStyle.Name} 样式加载成功");
                     await CallStyleRedraw();
                 }
-                ViewModel.ApplyMonitor();
+                ViewModel.OnPropertyChangedDetail -= ViewModel_OnPropertyChangedDetail;
+                ViewModel.OnCollectionChangedDetail -= ViewModel_OnCollectionChangedDetail;
                 ViewModel.OnPropertyChangedDetail += ViewModel_OnPropertyChangedDetail;
+                ViewModel.OnCollectionChangedDetail += ViewModel_OnCollectionChangedDetail;
+            }
+        }
+
+        private void ViewModel_OnCollectionChangedDetail(System.Collections.Specialized.NotifyCollectionChangedEventArgs e, object instance)
+        {
+            if (ViewModel.AutoRedraw)
+            {
+                DebounceStyleRedraw_Click(null, null);
+            }
+        }
+
+        private void ViewModel_OnPropertyChangedDetail(System.Reflection.PropertyInfo propertyInfo, object instance, object newValue, object oldValue)
+        {
+            if (ViewModel.AutoRedraw)
+            {
+                DebounceStyleRedraw_Click(null, null);
             }
         }
 
@@ -107,14 +125,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             CommandBindings.Add(new CommandBinding(ViewModel.OpenCommand, (_, _) => ViewModel.OpenCommand.Execute(null)));
             CommandBindings.Add(new CommandBinding(ViewModel.UndoCommand, (_, _) => ViewModel.UndoCommand.Execute(null)));
             CommandBindings.Add(new CommandBinding(ViewModel.RedoCommand, (_, _) => ViewModel.RedoCommand.Execute(null)));
-        }
-
-        private void ViewModel_OnPropertyChangedDetail(System.Reflection.PropertyInfo propertyInfo, System.Reflection.PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            if (ViewModel.AutoRedraw)
-            {
-                DebounceStyleRedraw_Click(null, null);
-            }
         }
 
         private void MainImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -227,6 +237,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             Stopwatch stopwatch = Stopwatch.StartNew();
             try
             {
+                ViewModel.UndoRedoManager.Processing = true;
                 ViewModel.Debouncing = true;
                 using var img = await Task.Run(async () =>
                 {
@@ -282,6 +293,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             finally
             {
                 ViewModel.Debouncing = false;
+                ViewModel.UndoRedoManager.Processing = false;
+                ViewModel.NoticeCanUndo();
                 DrawTimeText.Text = $"{stopwatch.ElapsedMilliseconds} ms";
             }
         }

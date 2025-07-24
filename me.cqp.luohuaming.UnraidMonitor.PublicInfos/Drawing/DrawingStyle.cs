@@ -3,6 +3,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -83,12 +84,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public string FatalIconColor { get; set; } = "#FF99A4";
 
             public event PropertyChangedEventHandler PropertyChanged;
-            public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
-            protected void OnPropertyChanged(string propertyName)
+            public void OnPropertyChanged(string propertyName, object before, object after)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
+                MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
             }
         }
 
@@ -152,95 +152,31 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public SKRect Boundary { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
-        protected void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName, object before, object after)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
-        }
-
-        /// <summary>
-        /// 仅UI使用，用于构建属性变化通知
-        /// </summary>
-        public void SubscribePropertyChangedEvents()
-        {
-            Palette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
-            Palette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
-            Palette.PropertyChanged -= NotifyPropertyChanged;
-            Palette.PropertyChanged += NotifyPropertyChanged;
-
-            Padding.OnPropertyChangedDetail -= Padding_OnPropertyChangedDetail;
-            Padding.OnPropertyChangedDetail += Padding_OnPropertyChangedDetail;
-            Padding.PropertyChanged -= NotifyPropertyChanged;
-            Padding.PropertyChanged += NotifyPropertyChanged;
-
-            BackgroundImages.CollectionChanged -= BackgroundImages_CollectionChanged;
-            BackgroundImages.CollectionChanged += BackgroundImages_CollectionChanged;
-
-            if (Content != null)
+            MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
+            if (propertyName == nameof(Content) || propertyName == nameof(BackgroundImages))
             {
-                foreach (var item in Content)
+                if (before is ObservableCollection<string> && after is ObservableCollection<string>)
                 {
-                    item.PropertyChanged -= NotifyPropertyChanged;
-                    item.PropertyChanged += NotifyPropertyChanged;
-
-                    item.OnPropertyChangedDetail -= DrawingBase_NotifyPropertyChangedDetail;
-                    item.OnPropertyChangedDetail += DrawingBase_NotifyPropertyChangedDetail;
-                    item.SubscribePropertyChangedEvents();
+                    (before as ObservableCollection<string>).CollectionChanged -= Content_CollectionChanged;
+                    (after as ObservableCollection<string>).CollectionChanged += Content_CollectionChanged;
+                }
+                if (before is ObservableCollection<DrawingCanvas> && after is ObservableCollection<DrawingCanvas>)
+                {
+                    (before as ObservableCollection<DrawingCanvas>).CollectionChanged -= Content_CollectionChanged;
+                    (after as ObservableCollection<DrawingCanvas>).CollectionChanged += Content_CollectionChanged;
                 }
             }
         }
 
-        private void BackgroundImages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Content_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(BackgroundImages));
-            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(nameof(BackgroundImages)), null, e.NewItems, e.OldItems);
+            MainSave.RaiseCollectionChanged(e, sender);
         }
 
-        /// <summary>
-        /// 清理属性变化通知
-        /// </summary>
-        public void UnsubscribePropertyChangedEvents()
-        {
-            Palette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
-            Palette.PropertyChanged -= NotifyPropertyChanged;
-
-            Padding.OnPropertyChangedDetail -= Padding_OnPropertyChangedDetail;
-            Padding.PropertyChanged -= NotifyPropertyChanged;
-
-            BackgroundImages.CollectionChanged -= BackgroundImages_CollectionChanged;
-
-            if (Content != null)
-            {
-                foreach (var item in Content)
-                {
-                    item.PropertyChanged -= NotifyPropertyChanged;
-                    item.OnPropertyChangedDetail -= DrawingBase_NotifyPropertyChangedDetail;
-                    item.UnsubscribePropertyChangedEvents();
-                }
-            }
-        }
-
-        private void DrawingBase_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail?.Invoke(propertyInfo, GetType().GetProperty(nameof(DrawingCanvas)), newValue, oldValue);
-        }
-
-        private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(sender, e);
-        }
-
-        private void Padding_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail?.Invoke(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
-        }
-
-        private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail?.Invoke(propertyInfo, GetType().GetProperty(nameof(Palette)), newValue, oldValue);
-        }
 
         public static Colors GetThemeDefaultColor(Theme theme, bool dark) => (theme, dark) switch
         {

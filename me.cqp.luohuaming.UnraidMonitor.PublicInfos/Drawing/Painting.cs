@@ -116,9 +116,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             canvas.ClipPath(path, SKClipOperation.Intersect, true);
 
             var srcRect = new SKRect(0, 0, image.Width, image.Height);
-            var destRect = new SKRect(0, 0, width, width);
+            var dstRect = new SKRect(0, 0, width, width);
 
-            canvas.DrawImage(image, srcRect, destRect, AntialiasPaint);
+            canvas.DrawImage(image, srcRect, dstRect, AntialiasPaint);
             canvas.Flush();
             return surface.Snapshot();
         }
@@ -500,9 +500,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 };
 
                 var srcRect = new SKRect(0, 0, image.Width, image.Height);
-                var destRect = new SKRect(0, 0, newWidth, newHeight);
+                var dstRect = new SKRect(0, 0, newWidth, newHeight);
 
-                canvas.DrawImage(image, srcRect, destRect, paint);
+                canvas.DrawImage(image, srcRect, dstRect, paint);
             }
 
             return SKImage.FromBitmap(scaledBitmap);
@@ -638,12 +638,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
-        private void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName, object before, object after)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
+            MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
         }
 
         public static Thickness Empty => new(0);

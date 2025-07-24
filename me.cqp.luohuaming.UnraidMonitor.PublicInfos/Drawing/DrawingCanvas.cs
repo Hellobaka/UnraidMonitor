@@ -3,6 +3,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -143,69 +144,24 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public bool LayoutDebug { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
-        protected void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName, object before, object after)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
-        }
-
-        public void SubscribePropertyChangedEvents()
-        {
-            foreach (var item in Content)
+            MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
+            if (propertyName == nameof(Content))
             {
-                item.PropertyChanged -= NotifyPropertyChanged;
-                item.PropertyChanged += NotifyPropertyChanged;
-
-                item.OnPropertyChangedDetail -= DrawingItemBase_NotifyPropertyChangedDetail;
-                item.OnPropertyChangedDetail += DrawingItemBase_NotifyPropertyChangedDetail;
-                item.SubscribePropertyChangedEvents();
+                if (before is ObservableCollection<DrawingItemBase> && after is ObservableCollection<DrawingItemBase>)
+                {
+                    (before as ObservableCollection<DrawingItemBase>).CollectionChanged -= Content_CollectionChanged;
+                    (after as ObservableCollection<DrawingItemBase>).CollectionChanged += Content_CollectionChanged;
+                }
             }
-
-            Margin.PropertyChanged -= NotifyPropertyChanged;
-            Margin.PropertyChanged += NotifyPropertyChanged;
-            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
-            Margin.OnPropertyChangedDetail += Margin_NotifyPropertyChangedDetail;
-
-            Padding.PropertyChanged -= NotifyPropertyChanged;
-            Padding.PropertyChanged += NotifyPropertyChanged;
-            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
-            Padding.OnPropertyChangedDetail += Padding_NotifyPropertyChangedDetail;
         }
 
-        public void UnsubscribePropertyChangedEvents()
+        private void Content_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (var item in Content)
-            {
-                item.PropertyChanged -= NotifyPropertyChanged;
-                item.OnPropertyChangedDetail -= DrawingItemBase_NotifyPropertyChangedDetail;
-                item.UnsubscribePropertyChangedEvents();
-            }
-            Margin.PropertyChanged -= NotifyPropertyChanged;
-            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
-            Padding.PropertyChanged -= NotifyPropertyChanged;
-            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
-        }
-
-        private void DrawingItemBase_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(DrawingItemBase)), newValue, oldValue);
-        }
-
-        private void Padding_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
-        }
-
-        private void Margin_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Margin)), newValue, oldValue);
-        }
-
-        private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(sender, e);
+            MainSave.RaiseCollectionChanged(e, sender);
         }
 
         /// <summary>

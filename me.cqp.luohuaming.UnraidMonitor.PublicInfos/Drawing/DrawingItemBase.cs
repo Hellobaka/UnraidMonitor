@@ -79,66 +79,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public bool IsExpanded { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
 
-        protected void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName, object before, object after)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            OnPropertyChangedDetail?.Invoke(GetType().GetProperty(propertyName), null, GetType().GetProperty(propertyName)?.GetValue(this), null);
-        }
-
-        public void SubscribePropertyChangedEvents()
-        {
-            Margin.PropertyChanged -= NotifyPropertyChanged;
-            Margin.PropertyChanged += NotifyPropertyChanged;
-            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
-            Margin.OnPropertyChangedDetail += Margin_NotifyPropertyChangedDetail;
-
-            Padding.PropertyChanged -= NotifyPropertyChanged;
-            Padding.PropertyChanged += NotifyPropertyChanged;
-            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
-            Padding.OnPropertyChangedDetail += Padding_NotifyPropertyChangedDetail;
-
-            if (OverridePalette != null)
-            {
-                OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
-                OverridePalette.OnPropertyChangedDetail += Palette_OnPropertyChangedDetail;
-                OverridePalette.PropertyChanged -= NotifyPropertyChanged;
-                OverridePalette.PropertyChanged += NotifyPropertyChanged;
-            }
-        }
-
-        public void UnsubscribePropertyChangedEvents()
-        {
-            Margin.PropertyChanged -= NotifyPropertyChanged;
-            Margin.OnPropertyChangedDetail -= Margin_NotifyPropertyChangedDetail;
-            Padding.PropertyChanged -= NotifyPropertyChanged;
-            Padding.OnPropertyChangedDetail -= Padding_NotifyPropertyChangedDetail;
-            if (OverridePalette != null)
-            {
-                OverridePalette.OnPropertyChangedDetail -= Palette_OnPropertyChangedDetail;
-                OverridePalette.PropertyChanged -= NotifyPropertyChanged;
-            }
-        }
-
-        private void Palette_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(OverridePalette)), newValue, oldValue);
-        }
-
-        private void Padding_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Padding)), newValue, oldValue);
-        }
-
-        private void Margin_NotifyPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue)
-        {
-            OnPropertyChangedDetail(propertyInfo, GetType().GetProperty(nameof(Margin)), newValue, oldValue);
-        }
-
-        private void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(sender, e);
+            MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
         }
 
         public virtual void BeforeBinding()

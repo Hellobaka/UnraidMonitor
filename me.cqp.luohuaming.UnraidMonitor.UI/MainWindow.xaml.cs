@@ -26,6 +26,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             if (App.Debug)
             {
                 LoadDebug();
@@ -74,18 +75,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             }
         }
 
-        public ObservableCollection<StyleHistoryItem> StyleHistories { get; set; } = [
-            new(){
-                DateTime = DateTime.Now,
-                FileName = "default.style",
-                FullPath = @"D:\Code\UnraidMonitor\me.cqp.luohuaming.UnraidMonitor.PublicInfos\bin\x86\Debug\default.style"
-            },
-            new(){
-                DateTime = DateTime.Now.AddDays(-1),
-                FileName = "layout.style",
-                FullPath = @"D:\Code\UnraidMonitor\me.cqp.luohuaming.UnraidMonitor.PublicInfos\bin\x86\Debug\layout.style"
-            },
-        ];
+        public ObservableCollection<StyleHistoryItem> StyleHistories { get; set; }
+      
+        public static MainWindow Instance { get; private set; }
 
         private void OpenFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -103,6 +95,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
                 });
                 LoadWorkbench(path);
             }
+            OnPropertyChanged(nameof(StyleHistories));
         }
 
         private void CreateFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -137,6 +130,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
                 LoadWorkbench(item.FullPath);
                 StyleHistoryListBox.SelectedItem = null;
             }
+            OnPropertyChanged(nameof(StyleHistories));
         }
 
         private async Task LoadActiveHistory()
@@ -163,21 +157,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             }
         }
 
-        private void SaveActiveHistory(StyleHistoryItem item)
+        public static void SaveActiveHistory(StyleHistoryItem item)
         {
             item.DateTime = DateTime.Now;
-            if (StyleHistories.Contains(item))
+            if (!Instance.StyleHistories.Any(x => x.FullPath == item.FullPath))
             {
-                OnPropertyChanged(nameof(StyleHistories));
-            }
-            else
-            {
-                StyleHistories.Add(item);
+                Instance.StyleHistories.Add(item);
             }
 
             try
             {
-                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "history.json"), JsonConvert.SerializeObject(StyleHistories));
+                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "history.json"), JsonConvert.SerializeObject(Instance.StyleHistories));
             }
             catch (Exception e)
             {
@@ -242,10 +232,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             return null;
         }
 
-        private async void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await LoadActiveHistory();
-            EmptyHint.Visibility = StyleHistories.Count > 0 ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+            EmptyHint.Visibility = StyleHistories.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
+            OnPropertyChanged(nameof(StyleHistories));
         }
     }
 }

@@ -1,30 +1,35 @@
 ﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls;
 using me.cqp.luohuaming.UnraidMonitor.UI.Models;
+using me.cqp.luohuaming.UnraidMonitor.UI.Windows;
+using Microsoft.Win32;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 {
-    [AddINotifyPropertyChangedInterface]
-    public class WorkbenchViewModel
+    public class WorkbenchViewModel : INotifyPropertyChanged
     {
-        public WorkbenchViewModel()
+        public WorkbenchViewModel(Window workbench)
         {
+            Workbench = workbench;
+
             NewCommand = new RelayCommand(_ => NewStyle(), _ => true);
             SaveCommand = new RelayCommand(_ => SaveStyle(), _ => true);
             ExitCommand = new RelayCommand(_ => Exit(), _ => true);
             OpenCommand = new RelayCommand(_ => OpenStyle(), _ => true);
             UndoCommand = new RelayCommand(_ => Undo(), _ => true);
             RedoCommand = new RelayCommand(_ => Redo(), _ => true);
-            UpdateActionStackCommand = new RelayCommand(_ => UpdateActionStack(), _ => true);
             ToggleThemeCommand = new RelayCommand(_ => ToggleTheme(), _ => true);
 
             if (MainSave.CQApi != null && MainSave.CQApi.AppInfo != null)
@@ -33,18 +38,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             }
 
             ThemeIcon = (Geometry)Application.Current.FindResource("LightModeGeometry");
+            UndoRedoManager = new UndoRedoManager(50);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
         public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
-
-        /// <summary>
-        /// 记录样式各个字段的值，包括嵌套对象中属性的值
-        /// </summary>
-        public Dictionary<string, object> StylePropertyValues { get; set; } = [];
+        public event MainSave.CollectionChangeEventArg OnCollectionChangedDetail;
 
         public bool AutoRedraw { get; set; } = true;
 
         public bool Debouncing { get; set; }
+        
+        public bool OperationPending { get; set; }
 
         public double DebounceValue { get; set; }
 
@@ -75,11 +80,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
         public Array BindingItemValues { get; set; } = Enum.GetValues(typeof(ItemType));
 
         public Array BindingTimeRangeValues { get; set; } = Enum.GetValues(typeof(TimeRange));
-
-        private Stack<(PropertyInfo property, object parent, object oldValue, object newValue)> ActionHistories { get; set; } = [];
-
-        private int ActionCurrentIndex { get; set; }
-
+       
+        public Window Workbench { get; set; }
+      
         public ICommand NewCommand { get; set; }
 
         public ICommand SaveCommand { get; set; }
@@ -94,67 +97,156 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public ICommand ToggleThemeCommand { get; set; }
 
-        public ICommand UpdateActionStackCommand { get; set; }
+        public bool CanUndo => !UndoRedoManager.Processing && UndoRedoManager.UndoStack.Count > 0;
 
-        public bool CanUndo { get; set; }
-
-        public bool CanRedo { get; set; }
+        public bool CanRedo => !UndoRedoManager.Processing && UndoRedoManager.RedoStack.Count > 0;
 
         public bool IsDarkMode { get; set; }
 
         public Geometry ThemeIcon { get; set; }
 
-        public void ApplyMonitor()
+        public UndoRedoManager UndoRedoManager { get; set; }
+
+        public void UnsubscribePropertyChangedEvents()
         {
-            if (CurrentStyle == null)
+            MainSave.OnPropertyChangedDetail -= MainSave_OnPropertyChangedDetail;
+            MainSave.OnCollectionChangedDetail -= MainSave_OnCollectionChangedDetail;
+        }
+
+        public void SubscribePropertyChangedEvents()
+        {
+            MainSave.OnPropertyChangedDetail += MainSave_OnPropertyChangedDetail;
+            MainSave.OnCollectionChangedDetail += MainSave_OnCollectionChangedDetail;
+        }
+
+        private void MainSave_OnCollectionChangedDetail(NotifyCollectionChangedEventArgs e, object instance)
+        {
+            UndoRedoManager.AddCommand(new CollectionChangeCommand(instance, e));
+            OnCollectionChangedDetail?.Invoke(e, instance);
+            OnPropertyChanged(nameof(CanRedo));
+            OnPropertyChanged(nameof(CanUndo));
+            OperationPending = true;
+        }
+
+        private void MainSave_OnPropertyChangedDetail(PropertyInfo propertyInfo, object instance, object newValue, object oldValue)
+        {
+            if (propertyInfo.Name == "Boundary")
             {
                 return;
             }
-            var styleType = CurrentStyle.GetType();
-            foreach (var property in styleType.GetProperties())
-            {
-                if (property.CanRead && property.CanWrite)
-                {
-                    var value = property.GetValue(CurrentStyle);
-                    var valueType = value?.GetType();
-                    if (value != null && !valueType.IsArray && (valueType.IsClass || valueType.IsLayoutSequential) && !(value is string || value is float || value is bool || value is int))
-                    {
-                        foreach (var nestedProperty in value.GetType().GetProperties())
-                        {
-                            if (nestedProperty.CanRead && nestedProperty.CanWrite)
-                            {
-                                //var nestedValue = nestedProperty.GetValue(value);
-                                //StylePropertyValues[$"{property.Name}.{nestedProperty.Name}"] = nestedValue;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        StylePropertyValues[property.Name] = value;
-                    }
-                }
-            }
-            CurrentStyle.OnPropertyChangedDetail += CurrentStyle_OnPropertyChangedDetail;
+            UndoRedoManager.AddCommand(new PropertyChangeCommand(instance, propertyInfo, oldValue, newValue));
+            OnPropertyChangedDetail?.Invoke(propertyInfo, instance, newValue, oldValue);
+            OnPropertyChanged(nameof(CanRedo));
+            OnPropertyChanged(nameof(CanUndo));
+            OperationPending = true;
         }
 
-        public void NewStyle()
+        public async Task NewStyle()
         {
+            if (OperationPending && !await MainWindow.ShowConfirmAsync("还有操作未保存，确定要抛弃这些更改吗？"))
+            {
+                return;
+            }
 
+            CreateStyle dialog = new CreateStyle();
+            dialog.Owner = Workbench;
+            dialog.ShowDialog();
+            if (dialog.DialogResult ?? false)
+            {
+                CurrentStylePath = dialog.SavedStylePath;
+                try
+                {
+                    MainWindow.SaveActiveHistory(new StyleHistoryItem
+                    {
+                        DateTime = DateTime.Now,
+                        FileName = Path.GetFileName(CurrentStylePath),
+                        FullPath = CurrentStylePath
+                    });
+
+                    OperationPending = false;
+                    UndoRedoManager.Clear();
+
+                    CurrentStyle = DrawingStyle.LoadFromFile(CurrentStylePath);
+                    OnPropertyChanged(nameof(CurrentStyle));
+                    Workbench.Title = $"{CurrentStyle.Name} - 样式编辑器";
+                    OnPropertyChangedDetail?.Invoke(null, this, CurrentStyle, null);
+                }
+                catch (Exception e)
+                {
+                    MainWindow.ShowError($"加载样式文件失败：{e.Message}");
+                }
+            }
         }
 
         public void SaveStyle()
         {
-
+            if (CurrentStyle == null)
+            {
+                MainWindow.ShowError("当前样式未定义，无法保存。");
+                return;
+            }
+            if (string.IsNullOrEmpty(CurrentStylePath))
+            {
+                SaveFileDialog dialog = new();
+                dialog.Title = "保存样式文件";
+                dialog.Filter = "样式文件|*.style|所有文件|*.*";
+                if (dialog.ShowDialog() ?? false)
+                {
+                    CurrentStylePath = dialog.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            File.WriteAllText(CurrentStylePath, CurrentStyle.Serialize());
+            MainWindow.ShowInfo("保存成功");
+            OperationPending = false;
         }
 
-        public void OpenStyle()
+        public async Task OpenStyle()
         {
+            if (OperationPending && !await MainWindow.ShowConfirmAsync("还有操作未保存，确定要抛弃这些更改吗？"))
+            {
+                return;
+            }
+            OpenFileDialog dialog = new();
+            dialog.Title = "打开样式文件";
+            dialog.Filter = "样式文件|*.style|所有文件|*.*";
+            if (dialog.ShowDialog() ?? false)
+            {
+                string path = dialog.FileName;
+                MainWindow.SaveActiveHistory(new StyleHistoryItem
+                {
+                    DateTime = DateTime.Now,
+                    FileName = Path.GetFileName(path),
+                    FullPath = path
+                });
+                CurrentStylePath = path;
+                try
+                {
+                    OperationPending = false;
+                    UndoRedoManager.Clear();
 
+                    CurrentStyle = DrawingStyle.LoadFromFile(path);
+                    OnPropertyChanged(nameof(CurrentStyle));
+                    Workbench.Title = $"{CurrentStyle.Name} - 样式编辑器";
+                    OnPropertyChangedDetail?.Invoke(null, this, CurrentStyle, null);
+                }
+                catch (Exception e)
+                {
+                    MainWindow.ShowError($"加载样式文件失败：{e.Message}");
+                }
+            }
         }
 
-        public void Exit()
+        public async Task Exit()
         {
-
+            if (OperationPending && !await MainWindow.ShowConfirmAsync("还有操作未保存，确定要抛弃这些更改吗？"))
+            {
+                return;
+            }
+            Workbench.Close();
         }
 
         public void ToggleTheme()
@@ -170,55 +262,43 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             }
         }
 
-        public void UpdateActionStack()
-        {
-
-        }
-
         public void Undo()
         {
-            if (ActionHistories.Count == 0)
+            try
             {
-                return;
+                UndoRedoManager.Undo();
+                OnPropertyChanged(nameof(CanRedo));
+                OnPropertyChanged(nameof(CanUndo));
             }
-            var lastAction = ActionHistories.Pop();
-            var property = lastAction.property;
-            var parent = lastAction.parent;
-            var oldValue = lastAction.oldValue;
-            property.SetValue(parent, oldValue);
-            CurrentStyle_OnPropertyChangedDetail(property, parent.GetType().GetProperty(property.Name), oldValue, lastAction.newValue);
+            catch (Exception e)
+            {
+                MainWindow.ShowError($"撤销操作过程异常：{e}");
+            }
         }
 
         public void Redo()
         {
-            if (ActionHistories.Count == 0)
+            try
             {
-                return;
+                UndoRedoManager.Redo();
+                OnPropertyChanged(nameof(CanRedo));
+                OnPropertyChanged(nameof(CanUndo));
             }
-            var lastAction = ActionHistories.Pop();
-            var property = lastAction.property;
-            var parent = lastAction.parent;
-            var newValue = lastAction.newValue;
-            property.SetValue(parent, newValue);
-            CurrentStyle_OnPropertyChangedDetail(property, parent.GetType().GetProperty(property.Name), newValue, lastAction.oldValue);
+            catch (Exception e)
+            {
+                MainWindow.ShowError($"重做操作过程异常：{e}");
+            }
         }
 
-        private void CurrentStyle_OnPropertyChangedDetail(PropertyInfo propertyInfo, PropertyInfo parentType, object newValue, object oldValue)
+        public void OnPropertyChanged(string propertyName)
         {
-            string propertyName = parentType == null ? propertyInfo.Name : $"{parentType.Name}.{propertyInfo.Name}";
-            if (StylePropertyValues.TryGetValue(propertyName, out object value))
-            {
-                // Get OldValue
-                Debug.WriteLine($"{propertyName} From {value} Changed To {newValue}");
-                StylePropertyValues[propertyName] = newValue;
-            }
-            else
-            {
-                value = null;
-                // Debugger.Break();
-                Debug.WriteLine($"{propertyName} Changed To {newValue}, but not found in StylePropertyValues");
-            }
-            OnPropertyChangedDetail?.Invoke(propertyInfo, parentType, newValue, value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void NoticeCanUndo()
+        {
+            OnPropertyChanged(nameof(CanRedo));
+            OnPropertyChanged(nameof(CanUndo));
         }
     }
 }

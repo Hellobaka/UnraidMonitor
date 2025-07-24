@@ -2,6 +2,7 @@ using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using me.cqp.luohuaming.UnraidMonitor.Sdk.Cqp;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 
@@ -23,6 +24,20 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static List<Commands> Commands { get; set; }
 
-        public delegate void PropertyChangeEventArg(PropertyInfo propertyInfo, PropertyInfo parentPropertyType, object newValue, object oldValue);
+        public static event PropertyChangeEventArg OnPropertyChangedDetail;
+        public static event CollectionChangeEventArg OnCollectionChangedDetail;
+
+        public static void RaisePropertyChanged(PropertyInfo propertyInfo, object instance, object newValue, object oldValue)
+        {
+            OnPropertyChangedDetail?.Invoke(propertyInfo, instance, newValue, oldValue);
+        }
+
+        public static void RaiseCollectionChanged(NotifyCollectionChangedEventArgs e, object instance)
+        {
+            OnCollectionChangedDetail?.Invoke(e, instance);
+        }
+
+        public delegate void PropertyChangeEventArg(PropertyInfo propertyInfo, object instance, object newValue, object oldValue);
+        public delegate void CollectionChangeEventArg(NotifyCollectionChangedEventArgs e, object instance);
     }
 }
