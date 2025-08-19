@@ -22,7 +22,10 @@
         VerticalAlignment="Stretch"
         Orientation="Vertical"
         Spacing="10">
-        <Expander x:Name="StyleExpander" Background="{StaticResource RegionBrush}">
+        <Expander
+            x:Name="StyleExpander"
+            Background="{StaticResource RegionBrush}"
+            IsExpanded="True">
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <Button
@@ -61,13 +64,13 @@
                 <controls:ControlWithTitle Title="主题" TitleWidth="{StaticResource GlobalTitleWidth}">
                     <ComboBox ItemsSource="{Binding ThemeValues, Converter={StaticResource EnumToItemsSourceConverter}}" SelectedItem="{Binding CurrentStyle.ItemTheme, Mode=TwoWay}" />
                 </controls:ControlWithTitle>
-                <controls:ControlWithTitle Title="深色模式" TitleWidth="{StaticResource GlobalTitleWidth}">
+                <!--<controls:ControlWithTitle Title="深色模式" TitleWidth="{StaticResource GlobalTitleWidth}">
                     <ToggleButton
                         HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                         IsChecked="True"
                         Style="{StaticResource ToggleButtonSwitch}" />
-                </controls:ControlWithTitle>
+                </controls:ControlWithTitle>-->
                 <Expander Background="{StaticResource RegionBrush}" Header="调色板">
                     <Border
                         Background="{DynamicResource RegionBrush}"
