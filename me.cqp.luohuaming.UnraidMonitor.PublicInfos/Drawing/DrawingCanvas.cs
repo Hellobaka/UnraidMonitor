@@ -12,7 +12,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
     public class DrawingCanvas : INotifyPropertyChanged
     {
-        public class Title
+        public class Title : INotifyPropertyChanged
         {
             public bool HasTitle { get; set; }
 
@@ -37,9 +37,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public int TextSize { get; set; } = 14;
 
             public float TitleMarginBottom { get; set; } = 10;
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public void OnPropertyChanged(string propertyName, object before, object after)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
+            }
         }
 
-        public class Border
+        public class Border : INotifyPropertyChanged
         {
             public bool HasBorder { get; set; } = false;
 
@@ -47,6 +55,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             public float BorderWidth { get; set; } = 0;
 
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public void OnPropertyChanged(string propertyName, object before, object after)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                MainSave.RaisePropertyChanged(GetType().GetProperty(propertyName), this, after, before);
+            }
             public float BorderRadius { get; set; } = 0;
         }
 
