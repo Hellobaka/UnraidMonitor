@@ -225,43 +225,13 @@
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,4,4">
-                    <ListBox
-                        x:Name="DrawingItemContainer"
-                        MaxHeight="500"
-                        ItemsSource="{Binding Content}"
-                        ScrollViewer.CanContentScroll="True"
-                        VirtualizingStackPanel.IsVirtualizing="True"
-                        VirtualizingStackPanel.VirtualizationMode="Recycling">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
+                    <ItemsControl ItemsSource="{Binding Content}">
+                        <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <local:DrawingItem
-                                    Margin="5,0"
-                                    CurrentCanvas="{Binding DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    DataContext="{Binding}" />
+                                <local:DrawingItem Margin="5,0" DataContext="{Binding}" />
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                                <Setter Property="Padding" Value="0" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="ListBoxItem">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Border>
             </Expander>
         </hc:UniformSpacingPanel>
