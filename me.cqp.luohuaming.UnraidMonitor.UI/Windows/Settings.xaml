@@ -2,6 +2,7 @@
     x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Windows.Settings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
@@ -10,12 +11,16 @@
     Width="800"
     Height="600"
     d:DesignHeight="1000"
-    d:DesignWidth="1500"
+    d:DesignWidth="800"
     Background="{DynamicResource RegionBrush}"
     Loaded="Page_Loaded"
     Style="{StaticResource WindowWin10}"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
+    <Window.Resources>
+        <converter:AlarmToDetailConverter x:Key="AlarmToDetailConverter" />
+        <converter:AlarmToTypeConverter x:Key="AlarmToTypeConverter" />
+    </Window.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -247,6 +252,117 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="监控配置">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <hc:UniformSpacingPanel Margin="0,0,0,10" Spacing="10">
+                        <Button
+                            Name="AlarmCommandNewButton"
+                            Width="100"
+                            Click="AlarmCommandNewButton_Click"
+                            Content="新建"
+                            Style="{StaticResource ButtonPrimary}" />
+                        <Button
+                            Name="AlarmEnableAllButton"
+                            Width="100"
+                            Content="全部启用" />
+                        <Button
+                            Name="AlarmDisableAllButton"
+                            Width="100"
+                            Content="全部禁用"
+                            Style="{StaticResource ButtonDanger}" />
+                    </hc:UniformSpacingPanel>
+                    <DataGrid
+                        Grid.Row="1"
+                        hc:DataGridAttach.CanUnselectAllWithBlankArea="True"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        CanUserDeleteRows="False"
+                        HeadersVisibility="Column"
+                        ItemsSource="{Binding Alarms}"
+                        RowDetailsVisibilityMode="VisibleWhenSelected"
+                        RowHeaderWidth="60"
+                        SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="状态">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border
+                                                Background="{StaticResource SuccessBrush}"
+                                                CornerRadius="5"
+                                                Visibility="{Binding Enabled, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                <TextBlock
+                                                    Margin="10,5"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource TextIconBrush}"
+                                                    Text="启用" />
+                                            </Border>
+                                            <Border
+                                                Background="{StaticResource DangerBrush}"
+                                                CornerRadius="5"
+                                                Visibility="{Binding Enabled, Converter={StaticResource Boolean2VisibilityReConverter}}">
+                                                <TextBlock
+                                                    Margin="10,5"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource TextIconBrush}"
+                                                    Text="禁用" />
+                                            </Border>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn
+                                Binding="{Binding Name}"
+                                Header="名称"
+                                IsReadOnly="True" />
+                            <DataGridTemplateColumn Width="*" Header="监控属性">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource AlarmToDetailConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="监控类型">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource AlarmToTypeConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="操作">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                            <Button
+                                                Width="50"
+                                                Content="编辑"
+                                                Style="{StaticResource ButtonPrimary}" />
+                                            <Button
+                                                Width="50"
+                                                Margin="5,0,0,0"
+                                                Content="删除"
+                                                Style="{StaticResource ButtonDanger}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>

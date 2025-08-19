@@ -1,9 +1,13 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.UI.Models;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.UI.Models;
+using me.cqp.luohuaming.UnraidMonitor.UI.Windows;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -83,6 +87,25 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
                 }
             }
             return null;
+        }
+
+    }
+
+    public class EnumToStringConverter : IValueConverter
+    {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value?.ToString() ?? DependencyProperty.UnsetValue;
+        }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null || !targetType.IsEnum)
+            {
+                return null;
+            }
+
+            return Enum.Parse(targetType, value.ToString());
         }
 
     }
@@ -179,4 +202,96 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
         }
     }
 
+    public class AlarmToDetailConverter : IValueConverter
+    {
+        private static Array ItemTypes => Enum.GetValues(typeof(ItemType));
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is AlarmRuleBase alarm)
+            {
+                var d = ItemTypes.Cast<ItemType>().FirstOrDefault(x => x.ToString() == alarm.ClassName);
+                if (d != ItemType.Unknown)
+                {
+                    var description = new EnumDescriptionConverter().Convert(d, targetType, parameter, culture) as string;
+                    
+                    var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "me.cqp.luohuaming.UnraidMonitor.PublicInfos");
+                    var modelTypes = assembly?.GetType($"me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.{alarm.ClassName}");
+                    if (modelTypes == null)
+                    {
+                        return DependencyProperty.UnsetValue;
+                    }
+
+                    foreach (PropertyInfo propertyInfo in modelTypes.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        string displayName = Attribute.GetCustomAttribute(propertyInfo, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : propertyInfo.Name;
+                        return $"{description} {displayName}";
+                    }
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class AlarmToTypeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is AlarmRuleBase alarm)
+            {
+                if(alarm is RangeAlarmRule) 
+                {
+                    return "区间报警";
+                }
+                else if (alarm is ThresholdAlarmRule)
+                {
+                    return "持续时间阈值报警";
+                }
+                else if (alarm is RateOfChangeAlarmRule)
+                {
+                    return "变化率报警";
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TimeSpanToDateTimeConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return DateTime.Today;
+            }
+            if (value is TimeSpan time)
+            {
+                return DateTime.Today.Add(time);
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+            {
+                return new TimeSpan();
+            }
+            if (value is DateTime time)
+            {
+                return time.TimeOfDay;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+    }
 }

@@ -33,6 +33,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public ObservableCollection<StyleCommandWrapper> StyleCommands { get; set; } = [];
 
+        public ObservableCollection<AlarmRuleBase> Alarms { get; set; } = new ObservableCollection<AlarmRuleBase>
+        {
+            new RangeAlarmRule()
+        };
+
         private static bool TryParse(string input, Type type, out object value)
         {
             value = input;
@@ -505,6 +510,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void AlarmCommandNewButton_Click(object sender, RoutedEventArgs e)
+        {
+            AlarmEditor alarmEditor = new AlarmEditor();
+            alarmEditor.ShowDialog();
+            if (alarmEditor.DialogResult ?? false)
+            {
+                Alarms.Add(alarmEditor.AlarmInstance);
+            }
         }
     }
 }

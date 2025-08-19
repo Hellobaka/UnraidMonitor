@@ -1,0 +1,332 @@
+﻿<Window
+    x:Class="me.cqp.luohuaming.UnraidMonitor.UI.Windows.AlarmEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="编辑报警条件"
+    Width="400"
+    Height="360"
+    d:DataContext="{d:DesignInstance Type=local:AlarmEditor}"
+    Loaded="Window_Loaded"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
+        <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <converter:TimeSpanToDateTimeConverter x:Key="TimeSpanToDateTimeConverter" />
+        <converter:EnumToStringConverter x:Key="EnumToStringConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="启用：" />
+                    <ToggleButton
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                        IsChecked="{Binding AlarmInstance.Alarmed, Mode=TwoWay}"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                </Grid>
+                <Grid Grid.Row="1" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="名称：" />
+                    <TextBox Grid.Column="1" Text="{Binding AlarmInstance.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+                <Grid Grid.Row="2" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="报警类型：" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding AlarmTypeValues}"
+                        SelectedItem="{Binding AlarmType, Mode=TwoWay}"
+                        SelectionChanged="AlarmType_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="3" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="可重复：" />
+                    <ToggleButton
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                        IsChecked="{Binding AlarmInstance.CanDuplicateAlarmPost, Mode=TwoWay}"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                </Grid>
+                <Grid Grid.Row="4" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="特定时段：" />
+                    <ToggleButton
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                        IsChecked="{Binding AlarmInstance.IsTimeRangeAlarm, Mode=TwoWay}"
+                        Style="{StaticResource ToggleButtonSwitch}" />
+                </Grid>
+                <Grid Grid.Row="5" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="开始时段：" />
+                    <hc:TimePicker
+                        Grid.Column="1"
+                        DisplayTime="{Binding AlarmInstance.StartTime, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                        Style="{StaticResource TimePickerPlus}" />
+                </Grid>
+                <Grid Grid.Row="6" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="结束时段：" />
+                    <hc:TimePicker
+                        Grid.Column="1"
+                        DisplayTime="{Binding AlarmInstance.EndTime, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                        Style="{StaticResource TimePickerPlus}" />
+                </Grid>
+                <Grid Grid.Row="7" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="最小间隔：" />
+                    <hc:TimePicker
+                        Grid.Column="1"
+                        DisplayTime="{Binding AlarmInstance.AlarmInterval, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                        Style="{StaticResource TimePickerPlus}" />
+                </Grid>
+                <Grid Grid.Row="8" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="监控类别：" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding BindingItemValues}"
+                        SelectedItem="{Binding AlarmInstance.ClassName, Mode=TwoWay, Converter={StaticResource EnumToStringConverter}}"
+                        SelectionChanged="ItemType_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="9" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="监控属性：" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding BindingProperties}"
+                        SelectedItem="{Binding AlarmInstance.PropertyName, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="10" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="激活文本模板：" />
+                    <TextBox Grid.Column="1" Text="{Binding AlarmInstance.AlarmNotifyFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+                <Grid Grid.Row="11" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center" Text="恢复文本模板：" />
+                    <TextBox Grid.Column="1" Text="{Binding AlarmInstance.RecoverNotifyFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+                <Grid
+                    x:Name="RangeAlarmPropertyContainer"
+                    Grid.Row="12"
+                    Margin="0,10,0,0"
+                    Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="区间内报警：" />
+                        <ToggleButton
+                            Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                            IsChecked="{Binding AlarmInstance.AlarmInside, Mode=TwoWay}"
+                            Style="{StaticResource ToggleButtonSwitch}" />
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="区间最小值：" />
+                        <TextBox Grid.Column="1" Text="{Binding AlarmInstance.Min, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="区间最大值：" />
+                        <TextBox Grid.Column="1" Text="{Binding AlarmInstance.Min, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Grid.Row="3" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="最大持续时长：" />
+                        <hc:TimePicker
+                            Grid.Column="1"
+                            DisplayTime="{Binding AlarmInstance.ThresholdTimeSpan, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                            Style="{StaticResource TimePickerPlus}" />
+                    </Grid>
+                </Grid>
+                <Grid
+                    x:Name="RateOfChangeAlarmPropertyContainer"
+                    Grid.Row="12"
+                    Margin="0,10,0,0"
+                    Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="最大变化量：" />
+                        <TextBox Grid.Column="1" Text="{Binding AlarmInstance.MaxDelta, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </Grid>
+                </Grid>
+                <Grid
+                    x:Name="ThresholdAlarmPropertyContainer"
+                    Grid.Row="12"
+                    Margin="0,10,0,0"
+                    Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="阈值：" />
+                        <TextBox Grid.Column="1" Text="{Binding AlarmInstance.Threshold, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="计算方式：" />
+                        <ComboBox
+                            Grid.Column="1"
+                            ItemsSource="{Binding BoolConditionValues}"
+                            SelectedItem="{Binding AlarmInstance.ThresholdBoolCondition, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center" Text="最大持续时长：" />
+                        <hc:TimePicker
+                            Grid.Column="1"
+                            DisplayTime="{Binding AlarmInstance.ThresholdTimeSpan, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                            Style="{StaticResource TimePickerPlus}" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                Click="Save_Click"
+                Content="保存"
+                Style="{StaticResource ButtonPrimary}" />
+            <Button
+                Grid.Column="1"
+                Margin="5"
+                HorizontalAlignment="Stretch"
+                Click="Cancel_Click"
+                Content="取消" />
+        </Grid>
+    </Grid>
+</Window>

@@ -180,6 +180,9 @@
     <Compile Include="ViewModels\AddOrUpdateStyleCommandViewModel.cs" />
     <Compile Include="ViewModels\UndoRedoManager.cs" />
     <Compile Include="ViewModels\WorkbenchViewModel.cs" />
+    <Compile Include="Windows\AlarmEditor.xaml.cs">
+      <DependentUpon>AlarmEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\BindingConditionEditor.xaml.cs">
       <DependentUpon>BindingConditionEditor.xaml</DependentUpon>
     </Compile>
@@ -284,6 +287,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AlarmEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
