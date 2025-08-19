@@ -3,6 +3,7 @@ using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,18 @@ using System.Text.RegularExpressions;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 {
+    public enum AlarmType
+    {
+        [Description("区间报警")]
+        RangeAlarm,
+
+        [Description("变化率报警")]
+        RateOfChangeAlarm,
+
+        [Description("持续时间阈值报警")]
+        ThresholdAlarm
+    }
+
     public class AlarmManager
     {
         public event Action<string> OnAlarmPost;
@@ -52,6 +65,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         var span = DateTime.Now - rule.LastAlarmTime;
                         if (span > rule.AlarmInterval)
                         {
+                            if (!rule.CanDuplicateAlarmPost && rule.Alarmed)
+                            {
+                                continue; // 如果不允许重复报警且已经处于报警状态，则跳过
+                            }
                             rule.LastAlarmTime = DateTime.Now;
                             rule.Alarmed = true;
                             OnAlarmPost?.Invoke(rule.GetAlarm(value));
@@ -59,9 +76,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     }
                     else
                     {
-                        rule.Alarmed = false;
-                        if (rule.CanAlarmRecover)
+                        if (rule.Alarmed)
                         {
+                            rule.Alarmed = false;
                             OnAlarmRecover?.Invoke(rule.GetRecover(value));
                         }
                     }
@@ -88,19 +105,34 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
     public abstract class AlarmRuleBase
     {
+        public string Name { get; set; } = "Default Alarm";
+
         public bool Enabled { get; set; }
 
+        /// <summary>
+        /// 是否处于报警状态
+        /// </summary>
         public bool Alarmed { get; set; }
 
         /// <summary>
-        /// 报警间隔
+        /// 允许报警的最小间隔
         /// </summary>
         public TimeSpan AlarmInterval { get; set; } = TimeSpan.FromHours(1);
 
+        /// <summary>
+        /// 报警能否重复抛出
+        /// </summary>
+        public bool CanDuplicateAlarmPost { get; set; } = false;
+
+        /// <summary>
+        /// 报警抛出时文本的格式字符串
+        /// </summary>
+        /// <remarks>格式类似于 %Value:f2%</remarks>
         public string AlarmNotifyFormat { get; set; }
 
-        public bool CanAlarmRecover { get; set; }
-
+        /// <summary>
+        /// 启用报警的类名
+        /// </summary>
         public string ClassName { get; set; }
 
         /// <summary>
@@ -118,10 +150,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// </summary>
         public DateTime LastAlarmTime { get; set; } = DateTime.MinValue;
 
+        /// <summary>
+        /// 启动报警的属性名称
+        /// </summary>
         public string PropertyName { get; set; }
 
+        /// <summary>
+        /// 报警回复时的文本格式字符串
+        /// </summary>
         public string RecoverNotifyFormat { get; set; }
 
+        /// <summary>
+        /// 控制报警是否在特定时间段内启用
+        /// </summary>
         public bool IsTimeRangeAlarm { get; set; }
 
         /// <summary>

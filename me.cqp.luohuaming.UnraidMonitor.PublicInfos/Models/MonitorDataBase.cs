@@ -43,6 +43,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models
                 {
                     Cache.Add(name, [(time, this)]);
                 }
+                CheckAlarms();
             }
         }
     }
