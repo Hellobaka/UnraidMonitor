@@ -96,7 +96,7 @@
             </ContextMenu>
         </Expander.ContextMenu>
         <hc:UniformSpacingPanel
-            Margin="16"
+            Margin="16,16,16,0"
             Orientation="Vertical"
             Spacing="10">
             <controls:ControlWithTitle Title="元素类型" TitleWidth="{StaticResource GlobalTitleWidth}">
