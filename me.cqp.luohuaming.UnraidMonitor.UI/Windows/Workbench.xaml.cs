@@ -298,5 +298,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 DrawTimeText.Text = $"{stopwatch.ElapsedMilliseconds} ms";
             }
         }
+
+        private async void CallStyleRedraw_Click(object sender, RoutedEventArgs e)
+        {
+            DebounceCancel?.Cancel();
+            await CallStyleRedraw();
+        }
     }
 }

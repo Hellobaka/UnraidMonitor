@@ -71,7 +71,7 @@
                         CornerRadius="2">
                         <TextBlock x:Name="DrawTimeText" Text="0 ms" />
                     </Border>
-                    <Button Grid.Column="2" Click="DebounceStyleRedraw_Click">重绘</Button>
+                    <Button Grid.Column="2" Click="CallStyleRedraw_Click">重绘</Button>
                 </Grid>
                 <ScrollViewer
                     x:Name="ImageScrollViewer"
