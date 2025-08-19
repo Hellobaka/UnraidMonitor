@@ -42,6 +42,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public ObservableCollection<DisplayKeyValuePair> AvailablePath { get; set; } = [];
 
+        public ObservableCollection<string> AvailableValues { get; set; } = [];
+
         public DisplayKeyValuePair SelectedPath { get; set; }
 
         public string TargetValue { get; set; } = "";
@@ -73,7 +75,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     Value = propertyInfo.Name
                 };
                 AvailablePath.Add(item);
-                if(item.Value == path)
+                if (item.Value == path)
                 {
                     SelectedPath = item;
                 }
@@ -90,6 +92,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         {
             DialogResult = false;
             Close();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (MonitorDataBase.Cache.TryGetValue(TargetValue, out var dict))
+            {
+                var data = dict.Select(x => x.data.ToString()).Distinct().OrderBy(o => o).ToList();
+                AvailableValues.Clear();
+                foreach (var item in data)
+                {
+                    AvailableValues.Add(item);
+                }
+            }
         }
     }
 }

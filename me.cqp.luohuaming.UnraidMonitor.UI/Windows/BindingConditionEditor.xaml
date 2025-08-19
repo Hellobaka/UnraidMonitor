@@ -41,7 +41,8 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding AvailablePath}"
-                        SelectedItem="{Binding SelectedPath, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedPath, Mode=TwoWay}"
+                        SelectionChanged="ComboBox_SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Key}" />
@@ -55,7 +56,13 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="等于：" />
-                    <TextBox Grid.Column="1" Text="{Binding TargetValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <hc:ComboBox
+                        Grid.Column="1"
+                        hc:InfoElement.ShowClearButton="True"
+                        IsEditable="True"
+                        ItemsSource="{Binding AvailableValues}"
+                        SelectedIndex="0"
+                        Text="{Binding TargetValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </Grid>
         </ScrollViewer>
