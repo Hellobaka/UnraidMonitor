@@ -19,10 +19,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
                 {
                     Thread thread = new Thread(() =>
                     {
-                        App = new();
-                        App.ShutdownMode = ShutdownMode.OnMainWindowClose;
-                        App.InitializeComponent();
-                        App.Run();
+                        try
+                        {
+                            App = new();
+                            App.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                            App.InitializeComponent();
+                            App.Run();
+                        }
+                        catch (Exception exc)
+                        {
+                            MainSave.CQLog?.Error("UI异常", exc.ToString());
+                        }
                     });
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
