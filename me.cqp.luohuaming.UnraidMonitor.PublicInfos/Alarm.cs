@@ -1,6 +1,7 @@
 ﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using Newtonsoft.Json;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,6 +34,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public List<AlarmRuleBase> Rules { get; set; } = [];
 
+        public static void SaveRules(string path)
+        {
+            try
+            {
+                var rules = Instance.Rules.Select(x => x.Clone()).ToList();
+                File.WriteAllText(path, JsonConvert.SerializeObject(rules, new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    Formatting = Formatting.Indented,
+                }));
+            }
+            catch (Exception e)
+            {
+                MainSave.CQLog?.Error("注册数据监控", $"保存规则列表失败：{e}");
+            }
+        }
+
         public static void LoadRules(string path)
         {
             try
@@ -41,7 +59,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                 {
                     return;
                 }
-                List<AlarmRuleBase> rules = JsonConvert.DeserializeObject<List<AlarmRuleBase>>(File.ReadAllText(path));
+                List<AlarmRuleBase> rules = JsonConvert.DeserializeObject<List<AlarmRuleBase>>(File.ReadAllText(path), new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
                 foreach (var rule in rules)
                 {
                     Instance.RegisterRule(rule);
@@ -103,6 +124,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         }
     }
 
+    [AddINotifyPropertyChangedInterface]
     public abstract class AlarmRuleBase
     {
         public string Name { get; set; } = "Default Alarm";
@@ -128,12 +150,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// 报警抛出时文本的格式字符串
         /// </summary>
         /// <remarks>格式类似于 %Value:f2%</remarks>
-        public string AlarmNotifyFormat { get; set; }
+        public string AlarmNotifyFormat { get; set; } = string.Empty;
 
         /// <summary>
         /// 启用报警的类名
         /// </summary>
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = string.Empty;
 
         /// <summary>
         /// 第一个无效点时间
@@ -153,12 +175,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// <summary>
         /// 启动报警的属性名称
         /// </summary>
-        public string PropertyName { get; set; }
+        public string PropertyName { get; set; } = string.Empty;
 
         /// <summary>
         /// 报警回复时的文本格式字符串
         /// </summary>
-        public string RecoverNotifyFormat { get; set; }
+        public string RecoverNotifyFormat { get; set; } = string.Empty;
 
         /// <summary>
         /// 控制报警是否在特定时间段内启用
@@ -187,7 +209,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             return false;
         }
 
-        public string Format(string pattern, Dictionary<string, object> variableList)
+        public string Format(string pattern, Dictionary<(string display, string value), object> variableList)
         {
             return string.IsNullOrEmpty(pattern) || variableList == null
                 ? pattern
@@ -196,7 +218,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                     var key = match.Groups[1].Value;
                     var format = match.Groups[2].Success ? match.Groups[2].Value : null;
 
-                    if (!variableList.TryGetValue(key, out var value) || value == null)
+                    var find = variableList.Any(x => x.Key.value.Equals(key, StringComparison.OrdinalIgnoreCase));
+                    var v = variableList.FirstOrDefault(x => x.Key.value.Equals(key, StringComparison.OrdinalIgnoreCase));
+                    var value = v.Value;
+                    if (!find || value == null)
                     {
                         return match.Value; // 未找到变量，原样返回
                     }
@@ -228,7 +253,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public string GetRecover(double value) => Format(RecoverNotifyFormat, GetVariableList(value));
 
-        public virtual Dictionary<string, object> GetVariableList(double value)
+        public virtual Dictionary<(string display, string value), object> GetVariableList(double value)
         {
             return [];
         }
@@ -262,6 +287,30 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             {
                 return false;
             }
+        }
+
+        public virtual AlarmRuleBase Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloneBase(AlarmRuleBase target)
+        {
+            target.Name = Name;
+            target.Enabled = Enabled;
+            target.Alarmed = Alarmed;
+            target.AlarmInterval = AlarmInterval;
+            target.AlarmNotifyFormat = AlarmNotifyFormat;
+            target.CanDuplicateAlarmPost = CanDuplicateAlarmPost;
+            target.ClassName = ClassName;
+            target.FirstInvalidTime = FirstInvalidTime;
+            target.InvalidValueCount = InvalidValueCount;
+            target.LastAlarmTime = LastAlarmTime;
+            target.IsTimeRangeAlarm = IsTimeRangeAlarm;
+            target.PropertyName = PropertyName;
+            target.RecoverNotifyFormat = RecoverNotifyFormat;
+            target.StartTime = StartTime;
+            target.EndTime = EndTime;
         }
     }
 
@@ -305,17 +354,31 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             }
         }
 
-        public override Dictionary<string, object> GetVariableList(double value)
+        public override Dictionary<(string display, string value), object> GetVariableList(double value)
         {
             return new()
             {
-                { "Value", value },
-                { "Min", Min },
-                { "Max", Max },
-                { "FirstInvalidTime", FirstInvalidTime },
-                { "LastAlarmTime", LastAlarmTime },
-                { "InvalidValueCount", InvalidValueCount },
+                { ("当前值", "Value"), value },
+                { ("报警下限", "Min"), Min },
+                { ("报警上限", "Max"), Max },
+                { ("首个异常值", "FirstInvalidTime"), FirstInvalidTime },
+                { ("最后异常时间", "LastAlarmTime"), LastAlarmTime },
+                { ("异常值个数", "InvalidValueCount"), InvalidValueCount },
             };
+        }
+
+        public override AlarmRuleBase Clone()
+        {
+            var clone = new RangeAlarmRule
+            {
+                Max = Max,
+                Min = Min,
+                AlarmInside = AlarmInside,
+                ThresholdTimeSpan = ThresholdTimeSpan
+            };
+            CloneBase(clone);
+
+            return clone;
         }
     }
 
@@ -346,16 +409,26 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             return false;
         }
 
-        public override Dictionary<string, object> GetVariableList(double value)
+        public override Dictionary<(string display, string value), object> GetVariableList(double value)
         {
             return new()
             {
-                { "Value", value },
-                { "MaxDelta", MaxDelta },
-                { "FirstInvalidTime", FirstInvalidTime },
-                { "LastAlarmTime", LastAlarmTime },
-                { "InvalidValueCount", InvalidValueCount },
+                { ("当前值", "Value"), value },
+                { ("最大允许变化值", "MaxDelta"), MaxDelta },
+                { ("首个异常值", "FirstInvalidTime"), FirstInvalidTime },
+                { ("最后异常时间", "LastAlarmTime"), LastAlarmTime },
+                { ("异常值个数", "InvalidValueCount"), InvalidValueCount },
             };
+        }
+
+        public override AlarmRuleBase Clone()
+        {
+            var clone = new RateOfChangeAlarmRule
+            {
+                MaxDelta = MaxDelta
+            };
+            CloneBase(clone);
+            return clone;
         }
     }
 
@@ -408,16 +481,28 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             }
         }
 
-        public override Dictionary<string, object> GetVariableList(double value)
+        public override Dictionary<(string display, string value), object> GetVariableList(double value)
         {
             return new()
             {
-                { "Value", value },
-                { "Threshold", Threshold },
-                { "FirstInvalidTime", FirstInvalidTime },
-                { "LastAlarmTime", LastAlarmTime },
-                { "InvalidValueCount", InvalidValueCount },
+                { ("当前值", "Value"), value },
+                { ("阈值", "Threshold"), Threshold },
+                { ("首个异常值", "FirstInvalidTime"), FirstInvalidTime },
+                { ("最后异常时间", "LastAlarmTime"), LastAlarmTime },
+                { ("异常值个数", "InvalidValueCount"), InvalidValueCount },
             };
+        }
+
+        public override AlarmRuleBase Clone()
+        {
+            var clone = new ThresholdAlarmRule
+            {
+                Threshold = Threshold,
+                ThresholdBoolCondition = ThresholdBoolCondition,
+                ThresholdTimeSpan = ThresholdTimeSpan
+            };
+            CloneBase(clone);
+            return clone;
         }
     }
 }
