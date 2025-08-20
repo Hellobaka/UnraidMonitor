@@ -1,5 +1,6 @@
 ﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.UI.Windows;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -36,7 +37,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
         private void DuplicateItem_Click(object sender, RoutedEventArgs e)
         {
             var newItem = CurrentItem.Clone();
-            CurrentCanvas.Content.Add(newItem);
+            int index = CurrentCanvas.Content.IndexOf(CurrentItem);
+            CurrentCanvas.Content.Insert(index, newItem);
         }
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
@@ -66,6 +68,60 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             if (editor.ShowDialog() ?? false)
             {
                 CurrentItem.Binding = editor.CustomBinding;
+            }
+        }
+
+        private void SetTopLevel_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentCanvas.Content.Contains(CurrentItem))
+            {
+                CurrentCanvas.Content.Remove(CurrentItem);
+                CurrentCanvas.Content.Insert(0, CurrentItem);
+            }
+            else
+            {
+                MainWindow.ShowError("当前项不在画布中，无法移动");
+            }
+        }
+
+        private void MoveUpLevel_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentCanvas.Content.Contains(CurrentItem))
+            {
+                int index = CurrentCanvas.Content.IndexOf(CurrentItem);
+                CurrentCanvas.Content.Remove(CurrentItem);
+                CurrentCanvas.Content.Insert(Math.Max(0, index - 1), CurrentItem);
+            }
+            else
+            {
+                MainWindow.ShowError("当前项不在画布中，无法移动");
+            }
+        }
+
+        private void MoveDownLevel_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentCanvas.Content.Contains(CurrentItem))
+            {
+                int index = CurrentCanvas.Content.IndexOf(CurrentItem);
+                CurrentCanvas.Content.Remove(CurrentItem);
+                CurrentCanvas.Content.Insert(Math.Min(CurrentCanvas.Content.Count - 1, index + 1), CurrentItem);
+            }
+            else
+            {
+                MainWindow.ShowError("当前项不在画布中，无法移动");
+            }
+        }
+
+        private void SetBottomLevel_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentCanvas.Content.Contains(CurrentItem))
+            {
+                CurrentCanvas.Content.Remove(CurrentItem);
+                CurrentCanvas.Content.Insert(CurrentCanvas.Content.Count - 1, CurrentItem);
+            }
+            else
+            {
+                MainWindow.ShowError("当前项不在画布中，无法移动");
             }
         }
     }

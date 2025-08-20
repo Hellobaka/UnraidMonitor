@@ -43,7 +43,10 @@
                     <MenuItem Click="CreateItem_Image_Click" Header="图片" />
                     <MenuItem Click="CreateItem_RunningStatus_Click" Header="双行状态块" />
                     <Separator />
-                    <MenuItem Click="CreateItem_RunningStatus_Click" Header="从模板创建" />
+                    <MenuItem
+                        Click="CreateItem_RunningStatus_Click"
+                        Header="从模板创建"
+                        IsEnabled="False" />
                 </MenuItem>
                 <MenuItem Click="CollapseAllItems_Click" Header="折叠所有控件" />
                 <MenuItem Click="ExpandAllItems_Click" Header="展开所有控件" />
@@ -228,7 +231,10 @@
                     <ItemsControl ItemsSource="{Binding Content}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <local:DrawingItem Margin="5,0" DataContext="{Binding}" />
+                                <local:DrawingItem
+                                    Margin="5,0"
+                                    CurrentCanvas="{Binding DataContext, RelativeSource={RelativeSource AncestorType=local:Canvas, Mode=FindAncestor}}"
+                                    DataContext="{Binding}" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

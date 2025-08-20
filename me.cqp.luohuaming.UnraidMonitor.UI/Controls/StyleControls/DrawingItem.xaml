@@ -93,6 +93,11 @@
                 <Separator />
                 <MenuItem Click="ClearBinding_Click" Header="清除绑定" />
                 <MenuItem Click="SetBinding_Click" Header="设置绑定" />
+                <Separator />
+                <MenuItem Click="SetTopLevel_Click" Header="置于顶层" />
+                <MenuItem Click="MoveUpLevel_Click" Header="向上一层" />
+                <MenuItem Click="MoveDownLevel_Click" Header="向下一层" />
+                <MenuItem Click="SetBottomLevel_Click" Header="置于底层" />
             </ContextMenu>
         </Expander.ContextMenu>
         <hc:UniformSpacingPanel
