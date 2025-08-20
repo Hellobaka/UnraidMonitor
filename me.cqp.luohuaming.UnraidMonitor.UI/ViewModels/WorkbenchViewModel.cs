@@ -141,9 +141,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             OperationPending = true;
         }
 
-        public async Task NewStyle()
+        public void NewStyle()
         {
-            if (OperationPending && !await MainWindow.ShowConfirmAsync("还有操作未保存，确定要抛弃这些更改吗？"))
+            if (OperationPending && !MainWindow.ShowConfirm("还有操作未保存，确定要抛弃这些更改吗？"))
             {
                 return;
             }
@@ -204,9 +204,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             OperationPending = false;
         }
 
-        public async Task OpenStyle()
+        public void OpenStyle()
         {
-            if (OperationPending && !await MainWindow.ShowConfirmAsync("还有操作未保存，确定要抛弃这些更改吗？"))
+            if (OperationPending && !MainWindow.ShowConfirm("还有操作未保存，确定要抛弃这些更改吗？"))
             {
                 return;
             }
@@ -240,9 +240,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
             }
         }
 
-        public async Task Exit()
+        public void Exit()
         {
-            if (OperationPending && !await MainWindow.ShowConfirmAsync("还有操作未保存，确定要抛弃这些更改吗？"))
+            if (OperationPending && !MainWindow.ShowConfirm("还有操作未保存，确定要抛弃这些更改吗？"))
             {
                 return;
             }

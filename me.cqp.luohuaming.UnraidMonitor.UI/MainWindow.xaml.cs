@@ -1,4 +1,5 @@
 using HandyControl.Controls;
+using HandyControl.Data;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using me.cqp.luohuaming.UnraidMonitor.UI.Models;
@@ -204,17 +205,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             Growl.Error(content);
         }
 
-        public static Task<bool> ShowConfirmAsync(string content)
+        public static bool ShowConfirm(string content)
         {
-            var tcs = new TaskCompletionSource<bool>();
-
-            Growl.Ask(content, (isConfirmed) =>
+            return HandyControl.Controls.MessageBox.Show(new MessageBoxInfo
             {
-                tcs.SetResult(isConfirmed);
-                return true;
-            });
-
-            return tcs.Task;
+                Message = content,
+                Caption = "询问",
+                Button = MessageBoxButton.YesNo,
+                IconBrushKey = ResourceToken.AccentBrush,
+                IconKey = ResourceToken.AskGeometry,
+            }) == MessageBoxResult.Yes;
         }
 
         public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject

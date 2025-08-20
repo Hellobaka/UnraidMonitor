@@ -129,7 +129,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             CanLastStep = CurrentStep > 0;
         }
 
-        private async void NextStep_Click(object sender, RoutedEventArgs e)
+        private void NextStep_Click(object sender, RoutedEventArgs e)
         {
             var binding = StyleNameInput.GetBindingExpression(TextBox.TextProperty);
             binding?.UpdateSource();
@@ -143,7 +143,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     MainWindow.ShowError("样式名称或宽度无效，请检查输入");
                     return;
                 }
-                if (await MainWindow.ShowConfirmAsync("快速设置完成，点击确定以保存文件并进入工作台"))
+                if (MainWindow.ShowConfirm("快速设置完成，点击确定以保存文件并进入工作台"))
                 {
                     var dialog = new SaveFileDialog();
                     dialog.Filter = "样式文件|*.style|所有文件|*.*";

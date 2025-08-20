@@ -491,14 +491,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             OnPropertyChanged(nameof(StyleCommands));
         }
 
-        private async void StyleCommandDeleteButton_Click(object sender, RoutedEventArgs e)
+        private void StyleCommandDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (StyleCommandList.SelectedItem == null || StyleCommandList.SelectedItem is not StyleCommandWrapper command)
             {
                 MainWindow.ShowError("请选择一项");
                 return;
             }
-            if (!await MainWindow.ShowConfirmAsync("确定要删除所选的样式指令吗？"))
+            if (!MainWindow.ShowConfirm("确定要删除所选的样式指令吗？"))
             {
                 return;
             }
@@ -548,14 +548,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
         }
 
-        private async void AlarmItemDelete_Click(object sender, RoutedEventArgs e)
+        private void AlarmItemDelete_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button).DataContext is not AlarmRuleBase alarm)
             {
                 MainWindow.ShowError("请选择一项");
                 return;
             }
-            if (await MainWindow.ShowConfirmAsync("确定要删除所选的报警规则吗？"))
+            if (!MainWindow.ShowConfirm("确定要删除所选的报警规则吗？"))
             {
                 return;
             }
