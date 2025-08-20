@@ -1,4 +1,5 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using Microsoft.Win32;
 using System;
@@ -148,6 +149,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     var dialog = new SaveFileDialog();
                     dialog.Filter = "样式文件|*.style|所有文件|*.*";
                     dialog.FileName = $"{NameInput}.style";
+                    dialog.InitialDirectory = MainSave.AppDirectory;
                     if (dialog.ShowDialog() ?? false)
                     {
                         SavedStylePath = dialog.FileName;
@@ -161,7 +163,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                                 CreateTime = DateTime.Now,
                                 ModifyTime = DateTime.Now,
                                 Palette = DrawingStyle.GetThemeDefaultColor(SelectedTheme.Theme, SelectedTheme.DarkMode),
+                                BackgroundColor = SelectedTheme.DarkMode ? "#000000" : "#FFFFFF"
                             };
+                            style.Content.Add(new DrawingCanvas
+                            {
+                                Name = "新画布",
+                            });
                             File.WriteAllText(dialog.FileName, style.Serialize());
                             DialogResult = true;
                             Close();
