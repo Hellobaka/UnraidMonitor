@@ -53,6 +53,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             intervalConfig.LoadConfig();
             intervalConfig.EnableAutoReload();
 
+            AlarmManager.LoadRules(Path.Combine(MainSave.AppDirectory, "AlarmRules.json"));
+
             try
             {
                 if (AppConfig.MonitorOSType.Equals("Linux", StringComparison.OrdinalIgnoreCase))
