@@ -561,5 +561,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
             Alarms.Remove(alarm);
         }
+
+        private void AlarmEnableAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var alarm in Alarms)
+            {
+                alarm.Enabled = true;
+            }
+            OnPropertyChanged(nameof(Alarms));
+        }
+
+        private void AlarmDisableAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var alarm in Alarms)
+            {
+                alarm.Enabled = false;
+            }
+            OnPropertyChanged(nameof(Alarms));
+        }
     }
 }

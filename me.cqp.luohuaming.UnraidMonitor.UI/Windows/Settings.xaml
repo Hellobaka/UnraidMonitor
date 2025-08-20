@@ -270,10 +270,12 @@
                         <Button
                             Name="AlarmEnableAllButton"
                             Width="100"
+                            Click="AlarmEnableAllButton_Click"
                             Content="全部启用" />
                         <Button
                             Name="AlarmDisableAllButton"
                             Width="100"
+                            Click="AlarmDisableAllButton_Click"
                             Content="全部禁用"
                             Style="{StaticResource ButtonDanger}" />
                     </hc:UniformSpacingPanel>
