@@ -317,16 +317,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                             }
                         }
                     }
-                    else if (item is ComboBox combobox)
+                    else if (item is ComboBox comboBox)
                     {
-                        var property = properties.FirstOrDefault(x => x.Name == combobox.Name);
+                        var property = properties.FirstOrDefault(x => x.Name == comboBox.Name);
                         if (property == null)
                         {
                             Debugger.Break();
                             continue;
                         }
                         var v = property?.GetValue(null, null);
-                        combobox.SelectedIndex = (int)v;
+                        for (int i = 0; i < comboBox.Items.Count; i++)
+                        {
+                            if (comboBox.Items[i] is ComboBoxItem comboBoxItem && comboBoxItem.Tag.ToString() == v?.ToString())
+                            {
+                                comboBox.SelectedIndex = i;
+                                break;
+                            }
+                        }
                     }
                 }
             }

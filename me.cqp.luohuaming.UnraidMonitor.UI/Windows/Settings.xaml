@@ -34,20 +34,23 @@
                 <ScrollViewer>
                     <StackPanel x:Name="AppConfigContainer" Margin="10">
                         <TextBlock VerticalAlignment="Center">目标系统:</TextBlock>
-                        <TextBox x:Name="MonitorOSType" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">SSH 主机:</TextBlock>
+                        <ComboBox x:Name="MonitorOSType" Margin="0,5,0,0">
+                            <ComboBoxItem Content="Linux" Tag="Linux" />
+                            <ComboBoxItem Content="Windows" Tag="Windows" />
+                        </ComboBox>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">SSH 主机:</TextBlock>
                         <TextBox x:Name="SSHHost" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">SSH 端口:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">SSH 端口:</TextBlock>
                         <TextBox x:Name="SSHPort" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">SSH 用户名:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">SSH 用户名:</TextBlock>
                         <TextBox x:Name="SSHUserName" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">SSH 密码:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">SSH 密码:</TextBlock>
                         <TextBox x:Name="SSHPassword" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">SSH 指令超时（秒）:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">SSH 指令超时（秒）:</TextBlock>
                         <TextBox x:Name="SSHCommandTimeout" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">缓存保留时长（秒）:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">缓存保留时长（秒）:</TextBlock>
                         <TextBox x:Name="CacheKeepSeconds" Margin="0,5,0,0" />
-                        <TextBlock VerticalAlignment="Center">默认字体（全称或路径）:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">默认字体（全称或路径）:</TextBlock>
                         <TextBox x:Name="FallbackFont" Margin="0,5,0,0" />
                     </StackPanel>
                 </ScrollViewer>
@@ -159,52 +162,52 @@
                             Style="{StaticResource BorderTipInfo}">
                             <TextBlock>单位均为毫秒（ms）填 0 时表示只查询一次 填 -1 时表示不启用</TextBlock>
                         </Border>
-                        <TextBlock VerticalAlignment="Center">CPU 信息:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">CPU 信息:</TextBlock>
                         <TextBox x:Name="CpuInfo" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">CPU 占用率:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">CPU 占用率:</TextBlock>
                         <TextBox x:Name="CpuUsages" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">内存占用率:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">内存占用率:</TextBlock>
                         <TextBox x:Name="MemoryInfo" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">磁盘挂载:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">磁盘挂载:</TextBlock>
                         <TextBox x:Name="DiskMountInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">Docker 容器:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">Docker 容器:</TextBlock>
                         <TextBox x:Name="Dockers" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">风扇:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">风扇:</TextBlock>
                         <TextBox x:Name="FanInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">主板:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">主板:</TextBlock>
                         <TextBox x:Name="MotherboardInfo" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">网络接口:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">网络接口:</TextBlock>
                         <TextBox x:Name="NetworkInterfaceInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">网络流量:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">网络流量:</TextBlock>
                         <TextBox x:Name="NetworkTrafficInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">温度:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">温度:</TextBlock>
                         <TextBox x:Name="TemperatureInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">虚拟机:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">虚拟机:</TextBlock>
                         <TextBox x:Name="VirtualMachines" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">磁盘:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">磁盘:</TextBlock>
                         <TextBox x:Name="DiskInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">磁盘 SMART:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">磁盘 SMART:</TextBlock>
                         <TextBox x:Name="DiskSmartInfos" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">系统运行时间:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">系统运行时间:</TextBlock>
                         <TextBox x:Name="SystemUptime" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">系统:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">系统:</TextBlock>
                         <TextBox x:Name="SystemInfo" Margin="0,5,0,0" />
 
-                        <TextBlock VerticalAlignment="Center">UPS 电源:</TextBlock>
+                        <TextBlock Margin="0,5,0,0" VerticalAlignment="Center">UPS 电源:</TextBlock>
                         <TextBox x:Name="UPS" Margin="0,5,0,0" />
                     </StackPanel>
                 </ScrollViewer>
