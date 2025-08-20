@@ -7,6 +7,7 @@ using System.Reflection;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace me.cqp.luohuaming.UnraidMonitor.Code
 {
@@ -85,8 +86,55 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             }
             e.CQLog.Info("初始化", "加载Alarm规则");
             AlarmManager.LoadRules(Path.Combine(MainSave.AppDirectory, "AlarmRules.json"));
+            AlarmManager.OnAlarmPost += AlarmManager_OnAlarmPost;
+            AlarmManager.OnAlarmRecover += AlarmManager_OnAlarmRecover;
             e.CQLog.Info("初始化", $"加载了 {AlarmManager.Instance.Rules.Count} 条Alarm规则");
             e.CQLog.InfoSuccess("初始化", "初始化完成");
+        }
+
+        private void AlarmManager_OnAlarmRecover(AlarmRuleBase alarm, string message)
+        {
+            MainSave.CQLog.Info("Alarm恢复", $"{alarm.Name} 恢复正常");
+            if (!AppConfig.EnableAlarmRecoveryNotice)
+            {
+                return;
+            }
+
+            foreach (var group in AppConfig.AlarmNoticeGroupList)
+            {
+                try
+                {
+                    MainSave.CQApi.SendGroupMessage(group, message);
+
+                    Thread.Sleep(AppConfig.AlarmNoticeDelay * 1000);
+                }
+                catch (Exception ex)
+                {
+                    MainSave.CQLog.Error("Alarm恢复通知", $"发送报警信息到群 {group} 时发生异常：{ex}");
+                }
+            }
+        }
+
+        private void AlarmManager_OnAlarmPost(AlarmRuleBase alarm, string message)
+        {
+            MainSave.CQLog.Info("Alarm抛出", $"{alarm.Name} 发生异常");
+            if (!AppConfig.EnableAlarmPostNotice)
+            {
+                return;
+            }
+            foreach (var group in AppConfig.AlarmNoticeGroupList)
+            {
+                try
+                {
+                    MainSave.CQApi.SendGroupMessage(group, message);
+
+                    Thread.Sleep(AppConfig.AlarmNoticeDelay * 1000);
+                }
+                catch (Exception ex)
+                {
+                    MainSave.CQLog.Error("Alarm通知", $"发送报警信息到群 {group} 时发生异常：{ex}");
+                }
+            }
         }
     }
 }

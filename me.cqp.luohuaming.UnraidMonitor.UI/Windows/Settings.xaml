@@ -255,12 +255,16 @@
                 </Grid>
             </TabItem>
             <TabItem Header="监控配置">
-                <Grid>
+                <Grid Margin="10,0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <hc:UniformSpacingPanel Margin="0,0,0,10" Spacing="10">
+                    <hc:UniformSpacingPanel
+                        Grid.Row="1"
+                        Margin="0,0,0,10"
+                        Spacing="10">
                         <Button
                             Name="AlarmCommandNewButton"
                             Width="100"
@@ -280,7 +284,7 @@
                             Style="{StaticResource ButtonDanger}" />
                     </hc:UniformSpacingPanel>
                     <DataGrid
-                        Grid.Row="1"
+                        Grid.Row="2"
                         hc:DataGridAttach.CanUnselectAllWithBlankArea="True"
                         AutoGenerateColumns="False"
                         CanUserAddRows="False"
@@ -367,6 +371,54 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <StackPanel Grid.Row="0" Margin="0,10">
+                        <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center">启用报警抛出通知:</TextBlock>
+                            <ToggleButton
+                                x:Name="EnableAlarmPost"
+                                Margin="5,0"
+                                HorizontalAlignment="Left"
+                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                                Style="{StaticResource ToggleButtonSwitch}" />
+                            <TextBlock Margin="5,0" VerticalAlignment="Center">启用报警恢复通知:</TextBlock>
+                            <ToggleButton
+                                x:Name="EnableAlarmRecovery"
+                                Margin="5,0"
+                                HorizontalAlignment="Left"
+                                hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
+                                Style="{StaticResource ToggleButtonSwitch}" />
+                        </StackPanel>
+                        <TextBlock VerticalAlignment="Center">启用报警通知群列表:</TextBlock>
+                        <ListBox
+                            x:Name="AlarmNoticeList"
+                            MinHeight="20"
+                            MaxHeight="150"
+                            Margin="0,5,0,0" />
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                x:Name="AlarmNoticeListRemoveButton"
+                                Grid.Column="0"
+                                Width="50"
+                                Margin="0,0,10,0"
+                                Click="AlarmNoticeListRemoveButton_Click">
+                                删除
+                            </Button>
+                            <TextBox x:Name="AlarmNoticeListAdd" Grid.Column="1" />
+                            <Button
+                                x:Name="AlarmNoticeListAddButton"
+                                Grid.Column="2"
+                                Width="50"
+                                Margin="10,0,0,0"
+                                Click="AlarmNoticeListAddButton_Click">
+                                添加
+                            </Button>
+                        </Grid>
+                    </StackPanel>
                 </Grid>
             </TabItem>
         </TabControl>

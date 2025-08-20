@@ -199,6 +199,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             ListRemoveButtonHandler(PersonList);
         }
 
+        private void AlarmNoticeListAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            ListAddButtonHandler(AlarmNoticeListAdd, AlarmNoticeList, true);
+        }
+
+        private void AlarmNoticeListRemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            ListRemoveButtonHandler(AlarmNoticeList);
+        }
+
         private void SaveConfigButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -209,17 +219,32 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     && VerifyInput(properties, AuthContainer, out err))
                 {
                     AppConfig.Instance.DisableAutoReload();
+                    CommandIntervalConfig.Instance.DisableAutoReload();
                     GetAndSetConfigFromStackPanel(properties, AppConfigContainer, AppConfig.Instance);
                     GetAndSetConfigFromStackPanel(properties, AuthContainer, AppConfig.Instance);
-                    AppConfig.Instance.EnableAutoReload();
 
-                    CommandIntervalConfig.Instance.DisableAutoReload();
                     GetAndSetConfigFromStackPanel(properties, APIContainer, CommandIntervalConfig.Instance);
-                    CommandIntervalConfig.Instance.EnableAutoReload();
 
                     MainSave.Commands = StyleCommands.Select(x => x.Raw).ToList();
                     AlarmManager.Instance.Rules = Alarms.ToList();
                     AlarmManager.SaveRules(Path.Combine(MainSave.AppDirectory, "AlarmRules.json"));
+
+                    AppConfig.EnableAlarmPostNotice = EnableAlarmPost.IsChecked ?? false;
+                    AppConfig.EnableAlarmRecoveryNotice = EnableAlarmRecovery.IsChecked ?? false;
+                    AppConfig.AlarmNoticeGroupList = [];
+                    foreach (var item in AlarmNoticeList.Items)
+                    {
+                        if (long.TryParse(item.ToString(), out long v))
+                        {
+                            AppConfig.AlarmNoticeGroupList.Add(v);
+                        }
+                    }
+                    AppConfig.Instance.SetConfig(nameof(AppConfig.EnableAlarmPostNotice), AppConfig.EnableAlarmPostNotice);
+                    AppConfig.Instance.SetConfig(nameof(AppConfig.EnableAlarmRecoveryNotice), AppConfig.EnableAlarmRecoveryNotice);
+                    AppConfig.Instance.SetConfig(nameof(AppConfig.AlarmNoticeGroupList), AppConfig.AlarmNoticeGroupList);
+
+                    CommandIntervalConfig.Instance.EnableAutoReload();
+                    AppConfig.Instance.EnableAutoReload();
                     MainWindow.ShowInfo("配置保存成功");
                 }
                 else
@@ -356,7 +381,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     var commands = JsonConvert.DeserializeObject<List<Commands>>(File.ReadAllText(commandPath));
                     if (commands != null)
                     {
-                        foreach(var item in commands)
+                        foreach (var item in commands)
                         {
                             StyleCommands.Add(new()
                             {
@@ -375,9 +400,16 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             }
 
             Alarms = [];
-            foreach(var alarm in AlarmManager.Instance.Rules)
+            foreach (var alarm in AlarmManager.Instance.Rules)
             {
                 Alarms.Add(alarm);
+            }
+            EnableAlarmPost.IsChecked = AppConfig.EnableAlarmPostNotice;
+            EnableAlarmRecovery.IsChecked = AppConfig.EnableAlarmRecoveryNotice;
+            AlarmNoticeList.Items.Clear();
+            foreach (var group in AppConfig.AlarmNoticeGroupList)
+            {
+                AlarmNoticeList.Items.Add(group);
             }
         }
 

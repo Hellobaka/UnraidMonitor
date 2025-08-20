@@ -26,9 +26,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
     public class AlarmManager
     {
-        public event Action<string> OnAlarmPost;
+        public static event Action<AlarmRuleBase, string> OnAlarmPost;
 
-        public event Action<string> OnAlarmRecover;
+        public static event Action<AlarmRuleBase, string> OnAlarmRecover;
 
         public static AlarmManager Instance { get; set; } = new AlarmManager();
 
@@ -92,7 +92,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             }
                             rule.LastAlarmTime = DateTime.Now;
                             rule.Alarmed = true;
-                            OnAlarmPost?.Invoke(rule.GetAlarm(value));
+                            OnAlarmPost?.Invoke(rule, rule.GetAlarm(value));
                         }
                     }
                     else
@@ -100,7 +100,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         if (rule.Alarmed)
                         {
                             rule.Alarmed = false;
-                            OnAlarmRecover?.Invoke(rule.GetRecover(value));
+                            OnAlarmRecover?.Invoke(rule, rule.GetRecover(value));
                         }
                     }
                 }

@@ -38,6 +38,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 
         public static List<long> PersonList { get; set; } = new List<long>();
 
+        public static bool EnableAlarmPostNotice { get; set; }
+
+        public static bool EnableAlarmRecoveryNotice { get; set; }
+
+        public static List<long> AlarmNoticeGroupList { get; set; } = [];
+
+        public static int AlarmNoticeDelay { get; set; } = 60;
+
         public override void LoadConfig()
         {
             DisableAutoReload();
@@ -52,6 +60,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             GroupList = GetConfig("GroupList", new List<long>());
             PersonList = GetConfig("PersonList", new List<long>());
             BlackList = GetConfig("BlackList", new List<long>());
+            AlarmNoticeGroupList = GetConfig("AlarmNoticeGroupList", new List<long>());
+            EnableAlarmPostNotice = GetConfig("EnableAlarmPostNotice", false);
+            EnableAlarmRecoveryNotice = GetConfig("EnableAlarmRecoveryNotice", false);
+            AlarmNoticeDelay = GetConfig("AlarmNoticeDelay", 60);
             EnableAutoReload();
         }
     }
