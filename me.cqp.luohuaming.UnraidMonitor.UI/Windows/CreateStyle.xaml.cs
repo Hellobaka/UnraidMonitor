@@ -51,56 +51,56 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             ThemeList.Add(new ThemeItem
             {
                 Name = "WinUI3 - Light",
-                Preview = "pack://application:,,,/Resources/Images/WinUI3-Light.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/WinUI3-Light.bmp",
                 Theme = DrawingStyle.Theme.WinUI3,
                 DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "WinUI3 - Dark",
-                Preview = "pack://application:,,,/Resources/Images/WinUI3-Dark.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/WinUI3-Dark.bmp",
                 Theme = DrawingStyle.Theme.WinUI3,
                 DarkMode = true,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign2 - Light",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign2-Light.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/MaterialDesign2-Light.bmp",
                 Theme = DrawingStyle.Theme.MaterialDesign2,
                 DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign2 - Dark",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign2-Dark.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/MaterialDesign2-Dark.bmp",
                 Theme = DrawingStyle.Theme.MaterialDesign2,
                 DarkMode = true,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign3 - Light",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign3-Light.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/MaterialDesign3-Light.bmp",
                 Theme = DrawingStyle.Theme.MaterialDesign3,
                 DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "MaterialDesign3 - Dark",
-                Preview = "pack://application:,,,/Resources/Images/MaterialDesign3-Dark.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/MaterialDesign3-Dark.bmp",
                 Theme = DrawingStyle.Theme.MaterialDesign3,
                 DarkMode = true,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "Unraid - Light",
-                Preview = "pack://application:,,,/Resources/Images/Unraid-Light.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/Unraid-Light.bmp",
                 Theme = DrawingStyle.Theme.Unraid,
                 DarkMode = false,
             });
             ThemeList.Add(new ThemeItem
             {
                 Name = "Unraid - Dark",
-                Preview = "pack://application:,,,/Resources/Images/Unraid-Dark.bmp",
+                Preview = "pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/Unraid-Dark.bmp",
                 Theme = DrawingStyle.Theme.Unraid,
                 DarkMode = true,
             });

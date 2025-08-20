@@ -79,8 +79,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
         }
 
         public ObservableCollection<StyleHistoryItem> StyleHistories { get; set; }
-      
+
         public static MainWindow Instance { get; private set; }
+
+        private bool FormLoaded { get; set; }
 
         private void OpenFileButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -239,6 +241,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             await LoadActiveHistory();
             EmptyHint.Visibility = StyleHistories.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
             OnPropertyChanged(nameof(StyleHistories));
+            if (!FormLoaded)
+            {
+                FormLoaded = true;
+                Topmost = true;
+                await Task.Delay(500);
+                Topmost = false;
+            }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }
