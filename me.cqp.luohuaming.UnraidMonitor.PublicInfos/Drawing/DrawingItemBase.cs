@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items;
+using Newtonsoft.Json;
 using PropertyChanged;
 using SkiaSharp;
+using System;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -115,7 +117,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
             });
-            return JsonConvert.DeserializeObject<DrawingItemBase>(item);
+            return Type switch
+            {
+                ItemType.Text => JsonConvert.DeserializeObject<DrawingItem_Text>(item),
+                ItemType.ProgressBar => JsonConvert.DeserializeObject<DrawingItem_ProgressBar>(item),
+                ItemType.ProgressRing => JsonConvert.DeserializeObject<DrawingItem_ProgressRing>(item),
+                ItemType.Chart => JsonConvert.DeserializeObject<DrawingItem_Chart>(item),
+                ItemType.Alert => JsonConvert.DeserializeObject<DrawingItem_Alert>(item),
+                ItemType.Image => JsonConvert.DeserializeObject<DrawingItem_Image>(item),
+                ItemType.RunningStatus => JsonConvert.DeserializeObject<DrawingItem_RunningStatus>(item),
+                _ => throw new NotImplementedException($"不支持的绘图项类型: {Type}"),
+            };
         }
     }
 }
