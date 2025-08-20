@@ -324,7 +324,7 @@
                                 Binding="{Binding Name}"
                                 Header="名称"
                                 IsReadOnly="True" />
-                            <DataGridTemplateColumn Width="*" Header="监控属性">
+                            <DataGridTemplateColumn Header="监控属性">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource AlarmToDetailConverter}}" />
@@ -339,7 +339,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="操作">
+                            <DataGridTemplateColumn Width="*" Header="操作">
                                 <DataGridTemplateColumn.HeaderStyle>
                                     <Style BasedOn="{StaticResource DataGridColumnHeaderStyle}" TargetType="DataGridColumnHeader">
                                         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -350,11 +350,13 @@
                                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                             <Button
                                                 Width="50"
+                                                Click="AlarmItemEdit_Click"
                                                 Content="编辑"
                                                 Style="{StaticResource ButtonPrimary}" />
                                             <Button
                                                 Width="50"
                                                 Margin="5,0,0,0"
+                                                Click="AlarmItemDelete_Click"
                                                 Content="删除"
                                                 Style="{StaticResource ButtonDanger}" />
                                         </StackPanel>

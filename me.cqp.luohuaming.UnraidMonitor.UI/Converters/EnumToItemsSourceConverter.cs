@@ -91,7 +91,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
 
     }
 
-    public class EnumToStringConverter : IValueConverter
+    public class ItemTypeToStringConverter : IValueConverter
     {
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -100,12 +100,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || !targetType.IsEnum)
+            if (value == null)
             {
                 return null;
             }
 
-            return Enum.Parse(targetType, value.ToString());
+            return Enum.TryParse(value.ToString(), out ItemType type) ? type : ItemType.Unknown;
         }
 
     }
@@ -292,6 +292,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
                 return time.TimeOfDay;
             }
             return DependencyProperty.UnsetValue;
+        }
+    }
+
+    public class AlarmFormatWidthConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is double width)
+            {
+                return width - 120;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

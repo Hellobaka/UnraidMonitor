@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -33,10 +34,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public ObservableCollection<StyleCommandWrapper> StyleCommands { get; set; } = [];
 
-        public ObservableCollection<AlarmRuleBase> Alarms { get; set; } = new ObservableCollection<AlarmRuleBase>
-        {
-            new RangeAlarmRule()
-        };
+        public ObservableCollection<AlarmRuleBase> Alarms { get; set; } = [];
 
         private static bool TryParse(string input, Type type, out object value)
         {
@@ -220,6 +218,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     CommandIntervalConfig.Instance.EnableAutoReload();
 
                     MainSave.Commands = StyleCommands.Select(x => x.Raw).ToList();
+                    AlarmManager.Instance.Rules = Alarms.ToList();
+                    AlarmManager.SaveRules(Path.Combine(MainSave.AppDirectory, "AlarmRules.json"));
                     MainWindow.ShowInfo("配置保存成功");
                 }
                 else
@@ -373,6 +373,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     MainWindow.ShowError("加载样式指令失败，请查看日志");
                 }
             }
+
+            Alarms = [];
+            foreach(var alarm in AlarmManager.Instance.Rules)
+            {
+                Alarms.Add(alarm);
+            }
         }
 
         private void ListRemoveButtonHandler(ListBox listBox)
@@ -514,12 +520,46 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         private void AlarmCommandNewButton_Click(object sender, RoutedEventArgs e)
         {
-            AlarmEditor alarmEditor = new AlarmEditor();
+            AlarmEditor alarmEditor = new();
             alarmEditor.ShowDialog();
             if (alarmEditor.DialogResult ?? false)
             {
                 Alarms.Add(alarmEditor.AlarmInstance);
             }
+        }
+
+        private void AlarmItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.DataContext is not AlarmRuleBase alarm)
+            {
+                MainWindow.ShowError("请选择一项");
+                return;
+            }
+            AlarmEditor alarmEditor = new();
+            alarmEditor.AlarmInstance = alarm.Clone();
+            if (alarmEditor.ShowDialog() ?? false)
+            {
+                int index = Alarms.IndexOf(alarm);
+                if (index >= 0)
+                {
+                    Alarms.RemoveAt(index);
+                    Alarms.Add(alarmEditor.AlarmInstance);
+                }
+            }
+        }
+
+        private async void AlarmItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Button).DataContext is not AlarmRuleBase alarm)
+            {
+                MainWindow.ShowError("请选择一项");
+                return;
+            }
+            if (await MainWindow.ShowConfirmAsync("确定要删除所选的报警规则吗？"))
+            {
+                return;
+            }
+            Alarms.Remove(alarm);
         }
     }
 }

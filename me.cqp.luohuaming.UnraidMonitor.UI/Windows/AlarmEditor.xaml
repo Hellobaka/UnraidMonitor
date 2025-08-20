@@ -7,18 +7,20 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="AlarmEditorWindow"
     Title="编辑报警条件"
-    Width="400"
-    Height="360"
+    Width="500"
+    Height="560"
     d:DataContext="{d:DesignInstance Type=local:AlarmEditor}"
     Loaded="Window_Loaded"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
+        <converter:AlarmFormatWidthConverter x:Key="AlarmFormatWidthConverter" />
         <converter:EnumToItemsSourceConverter x:Key="EnumToItemsSourceConverter" />
         <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
         <converter:TimeSpanToDateTimeConverter x:Key="TimeSpanToDateTimeConverter" />
-        <converter:EnumToStringConverter x:Key="EnumToStringConverter" />
+        <converter:ItemTypeToStringConverter x:Key="ItemTypeToStringConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,7 +28,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible">
-            <Grid Margin="10">
+            <Grid x:Name="Container" Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
@@ -52,7 +54,7 @@
                         Grid.Column="1"
                         HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
-                        IsChecked="{Binding AlarmInstance.Alarmed, Mode=TwoWay}"
+                        IsChecked="{Binding AlarmInstance.Enabled, Mode=TwoWay}"
                         Style="{StaticResource ToggleButtonSwitch}" />
                 </Grid>
                 <Grid Grid.Row="1" Margin="0,10,0,0">
@@ -101,6 +103,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="特定时段：" />
                     <ToggleButton
+                        x:Name="TimeRangeSwitch"
                         Grid.Column="1"
                         HorizontalAlignment="Left"
                         hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
@@ -115,8 +118,13 @@
                     <TextBlock VerticalAlignment="Center" Text="开始时段：" />
                     <hc:TimePicker
                         Grid.Column="1"
-                        DisplayTime="{Binding AlarmInstance.StartTime, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
-                        Style="{StaticResource TimePickerPlus}" />
+                        IsEnabled="{Binding IsChecked, ElementName=TimeRangeSwitch}"
+                        SelectedTime="{Binding AlarmInstance.StartTime, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                        Style="{StaticResource TimePickerPlus}">
+                        <hc:TimePicker.Clock>
+                            <hc:ListClock />
+                        </hc:TimePicker.Clock>
+                    </hc:TimePicker>
                 </Grid>
                 <Grid Grid.Row="6" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -126,8 +134,13 @@
                     <TextBlock VerticalAlignment="Center" Text="结束时段：" />
                     <hc:TimePicker
                         Grid.Column="1"
-                        DisplayTime="{Binding AlarmInstance.EndTime, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
-                        Style="{StaticResource TimePickerPlus}" />
+                        IsEnabled="{Binding IsChecked, ElementName=TimeRangeSwitch}"
+                        SelectedTime="{Binding AlarmInstance.EndTime, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                        Style="{StaticResource TimePickerPlus}">
+                        <hc:TimePicker.Clock>
+                            <hc:ListClock />
+                        </hc:TimePicker.Clock>
+                    </hc:TimePicker>
                 </Grid>
                 <Grid Grid.Row="7" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -137,8 +150,12 @@
                     <TextBlock VerticalAlignment="Center" Text="最小间隔：" />
                     <hc:TimePicker
                         Grid.Column="1"
-                        DisplayTime="{Binding AlarmInstance.AlarmInterval, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
-                        Style="{StaticResource TimePickerPlus}" />
+                        SelectedTime="{Binding AlarmInstance.AlarmInterval, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                        Style="{StaticResource TimePickerPlus}">
+                        <hc:TimePicker.Clock>
+                            <hc:ListClock />
+                        </hc:TimePicker.Clock>
+                    </hc:TimePicker>
                 </Grid>
                 <Grid Grid.Row="8" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -149,7 +166,7 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding BindingItemValues}"
-                        SelectedItem="{Binding AlarmInstance.ClassName, Mode=TwoWay, Converter={StaticResource EnumToStringConverter}}"
+                        SelectedItem="{Binding AlarmItemType, Mode=TwoWay, Converter={StaticResource ItemTypeToStringConverter}}"
                         SelectionChanged="ItemType_SelectionChanged">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -167,10 +184,10 @@
                     <ComboBox
                         Grid.Column="1"
                         ItemsSource="{Binding BindingProperties}"
-                        SelectedItem="{Binding AlarmInstance.PropertyName, Mode=TwoWay}">
+                        SelectedItem="{Binding AlarmPropertyName, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                                <TextBlock Text="{Binding Key}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -180,16 +197,56 @@
                         <ColumnDefinition Width="90" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="激活文本模板：" />
-                    <TextBox Grid.Column="1" Text="{Binding AlarmInstance.AlarmNotifyFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox
+                        Name="AlarmPostText"
+                        Grid.Column="1"
+                        MaxWidth="{Binding Width, Converter={StaticResource AlarmFormatWidthConverter}, ElementName=AlarmEditorWindow}"
+                        AcceptsReturn="True"
+                        MaxLines="65535"
+                        Text="{Binding AlarmInstance.AlarmNotifyFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap" />
+                    <hc:UniformSpacingPanel
+                        Name="AlarmPostFormatContainer"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="{Binding Width, Converter={StaticResource AlarmFormatWidthConverter}, ElementName=AlarmEditorWindow}"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Left"
+                        ChildWrapping="Wrap"
+                        Spacing="10" />
                 </Grid>
                 <Grid Grid.Row="11" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
                     <TextBlock VerticalAlignment="Center" Text="恢复文本模板：" />
-                    <TextBox Grid.Column="1" Text="{Binding AlarmInstance.RecoverNotifyFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox
+                        Name="AlarmRecoveryText"
+                        Grid.Column="1"
+                        MaxWidth="{Binding Width, Converter={StaticResource AlarmFormatWidthConverter}, ElementName=AlarmEditorWindow}"
+                        AcceptsReturn="True"
+                        MaxLines="65535"
+                        Text="{Binding AlarmInstance.RecoverNotifyFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap" />
+                    <hc:UniformSpacingPanel
+                        Name="AlarmRecoveryFormatContainer"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Width="{Binding Width, Converter={StaticResource AlarmFormatWidthConverter}, ElementName=AlarmEditorWindow}"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Left"
+                        ChildWrapping="Wrap"
+                        Spacing="10" />
                 </Grid>
                 <Grid
                     x:Name="RangeAlarmPropertyContainer"
@@ -229,7 +286,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock VerticalAlignment="Center" Text="区间最大值：" />
-                        <TextBox Grid.Column="1" Text="{Binding AlarmInstance.Min, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        <TextBox Grid.Column="1" Text="{Binding AlarmInstance.Max, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     </Grid>
                     <Grid Grid.Row="3" Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
@@ -239,8 +296,12 @@
                         <TextBlock VerticalAlignment="Center" Text="最大持续时长：" />
                         <hc:TimePicker
                             Grid.Column="1"
-                            DisplayTime="{Binding AlarmInstance.ThresholdTimeSpan, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
-                            Style="{StaticResource TimePickerPlus}" />
+                            SelectedTime="{Binding AlarmInstance.ThresholdTimeSpan, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                            Style="{StaticResource TimePickerPlus}">
+                            <hc:TimePicker.Clock>
+                                <hc:ListClock />
+                            </hc:TimePicker.Clock>
+                        </hc:TimePicker>
                     </Grid>
                 </Grid>
                 <Grid
@@ -303,8 +364,12 @@
                         <TextBlock VerticalAlignment="Center" Text="最大持续时长：" />
                         <hc:TimePicker
                             Grid.Column="1"
-                            DisplayTime="{Binding AlarmInstance.ThresholdTimeSpan, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
-                            Style="{StaticResource TimePickerPlus}" />
+                            SelectedTime="{Binding AlarmInstance.ThresholdTimeSpan, Converter={StaticResource TimeSpanToDateTimeConverter}, Mode=TwoWay}"
+                            Style="{StaticResource TimePickerPlus}">
+                            <hc:TimePicker.Clock>
+                                <hc:ListClock />
+                            </hc:TimePicker.Clock>
+                        </hc:TimePicker>
                     </Grid>
                 </Grid>
             </Grid>
