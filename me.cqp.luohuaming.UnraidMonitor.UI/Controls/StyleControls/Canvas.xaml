@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls"
     xmlns:converter="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -228,7 +229,10 @@
                     BorderBrush="{DynamicResource BorderBrush}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,4,4">
-                    <ItemsControl ItemsSource="{Binding Content}">
+                    <ItemsControl
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        ItemsSource="{Binding Content}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <local:DrawingItem
