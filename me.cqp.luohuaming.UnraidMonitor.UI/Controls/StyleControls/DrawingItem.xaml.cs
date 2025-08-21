@@ -104,7 +104,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             {
                 int index = CurrentCanvas.Content.IndexOf(CurrentItem);
                 CurrentCanvas.Content.Remove(CurrentItem);
-                CurrentCanvas.Content.Insert(Math.Min(CurrentCanvas.Content.Count - 1, index + 1), CurrentItem);
+                CurrentCanvas.Content.Insert(Math.Min(CurrentCanvas.Content.Count, index + 1), CurrentItem);
             }
             else
             {
@@ -117,7 +117,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls
             if (CurrentCanvas.Content.Contains(CurrentItem))
             {
                 CurrentCanvas.Content.Remove(CurrentItem);
-                CurrentCanvas.Content.Insert(CurrentCanvas.Content.Count - 1, CurrentItem);
+                CurrentCanvas.Content.Add(CurrentItem);
             }
             else
             {
