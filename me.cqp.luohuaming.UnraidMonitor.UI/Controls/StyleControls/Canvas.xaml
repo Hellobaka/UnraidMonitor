@@ -171,6 +171,25 @@
                     </hc:UniformSpacingPanel>
                 </Border>
             </Expander>
+            <Expander Background="{StaticResource RegionBrush}" Header="边距控制">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <hc:UniformSpacingPanel
+                        Margin="16"
+                        Orientation="Vertical"
+                        Spacing="10">
+                        <controls:ControlWithTitle Title="外间距(Margin)" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <local:Margin Thickness="{Binding Margin}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="内间距(Padding)" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <local:Margin Thickness="{Binding Padding}" />
+                        </controls:ControlWithTitle>
+                    </hc:UniformSpacingPanel>
+                </Border>
+            </Expander>
             <controls:ControlWithTitle Title="背景高斯模糊" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <hc:NumericUpDown Maximum="100" Value="{Binding BackgroundBlur}" />
             </controls:ControlWithTitle>

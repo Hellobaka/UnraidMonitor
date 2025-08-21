@@ -93,11 +93,11 @@
                 <Separator />
                 <MenuItem Click="ClearBinding_Click" Header="清除绑定" />
                 <MenuItem Click="SetBinding_Click" Header="设置绑定" />
-                <Separator />
+                <!--<Separator />
                 <MenuItem Click="SetTopLevel_Click" Header="置于顶层" />
                 <MenuItem Click="MoveUpLevel_Click" Header="向上一层" />
                 <MenuItem Click="MoveDownLevel_Click" Header="向下一层" />
-                <MenuItem Click="SetBottomLevel_Click" Header="置于底层" />
+                <MenuItem Click="SetBottomLevel_Click" Header="置于底层" />-->
             </ContextMenu>
         </Expander.ContextMenu>
         <hc:UniformSpacingPanel
@@ -164,12 +164,25 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="外间距(Margin)" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <local:Margin Thickness="{Binding Margin}" />
-            </controls:ControlWithTitle>
-            <controls:ControlWithTitle Title="内间距(Padding)" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <local:Margin Thickness="{Binding Padding}" />
-            </controls:ControlWithTitle>
+            <Expander Background="{StaticResource RegionBrush}" Header="边距控制">
+                <Border
+                    Background="{DynamicResource RegionBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,4,4">
+                    <hc:UniformSpacingPanel
+                        Margin="16"
+                        Orientation="Vertical"
+                        Spacing="10">
+                        <controls:ControlWithTitle Title="外间距(Margin)" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <local:Margin Thickness="{Binding Margin}" />
+                        </controls:ControlWithTitle>
+                        <controls:ControlWithTitle Title="内间距(Padding)" TitleWidth="{StaticResource GlobalTitleWidth}">
+                            <local:Margin Thickness="{Binding Padding}" />
+                        </controls:ControlWithTitle>
+                    </hc:UniformSpacingPanel>
+                </Border>
+            </Expander>
             <controls:ControlWithTitle Title="自定义高度" TitleWidth="{StaticResource GlobalTitleWidth}">
                 <hc:NumericUpDown Value="{Binding OverrideHeight}" />
             </controls:ControlWithTitle>
