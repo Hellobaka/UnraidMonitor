@@ -108,6 +108,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     SelectedItem = item;
                 }
             }
+            ItemProperties.Add(new DisplayKeyValuePair
+            {
+                Key = "时间",
+                Value = "DateTime"
+            });
+            if(selectedItem == "DateTime")
+            {
+                SelectedItem = ItemProperties.Last();
+            }
             var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "me.cqp.luohuaming.UnraidMonitor.PublicInfos");
             var modelTypes = assembly?.GetType($"me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.{MonitorItemType}");
             if (modelTypes == null)
@@ -131,6 +140,15 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 {
                     SelectedModel = item;
                 }
+            }
+            ModelProperties.Add(new DisplayKeyValuePair
+            {
+                Key = "时间",
+                Value = "DateTime"
+            });
+            if (selectedModel == "DateTime")
+            {
+                SelectedModel = ModelProperties.Last();
             }
         }
 
