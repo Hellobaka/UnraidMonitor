@@ -96,9 +96,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (MonitorDataBase.Cache.TryGetValue(TargetValue, out var dict))
+            if (MonitorDataBase.Cache.TryGetValue(MonitorItemType.ToString(), out var dict))
             {
-                var data = dict.Select(x => x.data.ToString()).Distinct().OrderBy(o => o).ToList();
+                AvailableValues.Clear();
+                if (dict.Count == 0)
+                {
+                    AvailableValues.Add("无可用值");
+                    return;
+                }
+                var property = SelectedPath.Value;
+                var propertyInfo = dict.First().data.GetType().GetProperty(property, BindingFlags.Public | BindingFlags.Instance);
+                var data = dict.Select(x => propertyInfo.GetValue(x.data).ToString()).Distinct().OrderBy(o => o).ToList();
                 AvailableValues.Clear();
                 foreach (var item in data)
                 {
