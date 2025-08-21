@@ -66,6 +66,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             public float BorderRadius { get; set; } = 0;
         }
 
+        public DrawingCanvas()
+        {
+            Content.CollectionChanged += Content_CollectionChanged;
+        }
+
         public enum Position
         {
             [Description("顶部")]
@@ -404,7 +409,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented,
             });
-            return JsonConvert.DeserializeObject<DrawingCanvas>(canvas);
+            var c = JsonConvert.DeserializeObject<DrawingCanvas>(canvas);
+            c.Content.Clear();
+            foreach(var item in Content)
+            {
+                c.Content.Add(item.Clone());
+            }
+
+            return c;
         }
     }
 }
