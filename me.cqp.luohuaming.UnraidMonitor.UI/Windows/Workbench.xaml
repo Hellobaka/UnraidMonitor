@@ -15,6 +15,7 @@
     d:DataContext="{d:DesignInstance Type=vm:WorkbenchViewModel,
                                      IsDesignTimeCreatable=True}"
     Background="{DynamicResource SecondaryRegionBrush}"
+    Closing="Window_Closing"
     Icon="pack://application:,,,/me.cqp.luohuaming.UnraidMonitor.UI;component/Resources/Images/datatable.png"
     Loaded="Window_Loaded"
     ShowNonClientArea="True"

@@ -304,5 +304,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
             DebounceCancel?.Cancel();
             await CallStyleRedraw();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (ViewModel.OperationPending && !MainWindow.ShowConfirm("还有操作未保存，确定要抛弃这些更改吗？"))
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }
