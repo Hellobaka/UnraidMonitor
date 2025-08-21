@@ -49,7 +49,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             if (OverrideHeight == 0)
             {
-                OverrideHeight = 100;
+                ActualHeight = 100;
+            }
+            else
+            {
+                ActualHeight = OverrideHeight;
             }
             return base.CalcHeight(theme);
         }
@@ -129,7 +133,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 padding.Top = size.Height / 2 + textPadding;
                 padding.Bottom = Math.Max(padding.Bottom, size.Height / 2 + textPadding);
             }
-            float chartHeight = OverrideHeight - padding.Top - padding.Bottom;
+            float chartHeight = ActualHeight - padding.Top - padding.Bottom;
             SKPoint p1 = new(startPoint.X + padding.Left, startPoint.Y + padding.Top);
             SKPoint p2 = new(startPoint.X + padding.Left, startPoint.Y + padding.Top + chartHeight);
             painting.DrawLine(p1, p2, SKColor.Parse(palette.BackgroundColor), 1);
@@ -155,7 +159,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             }
             if (Points.Length == 0)
             {
-                return (new SKPoint(startPoint.X + desireWidth, startPoint.Y + OverrideHeight), desireWidth, OverrideHeight);
+                return (new SKPoint(startPoint.X + desireWidth, startPoint.Y + ActualHeight), desireWidth, ActualHeight);
             }
             int dataInterval = Math.Max(Points.Length / HorizonValueDisplayCount, 1);
             for (int i = 1; i <= HorizonValueDisplayCount; i++)
@@ -180,7 +184,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 Location = new(startPoint.X + padding.Left, startPoint.Y + padding.Top),
                 Size = new SKSize(desireWidth - padding.Left, chartHeight)
             }, SKColor.Parse(palette.AccentColor), 2, SKColor.Parse(palette.AccentColor), string.IsNullOrEmpty(palette.Accent2Color) ? SKColors.Transparent : SKColor.Parse(palette.Accent2Color));
-            return (new SKPoint(startPoint.X + desireWidth, startPoint.Y + OverrideHeight), desireWidth, OverrideHeight);
+            return (new SKPoint(startPoint.X + desireWidth, startPoint.Y + ActualHeight), desireWidth, ActualHeight);
         }
 
         public static DrawingItem_Chart Create() => new()

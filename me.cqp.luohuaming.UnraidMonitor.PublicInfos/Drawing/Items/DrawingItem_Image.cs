@@ -28,7 +28,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             if (OverrideHeight == 0)
             {
-                OverrideHeight = 100;
+                ActualHeight = 100;
+            }
+            else
+            {
+                ActualHeight = OverrideHeight;
             }
             return base.CalcHeight(theme);
         }
@@ -69,13 +73,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             painting.DrawImage(path, new SKRect
             {
                 Location = new SKPoint(startPoint.X, startPoint.Y),
-                Size = new SKSize(desireWidth, OverrideHeight)
+                Size = new SKSize(desireWidth, ActualHeight)
             });
 
             return (
-                endPoint: new SKPoint(startPoint.X + desireWidth, startPoint.Y + OverrideHeight),
+                endPoint: new SKPoint(startPoint.X + desireWidth, startPoint.Y + ActualHeight),
                 width: desireWidth,
-                height: OverrideHeight
+                height: ActualHeight
             );
         }
 

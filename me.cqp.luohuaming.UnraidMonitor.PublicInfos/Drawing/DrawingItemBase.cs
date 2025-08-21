@@ -71,6 +71,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual DrawingCanvas.Position VerticalAlignment { get; set; } = DrawingCanvas.Position.Top;
 
+        public float ActualHeight { get; set; }
+
         public Binding Binding { get; set; }
 
         [JsonIgnore]
@@ -99,7 +101,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual float CalcHeight(DrawingStyle.Theme theme)
         {
-            return OverrideHeight;
+            return ActualHeight;
         }
 
         public virtual (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)

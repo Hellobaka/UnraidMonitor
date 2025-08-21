@@ -60,13 +60,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             if (OverrideHeight == 0)
             {
-                OverrideHeight = theme switch
+                ActualHeight = theme switch
                 {
                     DrawingStyle.Theme.Unraid => 34,
                     DrawingStyle.Theme.MaterialDesign3 => 8,
                     DrawingStyle.Theme.MaterialDesign2 => 8,
                     _ => 8
                 };
+            }
+            else
+            {
+                ActualHeight = OverrideHeight;
             }
 
             return base.CalcHeight(theme);
@@ -88,7 +92,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
             float remainWidth = (float)(desireWidth - valueWidth);
-            float barHeight = OverrideHeight;
+            float barHeight = ActualHeight;
             painting.DrawRectangle(new SKRect
             {
                 Location = new(startPoint.X, startPoint.Y),
@@ -107,21 +111,34 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
             float remainWidth = (float)(desireWidth - valueWidth);
-            float barHeight = OverrideHeight;
+            float barHeight = ActualHeight;
             float trackGap = barHeight / 2;
+            if (valueWidth != 0)
+            {
+                valueWidth = Math.Max(valueWidth, ActualHeight);
+                remainWidth = (float)(desireWidth - valueWidth);
+                painting.DrawRectangle(new SKRect
+                {
+                    Location = new(startPoint.X, startPoint.Y),
+                    Size = new(valueWidth, barHeight)
+                }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 1000);
+                painting.DrawRectangle(new SKRect
+                {
+                    Location = new(startPoint.X + trackGap + valueWidth, startPoint.Y),
+                    Size = new(remainWidth - trackGap, barHeight)
+                }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 1000);
+            }
+            else
+            {
+                painting.DrawRectangle(new SKRect
+                {
+                    Location = new(startPoint.X + valueWidth, startPoint.Y),
+                    Size = new(remainWidth, barHeight)
+                }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 1000);
+            }
             painting.DrawRectangle(new SKRect
             {
-                Location = new(startPoint.X, startPoint.Y),
-                Size = new(valueWidth, barHeight)
-            }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 1000);
-            painting.DrawRectangle(new SKRect
-            {
-                Location = new(startPoint.X + trackGap + valueWidth, startPoint.Y),
-                Size = new(remainWidth - trackGap, barHeight)
-            }, SKColor.Parse(palette.BackgroundColor), SKColor.Empty, 0, null, 1000);
-            painting.DrawRectangle(new SKRect
-            {
-                Location = new(startPoint.X + valueWidth + remainWidth - trackGap - trackGap / 2, startPoint.Y + (OverrideHeight / 2) - (trackGap / 2)),
+                Location = new(startPoint.X + valueWidth + remainWidth - trackGap - trackGap / 2, startPoint.Y + (ActualHeight / 2) - (trackGap / 2)),
                 Size = new(trackGap, trackGap)
             }, SKColor.Parse(palette.AccentColor), SKColor.Empty, 0, null, 1000);
 
@@ -133,7 +150,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             SKShader shader = null;
             float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
             float remainWidth = (float)(desireWidth - valueWidth);
-            float barHeight = OverrideHeight;
+            float barHeight = ActualHeight;
             //startPoint.Y = verticalCenterPoint.Y - barHeight / 2;
             if (!string.IsNullOrEmpty(palette.Accent2Color))
             {
@@ -162,7 +179,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             float valueWidth = (float)(desireWidth * (Value - Min) / (Max - Min));
             float remainWidth = (float)(desireWidth - valueWidth);
-            float barHeight = OverrideHeight;
+            float barHeight = ActualHeight;
             float trackHeight = 3;
 
             painting.DrawRectangle(new SKRect
