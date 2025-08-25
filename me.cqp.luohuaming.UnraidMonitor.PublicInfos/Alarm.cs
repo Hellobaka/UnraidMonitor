@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
 {
@@ -92,7 +93,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             }
                             rule.LastAlarmTime = DateTime.Now;
                             rule.Alarmed = true;
-                            OnAlarmPost?.Invoke(rule, rule.GetAlarm(value));
+                            Task.Run(() => OnAlarmPost?.Invoke(rule, rule.GetAlarm(value)));
                         }
                     }
                     else
@@ -100,7 +101,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         if (rule.Alarmed)
                         {
                             rule.Alarmed = false;
-                            OnAlarmRecover?.Invoke(rule, rule.GetRecover(value));
+                            Task.Run(() => OnAlarmRecover?.Invoke(rule, rule.GetRecover(value)));
                         }
                     }
                 }
