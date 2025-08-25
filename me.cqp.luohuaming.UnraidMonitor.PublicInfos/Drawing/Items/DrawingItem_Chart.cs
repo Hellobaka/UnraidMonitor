@@ -61,8 +61,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override void BeforeBinding()
         {
             Points = [];
-            Min = 0;
-            Max = 100;
         }
 
         public override void ApplyBinding()
@@ -119,8 +117,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         {
             CalcHeight(theme);
             Thickness padding = new();
+            SKSize size = SKSize.Empty;
+            for (double i = Min; i <= Max; i += (Max - Min) / (VerticalValueDisplayCount - 1))
+            {
+                string text = Math.Round(i, 2).ToString();
+                var currentSize = Painting.MeasureString(text, TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
+                if (size.Width < currentSize.Width)
+                {
+                    size = currentSize;
+                }
+            }
+            if (size == SKSize.Empty)
+            {
+                size = Painting.MeasureString(Math.Round(Max, 2).ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
+            }
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
-            var size = Painting.MeasureString((Math.Round(Max, 2)).ToString(), TextSize, Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme)));
             float textPadding = 5;
             if (ShowHorizonValue)
             {
