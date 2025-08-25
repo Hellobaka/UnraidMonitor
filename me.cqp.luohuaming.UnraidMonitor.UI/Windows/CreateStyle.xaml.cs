@@ -42,7 +42,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
 
         public string NameInput { get; set; }
 
-        public string WidthInput { get; set; }
+        public string WidthInput { get; set; } = "1200";
 
         public string SavedStylePath { get; set; } = "";
 
