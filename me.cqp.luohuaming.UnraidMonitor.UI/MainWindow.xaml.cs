@@ -91,6 +91,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             OpenFileDialog dialog = new();
             dialog.Title = "打开样式文件";
             dialog.Filter = "样式文件|*.style|所有文件|*.*";
+            dialog.InitialDirectory = MainSave.AppDirectory;
             if (dialog.ShowDialog() ?? false)
             {
                 string path = dialog.FileName;
@@ -114,6 +115,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             if (createStyle.DialogResult ?? false)
             {
                 string path = createStyle.SavedStylePath;
+                SaveActiveHistory(new StyleHistoryItem
+                {
+                    DateTime = DateTime.Now,
+                    FileName = Path.GetFileName(path),
+                    FullPath = path
+                });
                 LoadWorkbench(path);
             }
             else
