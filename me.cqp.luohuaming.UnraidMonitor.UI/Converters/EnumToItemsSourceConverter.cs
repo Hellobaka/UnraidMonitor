@@ -224,6 +224,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Converters
 
                     foreach (PropertyInfo propertyInfo in modelTypes.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                     {
+                        if (propertyInfo.Name != alarm.PropertyName)
+                        {
+                            continue;
+                        }
                         string displayName = Attribute.GetCustomAttribute(propertyInfo, typeof(DescriptionAttribute)) is DescriptionAttribute attr ? attr.Description : propertyInfo.Name;
                         return $"{description} {displayName}";
                     }

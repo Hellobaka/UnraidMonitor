@@ -134,6 +134,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// <summary>
         /// 是否处于报警状态
         /// </summary>
+        [JsonIgnore]
         public bool Alarmed { get; set; }
 
         /// <summary>
@@ -160,16 +161,19 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// <summary>
         /// 第一个无效点时间
         /// </summary>
+        [JsonIgnore]
         public DateTime FirstInvalidTime { get; set; }
 
         /// <summary>
         /// 异常值数量
         /// </summary>
+        [JsonIgnore]
         public int InvalidValueCount { get; set; }
 
         /// <summary>
         /// 上次报警时间
         /// </summary>
+        [JsonIgnore]
         public DateTime LastAlarmTime { get; set; } = DateTime.MinValue;
 
         /// <summary>
@@ -196,6 +200,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
         /// 报警启用结束时间段
         /// </summary>
         public TimeSpan EndTime { get; set; }
+
+        public bool EnableFilter { get; set; }
+
+        public string FilterPropertyName { get; set; }
+
+        public string FilterPropertyValue { get; set; }
 
         private static Regex PlaceholderRegex { get; } = new Regex(@"%([A-Za-z0-9_]+)(?::([a-zA-Z0-9]+))?%", RegexOptions.Compiled);
 
@@ -258,6 +268,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             return [];
         }
 
+        /// <summary>
+        /// 从统计数据中，根据配置的类名与属性名获取目标值；同时启用筛选机制
+        /// </summary>
         public bool TryGetValue(MonitorDataBase data, out double value)
         {
             var type = data.GetType();
@@ -277,7 +290,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             {
                 return false;
             }
-
+            if (EnableFilter)
+            {
+                var filterProp = type.GetProperty(FilterPropertyName);
+                if (filterProp == null)
+                {
+                    MainSave.CQLog.Warning("AlarmFilter", $"{Name} 的过滤属性 {FilterPropertyName} 未找到对应实例的属性");
+                }
+                else
+                {
+                    var filter = filterProp.GetValue(data);
+                    if (filter.ToString() != FilterPropertyValue)
+                    {
+                        return false;
+                    }
+                }
+            }
             try
             {
                 value = Convert.ToDouble(valueObj);
@@ -311,6 +339,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             target.RecoverNotifyFormat = RecoverNotifyFormat;
             target.StartTime = StartTime;
             target.EndTime = EndTime;
+            target.FilterPropertyValue = FilterPropertyValue;
+            target.FilterPropertyName = FilterPropertyName;
+            target.EnableFilter = EnableFilter;
         }
     }
 

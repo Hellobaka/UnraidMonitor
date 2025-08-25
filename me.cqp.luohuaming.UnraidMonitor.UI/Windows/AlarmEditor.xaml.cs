@@ -1,5 +1,6 @@
 ﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos;
 using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using me.cqp.luohuaming.UnraidMonitor.UI.Models;
 using Newtonsoft.Json.Linq;
 using System;
@@ -40,12 +41,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         public Array BindingItemValues { get; set; } = Enum.GetValues(typeof(ItemType));
 
         public ObservableCollection<DisplayKeyValuePair> BindingProperties { get; set; } = [];
-        
+
+        public ObservableCollection<string> AvailableValues { get; set; } = [];
+
         public DisplayKeyValuePair AlarmPropertyName { get; set; }
 
         public ItemType AlarmItemType { get; set; } = ItemType.Unknown;
 
+        public DisplayKeyValuePair AlarmFilterPropertyName { get; set; }
+
         public AlarmType AlarmType { get; set; } = AlarmType.RangeAlarm;
+
+        public string AlarmFilterValue { get; set; } = "";
 
         public bool FormLoaded { get; set; }
 
@@ -53,6 +60,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         {
             AlarmInstance.ClassName = AlarmItemType.ToString();
             AlarmInstance.PropertyName = AlarmPropertyName.Value;
+            AlarmInstance.FilterPropertyName = AlarmFilterPropertyName.Value;
+            AlarmInstance.FilterPropertyValue = AlarmFilterValue;
             if (!ValidateAlarmInstance(AlarmInstance, out string error))
             {
                 MessageBox.Show(error, "错误", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -122,10 +131,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 Key = "请选择属性",
                 Value = ""
             };
+            AlarmFilterPropertyName = BindingProperties.FirstOrDefault(x => x.Value == AlarmInstance.FilterPropertyName) ?? new DisplayKeyValuePair
+            {
+                Key = "请选择属性",
+                Value = ""
+            };
+            AlarmFilterValue = AlarmInstance.FilterPropertyValue;
 
             OnPropertyChanged(nameof(AlarmInstance));
             OnPropertyChanged(nameof(AlarmItemType));
             OnPropertyChanged(nameof(AlarmPropertyName));
+            OnPropertyChanged(nameof(AlarmFilterPropertyName));
 
             FormLoaded = true;
         }
@@ -185,8 +201,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     {
                         AlarmInstance.AlarmNotifyFormat = "";
                     }
-                    AlarmInstance.AlarmNotifyFormat += $"%{b.Tag}%";
+                    string insertText = $"%{b.Tag}%";
+                    int lastCaretIndex = AlarmPostText.CaretIndex;
+                    AlarmInstance.AlarmNotifyFormat = AlarmInstance.AlarmNotifyFormat.Insert(lastCaretIndex, insertText);
+                    lastCaretIndex += insertText.Length;
                     OnPropertyChanged(nameof(AlarmInstance));
+                    AlarmPostText.Focus();
+                    AlarmPostText.CaretIndex = lastCaretIndex;
                 };
                 AlarmPostFormatContainer.Children.Add(button);
             }
@@ -207,8 +228,13 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                     {
                         AlarmInstance.RecoverNotifyFormat = "";
                     }
-                    AlarmInstance.RecoverNotifyFormat += $"%{b.Tag}%";
+                    string insertText = $"%{b.Tag}%";
+                    int lastCaretIndex = AlarmRecoveryText.CaretIndex;
+                    AlarmInstance.RecoverNotifyFormat = AlarmInstance.RecoverNotifyFormat.Insert(lastCaretIndex, insertText);
+                    lastCaretIndex += insertText.Length;
                     OnPropertyChanged(nameof(AlarmInstance));
+                    AlarmRecoveryText.Focus();
+                    AlarmRecoveryText.CaretIndex = lastCaretIndex;
                 };
                 AlarmRecoveryFormatContainer.Children.Add(button);
             }
@@ -240,6 +266,27 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
         private void ItemType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ReloadPropertyInfo();
+        }
+
+        private void FilterPropertyName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MonitorDataBase.Cache.TryGetValue(AlarmItemType.ToString(), out var dict))
+            {
+                AvailableValues.Clear();
+                if (dict.Count == 0)
+                {
+                    AvailableValues.Add("无可用值");
+                    return;
+                }
+                var property = AlarmFilterPropertyName.Value;
+                var propertyInfo = dict.First().data.GetType().GetProperty(property, BindingFlags.Public | BindingFlags.Instance);
+                var data = dict.Select(x => propertyInfo.GetValue(x.data).ToString()).Distinct().OrderBy(o => o).ToList();
+                AvailableValues.Clear();
+                foreach (var item in data)
+                {
+                    AvailableValues.Add(item);
+                }
+            }
         }
     }
 }
