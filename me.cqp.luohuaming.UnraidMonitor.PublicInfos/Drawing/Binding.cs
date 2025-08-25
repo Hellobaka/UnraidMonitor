@@ -260,6 +260,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 var data = genericMethod.Invoke(this, []);
                 // Item属性键，此次绑定结果
                 Dictionary<string, BindingResult> result = [];
+                ClearLastBindResult();
                 // 从缓存以及数据库获取数据后，解析结果
                 if (data is IEnumerable list)
                 {
@@ -357,6 +358,17 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 Debugger.Break();
             }
             return [];
+        }
+
+        private void ClearLastBindResult()
+        {
+            foreach (var item in BindingPath)
+            {
+                foreach (var binding in item.Value)
+                {
+                    binding.RawValues = [];
+                }
+            }
         }
 
         private object[] ApplyConverter(object[] number, NumberConverter converter)

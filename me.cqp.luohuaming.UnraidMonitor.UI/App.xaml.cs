@@ -16,7 +16,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
         {
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
             base.OnStartup(e);
             Debug = e.Args.Length > 0 && e.Args[0] == "Debug";
