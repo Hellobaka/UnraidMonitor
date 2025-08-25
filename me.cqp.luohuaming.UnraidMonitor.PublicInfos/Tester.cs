@@ -256,7 +256,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Remaining,
                             Binding = new(){
                                 Conditions = new(){
@@ -283,7 +283,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -312,7 +312,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -340,7 +340,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -369,7 +369,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -397,7 +397,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -426,7 +426,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -454,7 +454,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -483,7 +483,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -511,7 +511,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -540,7 +540,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -568,7 +568,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -597,7 +597,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -625,7 +625,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -654,7 +654,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -682,7 +682,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -711,7 +711,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -740,7 +740,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                             FillPercentage = 8,
                         },
                         new DrawingItem_ProgressBar {
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -769,7 +769,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar {
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Layout = DrawingCanvas.Layout.Percentage,
                             FillPercentage = 42,
                             Binding = new(){
@@ -856,7 +856,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar{
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Binding = new Binding(){
                                 Conditions = [],
                                 ItemType = ItemType.MemoryInfo,
@@ -1002,7 +1002,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
                         },
                         new DrawingItem_ProgressBar{
                             AfterNewLine = true,
-                            VerticalAlignment = DrawingCanvas.Position.Center,
+                            VerticalAlignment = DrawingCanvas.VerticalPosition.Center,
                             Binding = new Binding(){
                                 Conditions = [],
                                 ItemType = ItemType.DiskInfo,

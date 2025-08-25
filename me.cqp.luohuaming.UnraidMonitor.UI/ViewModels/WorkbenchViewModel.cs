@@ -71,7 +71,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public Array ItemTypeValues { get; set; } = Enum.GetValues(typeof(DrawingItemBase.ItemType));
 
-        public Array PositionValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.Position));
+        public Array VerticalPositionValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.VerticalPosition));
+
+        public Array HorizonPositionValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.HorizonPosition));
 
         public Array AlertTypeValues { get; set; } = Enum.GetValues(typeof(DrawingCanvas.AlertType));
 
@@ -245,7 +247,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
 
         public void Exit()
         {
-            if (OperationPending && !MainWindow.ShowConfirm("还有操作未保存，确定要抛弃这些更改吗？"))
+            if (OperationPending && !MainWindow.ShowConfirm("请确认文件是否已经保存，可能存在未保存的操作。\n点击确定继续退出"))
             {
                 return;
             }

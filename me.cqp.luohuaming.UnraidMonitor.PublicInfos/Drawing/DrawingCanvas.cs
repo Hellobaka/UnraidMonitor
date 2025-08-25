@@ -71,7 +71,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Content.CollectionChanged += Content_CollectionChanged;
         }
 
-        public enum Position
+        public enum VerticalPosition
         {
             [Description("顶部")]
             Top,
@@ -81,6 +81,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
             [Description("底部")]
             Bottom,
+        }
+
+        public enum HorizonPosition
+        {
+            [Description("靠左")]
+            Left,
+
+            [Description("居中")]
+            Center,
+
+            [Description("靠右")]
+            Right,
         }
 
         public enum Layout
@@ -323,8 +335,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     }
                     SKPoint drawPoint = new(x: currentPoint.X + item.item.Margin.Left, y: currentPoint.Y + maxTopMargin + item.item.VerticalAlignment switch
                     {
-                        Position.Center => maxTopMargin + (maxHeight / 2) - (item.height / 2),
-                        Position.Bottom => maxHeight - item.height - item.item.Margin.Bottom,
+                        VerticalPosition.Center => maxTopMargin + (maxHeight / 2) - (item.height / 2),
+                        VerticalPosition.Bottom => maxHeight - item.height - item.item.Margin.Bottom,
                         _ => item.item.Margin.Top,
                     });
                     painting.DrawImage(canvas.SnapShot(), new()

@@ -156,7 +156,7 @@
                 <hc:NumericUpDown Value="{Binding FixedWidth, Mode=TwoWay}" />
             </controls:ControlWithTitle>
             <controls:ControlWithTitle Title="垂直对齐" TitleWidth="{StaticResource GlobalTitleWidth}">
-                <ComboBox ItemsSource="{Binding DataContext.PositionValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}}" SelectedItem="{Binding VerticalAlignment, Mode=TwoWay}">
+                <ComboBox ItemsSource="{Binding DataContext.VerticalPositionValues, RelativeSource={RelativeSource AncestorType=local:Style, Mode=FindAncestor}}" SelectedItem="{Binding VerticalAlignment, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />

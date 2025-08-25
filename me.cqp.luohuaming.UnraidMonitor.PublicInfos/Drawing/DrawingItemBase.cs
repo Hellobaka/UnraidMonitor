@@ -69,7 +69,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public virtual DrawingStyle.Colors OverridePalette { get; set; }
 
-        public virtual DrawingCanvas.Position VerticalAlignment { get; set; } = DrawingCanvas.Position.Top;
+        public virtual DrawingCanvas.VerticalPosition VerticalAlignment { get; set; } = DrawingCanvas.VerticalPosition.Top;
 
         public float ActualHeight { get; set; }
 

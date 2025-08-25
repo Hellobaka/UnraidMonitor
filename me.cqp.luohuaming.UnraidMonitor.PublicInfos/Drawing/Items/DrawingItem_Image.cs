@@ -21,7 +21,10 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override void BeforeBinding()
         {
-            Source = "";
+            if (Binding.Value.ContainsKey("Source"))
+            {
+                Source = "";
+            }
         }
 
         public override float CalcHeight(DrawingStyle.Theme theme)

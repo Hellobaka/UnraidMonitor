@@ -43,11 +43,26 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override void BeforeBinding()
         {
-            Title = string.Empty;
-            RunningText = "运行中";
-            NotRunningText = "已停止";
-            ImagePath = "images\\default.png";
-            Running = false;
+            if (Binding.Value.ContainsKey("Title"))
+            {
+                Title = string.Empty;
+            }
+            if (Binding.Value.ContainsKey("RunningText"))
+            {
+                RunningText = "运行中";
+            }
+            if (Binding.Value.ContainsKey("NotRunningText"))
+            {
+                NotRunningText = "已停止";
+            }
+            if (Binding.Value.ContainsKey("ImagePath"))
+            {
+                ImagePath = "images\\default.png";
+            }
+            if (Binding.Value.ContainsKey("Running"))
+            {
+                Running = false;
+            }
         }
 
         public override void ApplyBinding()

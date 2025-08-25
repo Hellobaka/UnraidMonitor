@@ -36,9 +36,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override void BeforeBinding()
         {
-            Header = string.Empty;
-            Content = string.Empty;
-            AlertType = DrawingCanvas.AlertType.Info;
+            if (Binding.Value.ContainsKey("Header"))
+            {
+                Header = string.Empty;
+            }
+            if (Binding.Value.ContainsKey("Content"))
+            {
+                Content = string.Empty;
+            }
+            if (Binding.Value.ContainsKey("AlertType"))
+            {
+                AlertType = DrawingCanvas.AlertType.Info;
+            }
         }
 
         public override void ApplyBinding()

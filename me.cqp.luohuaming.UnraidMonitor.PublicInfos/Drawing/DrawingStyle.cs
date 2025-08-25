@@ -365,7 +365,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     blurAreas.Add((Painting.CreateRoundedRectPath(new SKRect
                     {
                         Location = new(startPoint.X, startPoint.Y),
-                        Size = new(desireWidth + item.Margin.Left + item.Margin.Right, actualHeight + item.Margin.Top + item.Margin.Bottom)
+                        Size = new(desireWidth, actualHeight)
                     }, item.Radius), item.BackgroundBlur));
                     // 根据填充类型计算下一个开始坐标
                     switch (item.DrawingLayout)

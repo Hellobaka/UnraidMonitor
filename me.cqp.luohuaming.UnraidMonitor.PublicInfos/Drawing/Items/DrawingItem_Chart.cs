@@ -60,7 +60,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override void BeforeBinding()
         {
-            Points = [];
+            if (Binding.Value.ContainsKey("Points"))
+            {
+                Points = [];
+            }
+            if (Binding.Value.ContainsKey("Min"))
+            {
+                Min = 0;
+            }
+            if (Binding.Value.ContainsKey("Max"))
+            {
+                Max = 100;
+            }
         }
 
         public override void ApplyBinding()

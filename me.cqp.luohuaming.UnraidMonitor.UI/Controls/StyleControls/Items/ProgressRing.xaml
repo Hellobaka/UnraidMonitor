@@ -21,6 +21,9 @@
     </UserControl.Resources>
 
     <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+        <controls:ControlWithTitle Title="圆环半径" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <hc:NumericUpDown Value="{Binding Radius}" />
+        </controls:ControlWithTitle>
         <controls:ControlWithTitle Title="最小值" TitleWidth="{StaticResource GlobalTitleWidth}">
             <hc:NumericUpDown Value="{Binding Min}" />
         </controls:ControlWithTitle>
@@ -39,9 +42,6 @@
                 hc:VisualElement.HighlightBrush="{DynamicResource PrimaryBrush}"
                 IsChecked="{Binding IsRounded, Mode=TwoWay}"
                 Style="{StaticResource ToggleButtonSwitch}" />
-        </controls:ControlWithTitle>
-        <controls:ControlWithTitle Title="圆头宽度" TitleWidth="{StaticResource GlobalTitleWidth}">
-            <hc:NumericUpDown Maximum="100" Value="{Binding Radius}" />
         </controls:ControlWithTitle>
 
         <controls:ControlWithTitle Title="透明背景" TitleWidth="{StaticResource GlobalTitleWidth}">
@@ -62,7 +62,7 @@
             Title="数值位置"
             TitleWidth="{StaticResource GlobalTitleWidth}"
             Visibility="{Binding ShowValue, Converter={StaticResource Boolean2VisibilityConverter}}">
-            <ComboBox ItemsSource="{Binding DataContext.PositionValues, RelativeSource={RelativeSource AncestorType=vm:Style, Mode=FindAncestor}}" SelectedItem="{Binding ValuePosition, Mode=TwoWay}">
+            <ComboBox ItemsSource="{Binding DataContext.VerticalPositionValues, RelativeSource={RelativeSource AncestorType=vm:Style, Mode=FindAncestor}}" SelectedItem="{Binding ValuePosition, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
@@ -104,7 +104,7 @@
             Title="标题位置"
             TitleWidth="{StaticResource GlobalTitleWidth}"
             Visibility="{Binding ShowHeader, Converter={StaticResource Boolean2VisibilityConverter}}">
-            <ComboBox ItemsSource="{Binding DataContext.PositionValues, RelativeSource={RelativeSource AncestorType=vm:Style, Mode=FindAncestor}}" SelectedItem="{Binding HeaderPosition, Mode=TwoWay}">
+            <ComboBox ItemsSource="{Binding DataContext.VerticalPositionValues, RelativeSource={RelativeSource AncestorType=vm:Style, Mode=FindAncestor}}" SelectedItem="{Binding HeaderPosition, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />

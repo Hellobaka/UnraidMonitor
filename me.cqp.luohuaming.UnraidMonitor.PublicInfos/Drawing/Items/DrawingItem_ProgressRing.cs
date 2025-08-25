@@ -54,9 +54,9 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public float Radius { get; set; }
 
-        public DrawingCanvas.Position HeaderPosition { get; set; } = DrawingCanvas.Position.Top;
+        public DrawingCanvas.VerticalPosition HeaderPosition { get; set; } = DrawingCanvas.VerticalPosition.Top;
 
-        public DrawingCanvas.Position ValuePosition { get; set; } = DrawingCanvas.Position.Center;
+        public DrawingCanvas.VerticalPosition ValuePosition { get; set; } = DrawingCanvas.VerticalPosition.Center;
 
         /// <summary>
         /// 文本外边距
@@ -65,11 +65,26 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override void BeforeBinding()
         {
-            Header = "";
-            DisplayValue = "";
-            Value = 0;
-            Min = 0;
-            Max = 100;
+            if (Binding.Value.ContainsKey("Header"))
+            {
+                Header = "";
+            }
+            if (Binding.Value.ContainsKey("DisplayValue"))
+            {
+                DisplayValue = "";
+            }
+            if (Binding.Value.ContainsKey("Value"))
+            {
+                Value = 0;
+            }
+            if (Binding.Value.ContainsKey("Min"))
+            {
+                Min = 0;
+            }
+            if (Binding.Value.ContainsKey("Max"))
+            {
+                Max = 100;
+            }
         }
 
         public override void ApplyBinding()
@@ -109,12 +124,12 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             }
             float extraHeight = 0;
             var font = Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme));
-            if (ShowHeader && (HeaderPosition == DrawingCanvas.Position.Top || HeaderPosition == DrawingCanvas.Position.Bottom))
+            if (ShowHeader && (HeaderPosition == DrawingCanvas.VerticalPosition.Top || HeaderPosition == DrawingCanvas.VerticalPosition.Bottom))
             {
                 var size = Painting.MeasureString(Header, HeaderFontSize, font);
                 extraHeight += size.Height;
             }
-            if (ShowValue && (ValuePosition == DrawingCanvas.Position.Top || ValuePosition == DrawingCanvas.Position.Bottom))
+            if (ShowValue && (ValuePosition == DrawingCanvas.VerticalPosition.Top || ValuePosition == DrawingCanvas.VerticalPosition.Bottom))
             {
                 var size = Painting.MeasureString(DisplayValue, ValueFontSize, font);
                 extraHeight = Math.Max(extraHeight, size.Height);
@@ -128,7 +143,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             CalcHeight(theme);
             var startPointCopy = new SKPoint(startPoint.X, startPoint.Y);
             var font = Painting.CreateCustomFont(DrawingStyle.GetThemeDefaultFont(theme));
-            if (ShowHeader && HeaderPosition == DrawingCanvas.Position.Top)
+            if (ShowHeader && HeaderPosition == DrawingCanvas.VerticalPosition.Top)
             {
                 startPoint.Y += Padding.Top;
                 var size = Painting.MeasureString(Header, HeaderFontSize, font);
@@ -139,7 +154,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
                 startPoint.Y += size.Height + Padding.Bottom;
             }
 
-            if (ShowValue && ValuePosition == DrawingCanvas.Position.Top)
+            if (ShowValue && ValuePosition == DrawingCanvas.VerticalPosition.Top)
             {
                 startPoint.Y += Padding.Top;
                 var size = Painting.MeasureString(DisplayValue, HeaderFontSize, font);
@@ -161,7 +176,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             if (ShowHeader)
             {
                 var size = Painting.MeasureString(Header, HeaderFontSize, font);
-                if (HeaderPosition == DrawingCanvas.Position.Bottom)
+                if (HeaderPosition == DrawingCanvas.VerticalPosition.Bottom)
                 {
                     var textCenter = new SKPoint(startPoint.X + desireWidth / 2, r.endPoint.Y + Padding.Top + size.Height / 2);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);
@@ -169,7 +184,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
                     r.endPoint = new SKPoint(endPoint.X, endPoint.Y);
                 }
-                else if (HeaderPosition == DrawingCanvas.Position.Center)
+                else if (HeaderPosition == DrawingCanvas.VerticalPosition.Center)
                 {
                     var textCenter = new SKPoint(startPoint.X + desireWidth / 2, startPoint.Y + Radius);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);
@@ -179,7 +194,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
             if (ShowValue)
             {
                 var size = Painting.MeasureString(DisplayValue, HeaderFontSize, font);
-                if (ValuePosition == DrawingCanvas.Position.Bottom)
+                if (ValuePosition == DrawingCanvas.VerticalPosition.Bottom)
                 {
                     var textCenter = new SKPoint(startPoint.X + desireWidth / 2, r.endPoint.Y + Padding.Top + size.Height / 2);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);
@@ -187,7 +202,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
                     r.endPoint = new SKPoint(endPoint.X, endPoint.Y);
                 }
-                else if (ValuePosition == DrawingCanvas.Position.Center)
+                else if (ValuePosition == DrawingCanvas.VerticalPosition.Center)
                 {
                     var textCenter = new SKPoint(startPoint.X + desireWidth / 2, startPoint.Y + Radius);
                     var textStartPoint = new SKPoint(textCenter.X - size.Width / 2, textCenter.Y - size.Height / 2);

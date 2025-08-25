@@ -9,12 +9,26 @@
     xmlns:items="clr-namespace:me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items;assembly=me.cqp.luohuaming.UnraidMonitor.PublicInfos"
     xmlns:local="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls.Items"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:styleLocal="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
     xmlns:vm="clr-namespace:me.cqp.luohuaming.UnraidMonitor.UI.Controls.StyleControls"
     d:DataContext="{d:DesignInstance Type=items:DrawingItem_Text}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <converter:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    </UserControl.Resources>
     <hc:UniformSpacingPanel Orientation="Vertical" Spacing="10">
+        <controls:ControlWithTitle Title="水平对齐" TitleWidth="{StaticResource GlobalTitleWidth}">
+            <ComboBox ItemsSource="{Binding DataContext.HorizonPositionValues, RelativeSource={RelativeSource AncestorType=styleLocal:Style, Mode=FindAncestor}}" SelectedItem="{Binding HorizonAlignment, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </controls:ControlWithTitle>
+
         <controls:ControlWithTitle Title="自定义字体" TitleWidth="{StaticResource GlobalTitleWidth}">
             <controls:FontPicker CustomFont="{Binding OverrideFont, Mode=TwoWay}" />
         </controls:ControlWithTitle>

@@ -23,9 +23,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public string OverrideColor { get; set; }
 
+        public DrawingCanvas.HorizonPosition HorizonAlignment { get; set; } = DrawingCanvas.HorizonPosition.Left;
+
         public override void BeforeBinding()
         {
-            Text = "";
+            if (Binding.Value.ContainsKey("Text"))
+            {
+                Text = "";
+            }
         }
 
         public override void ApplyBinding()
@@ -44,9 +49,23 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
         public override (SKPoint endPoint, float width, float height) Draw(Painting painting, SKPoint startPoint, float desireWidth, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
         {
             var font = Painting.CreateCustomFont(!string.IsNullOrEmpty(OverrideFont) ? OverrideFont : DrawingStyle.GetThemeDefaultFont(theme));
-            var endPoint = painting.DrawText(Text, Painting.Anywhere, startPoint, SKColor.Parse(string.IsNullOrEmpty(OverrideColor) ? palette.TextColor : OverrideColor), null, TextSize, font, IsBold);
             var size = Painting.MeasureString(Text, TextSize, font);
-            return (endPoint, Layout == DrawingCanvas.Layout.Minimal ? size.Width : desireWidth, size.Height);
+            if (Layout == DrawingCanvas.Layout.Minimal)
+            {
+                var endPoint = painting.DrawText(Text, Painting.Anywhere, startPoint, SKColor.Parse(string.IsNullOrEmpty(OverrideColor) ? palette.TextColor : OverrideColor), null, TextSize, font, IsBold);
+                return (endPoint, size.Width, size.Height);
+            }
+            else
+            {
+                startPoint = HorizonAlignment switch
+                {
+                    DrawingCanvas.HorizonPosition.Center => new SKPoint(startPoint.X + (desireWidth / 2 - size.Width / 2), startPoint.Y),
+                    DrawingCanvas.HorizonPosition.Right => new SKPoint(startPoint.X + desireWidth - size.Width - Margin.Right - Padding.Right, startPoint.Y),
+                    _ => startPoint,
+                };
+                var endPoint = painting.DrawText(Text, Painting.Anywhere, startPoint, SKColor.Parse(string.IsNullOrEmpty(OverrideColor) ? palette.TextColor : OverrideColor), null, TextSize, font, IsBold);
+                return (endPoint, desireWidth, size.Height);
+            }
         }
 
         public static DrawingItem_Text Create() => new()

@@ -30,9 +30,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing.Items
 
         public override void BeforeBinding()
         {
-            Value = 0;
-            Min = 0;
-            Max = 100;
+            if (Binding.Value.ContainsKey("Value"))
+            {
+                Value = 0;
+            }
+            if (Binding.Value.ContainsKey("Min"))
+            {
+                Min = 0;
+            }
+            if (Binding.Value.ContainsKey("Max"))
+            {
+                Max = 100;
+            }
         }
 
         public override void ApplyBinding()
