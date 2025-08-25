@@ -195,7 +195,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <param name="palette">调色板</param>
         /// <returns>绘制结束点位（右下角），实际使用宽度，实际使用高度</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual (SKPoint endPoint, float height) Draw(Painting painting, SKPoint startPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        public virtual (SKPoint endPoint, float height) Draw(Painting painting, SKPoint startPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette, bool enableBinding)
         {
             if (painting == null)
             {
@@ -211,7 +211,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 currentPoint = DrawTitle(painting, theme, palette, startLeft, currentPoint);
             }
             // 调用各个Item的绘制方法
-            currentPoint = DrawItems(painting, currentPoint, width - Padding.Left - Padding.Right, theme, palette);
+            currentPoint = DrawItems(painting, currentPoint, width - Padding.Left - Padding.Right, theme, palette, enableBinding);
             // 绘制Border
             if (DrawingBorder != null && DrawingBorder.HasBorder)
             {
@@ -230,14 +230,14 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             }, SKColors.Transparent, DrawingBorder.BorderColor, DrawingBorder.BorderWidth, null, DrawingBorder.BorderRadius);
         }
 
-        private SKPoint DrawItems(Painting painting, SKPoint currentPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette)
+        private SKPoint DrawItems(Painting painting, SKPoint currentPoint, float width, DrawingStyle.Theme theme, DrawingStyle.Colors palette, bool enableBinding)
         {
             List<List<(Painting itemCanvas, DrawingItemBase item, float width, float height)>> preDraw = [];
             List<(Painting itemCanvas, DrawingItemBase item, float width, float height)> currentLine = [];
             preDraw.Add(currentLine);
             foreach (var item in Content)
             {
-                if (item.Binding != null)
+                if (item.Binding != null && enableBinding)
                 {
                     item.BeforeBinding();
                     item.ApplyBinding();

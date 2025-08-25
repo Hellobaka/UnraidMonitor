@@ -297,7 +297,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// </summary>
         /// <param name="width">期望宽度</param>
         /// <returns></returns>
-        public Painting Draw(int width)
+        public Painting Draw(int width, bool enableBinding = true)
         {
             // 创建内容画布
             using Painting contentPainting = new((int)(width - Padding.Left - Padding.Right), 10000);
@@ -338,7 +338,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                     }
                     desireWidth -= item.Margin.Left + item.Margin.Right;
 
-                    var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette);
+                    var (endPoint, actualHeight) = item.Draw(contentPainting, startPoint, desireWidth, ItemTheme, Palette, enableBinding);
                     currentRowHeights.Add(actualHeight);
                     // 更新边界
                     item.Boundary = new()

@@ -45,6 +45,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
         public event MainSave.PropertyChangeEventArg OnPropertyChangedDetail;
         public event MainSave.CollectionChangeEventArg OnCollectionChangedDetail;
 
+        public bool EnableBinding { get; set; } = true;
+
         public bool AutoRedraw { get; set; } = false;
 
         public bool Debouncing { get; set; }

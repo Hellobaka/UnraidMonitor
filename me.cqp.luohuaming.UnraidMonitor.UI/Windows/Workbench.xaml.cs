@@ -243,7 +243,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.Windows
                 {
                     try
                     {
-                        return ViewModel.CurrentStyle?.Draw(ViewModel.CurrentStyle.Width);
+                        return ViewModel.CurrentStyle?.Draw(ViewModel.CurrentStyle.Width, ViewModel.EnableBinding);
                     }
                     catch (Exception e)
                     {
