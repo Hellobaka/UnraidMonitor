@@ -204,7 +204,8 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             List<T> data = [];
             if (MonitorDataBase.Cache.TryGetValue(name, out var cache))
             {
-                foreach (var item in cache.Where(x => x.cacheTime > From).OrderBy(x => x.cacheTime))
+                // ToList防止源数组更改发生异常
+                foreach (var item in cache.ToList().Where(x => x.cacheTime > From).OrderBy(x => x.cacheTime))
                 {
                     if (item.data is Array arr)
                     {
@@ -392,8 +393,22 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                         }
                         else
                         {
-                            // 字符串类型直接取最后一个值
-                            bindingResult = [.. bindingResult, binding.RawValues.Last()];
+                            // 字符串类型直接取最后一个值，如果这个值还是数组，则再取数组的最后一个元素
+                            object lastValue = binding.RawValues.Last();
+                            if (lastValue is Array arr && arr.Length > 0)
+                            {
+                                // 如果是数组且不为空，取数组的最后一个元素
+                                bindingResult = [.. bindingResult, arr.GetValue(arr.Length - 1)];
+                            }
+                            else if (lastValue is IList list && list.Count > 0)
+                            {
+                                bindingResult = [.. bindingResult, list[list.Count - 1]];
+                            }
+                            else
+                            {
+                                // 否则直接取值
+                                bindingResult = [.. bindingResult, lastValue];
+                            }
                         }
                     }
 
@@ -421,7 +436,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 }
                 catch
                 {
-                    // 忽略格式化异常，避免影响主流程
                 }
 
                 // 保存本次绑定项的结果
