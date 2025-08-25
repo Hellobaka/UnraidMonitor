@@ -57,19 +57,30 @@
                 Background="Transparent"
                 BorderBrush="Transparent"
                 ItemsSource="{Binding StyleHistories}"
-                SelectionChanged="StyleHistoryListBox_SelectionChanged">
+                PreviewMouseUp="StyleHistoryListBoxItem_MouseUp">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Padding" Value="10" />
+                        <Setter Property="Background" Value="Transparent" />
                     </Style>
                 </ListBox.ItemContainerStyle>
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid
                             Height="40"
-                            Margin="10"
-                            HorizontalAlignment="Stretch">
+                            HorizontalAlignment="Stretch"
+                            Background="Transparent">
+                            <Grid.ContextMenu>
+                                <ContextMenu Name="StyleContextMenu">
+                                    <MenuItem Click="OpenStyleDirectory_Click" Header="打开文件所在位置" />
+                                    <Separator />
+                                    <MenuItem Click="RemoveFromList_Click" Header="从列表中删除" />
+                                </ContextMenu>
+
+                            </Grid.ContextMenu>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition />

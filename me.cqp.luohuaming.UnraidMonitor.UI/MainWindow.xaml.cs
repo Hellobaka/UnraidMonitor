@@ -10,10 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace me.cqp.luohuaming.UnraidMonitor.UI
@@ -127,17 +129,6 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
             settings.Show();
         }
 
-        private void StyleHistoryListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (StyleHistoryListBox.SelectedItem is StyleHistoryItem item)
-            {
-                SaveActiveHistory(item);
-                LoadWorkbench(item.FullPath);
-                StyleHistoryListBox.SelectedItem = null;
-            }
-            OnPropertyChanged(nameof(StyleHistories));
-        }
-
         private async Task LoadActiveHistory()
         {
             StyleHistories = [];
@@ -159,6 +150,21 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
                 {
                     StyleHistories.Add(item);
                 }
+            }
+        }
+
+        public static void RemoveActiveHistory(StyleHistoryItem item)
+        {
+            item.DateTime = DateTime.Now;
+            Instance.StyleHistories.Remove(item);
+
+            try
+            {
+                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "history.json"), JsonConvert.SerializeObject(Instance.StyleHistories));
+            }
+            catch (Exception e)
+            {
+                ShowError($"保存历史记录时发生错误: {e.Message}");
             }
         }
 
@@ -254,6 +260,46 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
         {
             e.Cancel = true;
             Hide();
+        }
+
+        private void StyleHistoryListBoxItem_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton != System.Windows.Input.MouseButton.Left)
+            {
+                return;
+            }
+            var item = ItemsControl.ContainerFromElement(StyleHistoryListBox, e.OriginalSource as DependencyObject) as ListBoxItem;
+
+            if (item?.DataContext is StyleHistoryItem styleHistoryItem)
+            {
+                SaveActiveHistory(styleHistoryItem);
+                LoadWorkbench(styleHistoryItem.FullPath);
+                StyleHistoryListBox.SelectedItem = null;
+            }
+            OnPropertyChanged(nameof(StyleHistories));
+        }
+
+        private void RemoveFromList_Click(object sender, RoutedEventArgs e)
+        {
+            if (StyleHistoryListBox.SelectedItem is StyleHistoryItem item)
+            {
+                RemoveActiveHistory(item);
+            }
+        }
+
+        private void OpenStyleDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            if (StyleHistoryListBox.SelectedItem is StyleHistoryItem item)
+            {
+                try
+                {
+                    Process.Start("explorer.exe", $"/select,\"{item.FullPath}\"");
+                }
+                catch (Exception ex)
+                {
+                    ShowError($"打开历史路径时发生错误：{ex.Message}");
+                }
+            }
         }
     }
 }
