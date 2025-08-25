@@ -56,7 +56,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos
             SSHPassword = GetConfig("SSHPassword", "");
             SSHCommandTimeout = GetConfig("SSHCommandTimeout", 10);
             FallbackFont = GetConfig("FallbackFont", "微软雅黑");
-            CacheKeepSeconds = GetConfig("CacheKeepSeconds", (int)TimeSpan.FromDays(1).TotalSeconds);
+            CacheKeepSeconds = GetConfig("CacheKeepSeconds", (int)TimeSpan.FromMinutes(10).TotalSeconds);
             GroupList = GetConfig("GroupList", new List<long>());
             PersonList = GetConfig("PersonList", new List<long>());
             BlackList = GetConfig("BlackList", new List<long>());
