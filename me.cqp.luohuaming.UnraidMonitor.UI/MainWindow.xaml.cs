@@ -140,7 +140,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
         {
             StyleHistories = [];
 
-            string historyFilePath = Path.Combine(MainSave.AppDirectory, "history.json");
+            string historyFilePath = Path.Combine(MainSave.AppDirectory, "History.json");
             if (File.Exists(historyFilePath))
             {
                 List<StyleHistoryItem> historyItems = await Task.Run(() =>
@@ -167,7 +167,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
 
             try
             {
-                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "history.json"), JsonConvert.SerializeObject(Instance.StyleHistories));
+                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "History.json"), JsonConvert.SerializeObject(Instance.StyleHistories));
             }
             catch (Exception e)
             {
@@ -185,7 +185,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI
 
             try
             {
-                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "history.json"), JsonConvert.SerializeObject(Instance.StyleHistories));
+                File.WriteAllText(Path.Combine(MainSave.AppDirectory, "History.json"), JsonConvert.SerializeObject(Instance.StyleHistories));
             }
             catch (Exception e)
             {
