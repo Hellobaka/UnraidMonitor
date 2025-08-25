@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 {
@@ -152,6 +153,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         public SKRect Boundary { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public static event Action OnStyleUpdated;
 
         public void OnPropertyChanged(string propertyName, object before, object after)
         {
@@ -553,6 +555,11 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
                 StyleCache.Add(Path.GetFullPath(path), style);
             }
             return style;
+        }
+
+        public static void TriggerStyleUpdated()
+        {
+            Task.Run(() => OnStyleUpdated?.Invoke());
         }
     }
 }

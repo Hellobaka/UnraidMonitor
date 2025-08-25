@@ -8,6 +8,7 @@ using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
+using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing;
 
 namespace me.cqp.luohuaming.UnraidMonitor.Code
 {
@@ -47,21 +48,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             {
                 e.CQLog.Warning("初始化", $"图片文件夹缺失，可能没有放置数据包");
             }
-            e.CQLog.Info("初始化", "加载指令");
-            string path = Path.Combine(MainSave.AppDirectory, "Commands.json");
-            if (File.Exists(path))
-            {
-                try
-                {
-                    MainSave.Commands = JsonConvert.DeserializeObject<List<Commands>>(File.ReadAllText(path));
-                }
-                catch (Exception ex)
-                {
-                    e.CQLog.Error("初始化", $"加载指令时发生异常：{ex}");
-                }
-            }
-
-            e.CQLog.Info("初始化", $"加载了 {MainSave.Commands?.Count ?? 0} 条指令");
+            LoadStyleCommands();
 
             e.CQLog.Info("初始化", "启动数据采集线程");
             try
@@ -88,8 +75,33 @@ namespace me.cqp.luohuaming.UnraidMonitor.Code
             AlarmManager.LoadRules(Path.Combine(MainSave.AppDirectory, "AlarmRules.json"));
             AlarmManager.OnAlarmPost += AlarmManager_OnAlarmPost;
             AlarmManager.OnAlarmRecover += AlarmManager_OnAlarmRecover;
+            DrawingStyle.OnStyleUpdated += DrawingStyle_OnStyleUpdated;
             e.CQLog.Info("初始化", $"加载了 {AlarmManager.Instance.Rules.Count} 条Alarm规则");
             e.CQLog.InfoSuccess("初始化", "初始化完成");
+        }
+
+        private void DrawingStyle_OnStyleUpdated()
+        {
+            LoadStyleCommands();
+        }
+
+        private static void LoadStyleCommands()
+        {
+            MainSave.CQLog.Info("初始化", "加载指令");
+            string path = Path.Combine(MainSave.AppDirectory, "Commands.json");
+            if (File.Exists(path))
+            {
+                try
+                {
+                    MainSave.Commands = JsonConvert.DeserializeObject<List<Commands>>(File.ReadAllText(path));
+                }
+                catch (Exception ex)
+                {
+                    MainSave.CQLog.Error("初始化", $"加载指令时发生异常：{ex}");
+                }
+            }
+
+            MainSave.CQLog.Info("初始化", $"加载了 {MainSave.Commands?.Count ?? 0} 条指令");
         }
 
         private void AlarmManager_OnAlarmRecover(AlarmRuleBase alarm, string message)

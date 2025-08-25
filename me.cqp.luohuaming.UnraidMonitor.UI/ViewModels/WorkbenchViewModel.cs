@@ -202,6 +202,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.UI.ViewModels
                 }
             }
             File.WriteAllText(CurrentStylePath, CurrentStyle.Serialize());
+            DrawingStyle.TriggerStyleUpdated();
             MainWindow.ShowInfo("保存成功");
             OperationPending = false;
         }
