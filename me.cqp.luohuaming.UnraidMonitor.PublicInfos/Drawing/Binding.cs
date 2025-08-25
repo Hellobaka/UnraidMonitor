@@ -1,5 +1,4 @@
-﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Handler;
-using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
+﻿using me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -229,135 +228,212 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
         /// <returns>列表内容为：属性值 - 值</returns>
         public Dictionary<string, BindingResult> CallGetMetricsAndParseResult()
         {
-            var itemType = GetType().Assembly.GetTypes().FirstOrDefault(x => x.FullName == $"me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.{ItemType}");
-            MultipleBinding[] multipleBindings = BindingPath.SelectMany(x => x.Value).Distinct().ToArray();
-            Dictionary<MultipleBinding, PropertyInfo> pathProperties = [];// 模型属性，反射属性
-            Dictionary<PropertyInfo, string> tags = [];
-            foreach (var item in itemType.GetProperties())
-            {
-                // 反射Model所有属性，获取绑定路径和条件
-                // 整理MultiBinding，获取所有绑定需求的路径，若当前模型属性在绑定需求中，则缓存反射信息
-                foreach (var bind in multipleBindings.Where(x => x.Path == item.Name))
-                {
-                    string valueType = item.PropertyType.Name;
-                    bind.IsNumber = valueType == "Int32" || valueType == "Int64" || valueType == "Double" || valueType == "Single";
-                    pathProperties[bind] = item;
-                }
-                if (Conditions.TryGetValue(item.Name, out string value))
-                {
-                    tags[item] = value;
-                }
-            }
-            if (itemType == null || (pathProperties.Count == 0 && BindingPath.FirstOrDefault().Key != "$"))
+            var modelType = GetModelType();
+            if (modelType == null)
             {
                 Debugger.Break();
                 return [];
             }
-            var method = GetType().GetMethod("GetMetrics", BindingFlags.Public | BindingFlags.Instance);
-            if (method != null)
-            {
-                var genericMethod = method.MakeGenericMethod(itemType);
-                var data = genericMethod.Invoke(this, []);
-                // Item属性键，此次绑定结果
-                Dictionary<string, BindingResult> result = [];
-                ClearLastBindResult();
-                // 从缓存以及数据库获取数据后，解析结果
-                if (data is IEnumerable list)
-                {
-                    foreach (var item in list)
-                    {
-                        if (tags.All(x => x.Key.GetValue(item).ToString() == x.Value))
-                        {
-                            // 要求满足所有条件，说明此Item可以进行绑定
-                            // 按照BindingPath进行绑定
-                            foreach (var bind in BindingPath)
-                            {
-                                foreach (var binding in bind.Value)
-                                {
-                                    if (pathProperties.TryGetValue(binding, out var propertyInfo))
-                                    {
-                                        var value = propertyInfo.GetValue(item);
-                                        binding.RawValues = [.. binding.RawValues, value];
-                                    }
-                                    else
-                                    {
-                                        Debugger.Break();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // 解析绑定结果并填充 result 字典
-                    foreach (var bind in BindingPath)
-                    {
-                        if (!result.TryGetValue(bind.Key, out var resultBinding))
-                        {
-                            resultBinding = new();
-                            // 用于存储当前绑定项处理后的结果（数值或字符串），用于后续格式化输出和数值解析
-                            object[] bindingResult = [];
-                            bool hasString = bind.Value.Any(x => !x.IsNumber);
-                            // 遍历每个绑定项，处理数值和字符串类型
-                            foreach (var binding in bind.Value)
-                            {
-                                if (binding.RawValues.Length > 0)
-                                {
-                                    if (binding.IsNumber)
-                                    {
-                                        double number = 0;
-                                        // 应用数值转换器
-                                        binding.RawValues = ApplyConverter(binding.RawValues, binding.NumberConverter);
-                                        // 差值计算
-                                        if (binding.ValueType == ValueType.Diff
-                                            || binding.ValueType == ValueType.DiffMin
-                                            || binding.ValueType == ValueType.DiffMax)
-                                        {
-                                            binding.RawValues = CalcDiff(binding.RawValues, binding.DiffUnit);
-                                        }
 
-                                        number = GetNumber(binding.RawValues, binding.ValueType);
-                                        bindingResult = [.. bindingResult, number];
-                                    }
-                                    else
-                                    {
-                                        // 字符串类型取最后一个值
-                                        bindingResult = [.. bindingResult, binding.RawValues.Last()];
-                                    }
-                                }
-                                // 累加原始值
-                                resultBinding.RawValues = [.. binding.RawValues, .. resultBinding.RawValues];
-                            }
-                            try
-                            {
-                                if (bindingResult.Length > 0)
-                                {
-                                    // 若有字符串则数值为0，否则取第一个数值
-                                    resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
-                                    // 格式化字符串输出
-                                    resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
-                                }
-                                else
-                                {
-                                    resultBinding.ParsedNumber = 0;
-                                    int formatCount = StringFormat.Count(x => x == '{' && x != '}');
-                                    resultBinding.FormattedString = string.Format(StringFormat, new string[formatCount]);
-                                }
-                            }
-                            catch { }
-                            result[bind.Key] = resultBinding;
-                        }
-                    }
-                    return result;
-                }
-                else
-                {
-                    Debugger.Break();
-                }
-            }
-            else
+            var multiBindings = GetAllMultiBindings();
+            var propertyMap = GetPropertyMap(modelType, multiBindings);
+            var conditionMap = GetConditionMap(modelType);
+
+            if (propertyMap.Count == 0 && !BindingPath.ContainsKey("$"))
             {
                 Debugger.Break();
+                return [];
             }
-            return [];
+
+            var metrics = GetMetricsForModelType(modelType);
+            if (metrics is not IEnumerable metricList)
+            {
+                Debugger.Break();
+                return [];
+            }
+
+            // 清空上一次绑定结果
+            ClearLastBindResult();
+
+            // 收集满足条件的数据
+            foreach (var item in metricList)
+            {
+                if (!IsMatchAllConditions(item, conditionMap))
+                {
+                    continue;
+                }
+
+                BindItemValues(item, propertyMap);
+            }
+
+            // 解析最终结果
+            return ParseBindingResults();
+        }
+
+        private Type GetModelType()
+        {
+            return GetType().Assembly.GetTypes()
+                .FirstOrDefault(x => x.FullName == $"me.cqp.luohuaming.UnraidMonitor.PublicInfos.Models.{ItemType}");
+        }
+
+        private MultipleBinding[] GetAllMultiBindings()
+        {
+            return BindingPath.SelectMany(x => x.Value).Distinct().ToArray();
+        }
+
+        private Dictionary<MultipleBinding, PropertyInfo> GetPropertyMap(Type modelType, MultipleBinding[] multiBindings)
+        {
+            var map = new Dictionary<MultipleBinding, PropertyInfo>();
+            foreach (var prop in modelType.GetProperties())
+            {
+                foreach (var bind in multiBindings.Where(x => x.Path == prop.Name))
+                {
+                    bind.IsNumber = IsNumericType(prop.PropertyType);
+                    map[bind] = prop;
+                }
+            }
+            return map;
+        }
+
+        private Dictionary<PropertyInfo, string> GetConditionMap(Type modelType)
+        {
+            var map = new Dictionary<PropertyInfo, string>();
+            foreach (var prop in modelType.GetProperties())
+            {
+                if (Conditions.TryGetValue(prop.Name, out string value))
+                {
+                    map[prop] = value;
+                }
+            }
+            return map;
+        }
+
+        private object GetMetricsForModelType(Type modelType)
+        {
+            var method = GetType().GetMethod("GetMetrics", BindingFlags.Public | BindingFlags.Instance);
+            if (method == null)
+            {
+                return null;
+            }
+
+            var genericMethod = method.MakeGenericMethod(modelType);
+            return genericMethod.Invoke(this, []);
+        }
+
+        private bool IsMatchAllConditions(object item, Dictionary<PropertyInfo, string> conditionMap)
+        {
+            return conditionMap.All(x => x.Key.GetValue(item)?.ToString() == x.Value);
+        }
+
+        private void BindItemValues(object item, Dictionary<MultipleBinding, PropertyInfo> propertyMap)
+        {
+            foreach (var kvp in BindingPath)
+            {
+                foreach (var binding in kvp.Value)
+                {
+                    if (propertyMap.TryGetValue(binding, out var prop))
+                    {
+                        var value = prop.GetValue(item);
+                        binding.RawValues = [.. binding.RawValues, value];
+                    }
+                    else
+                    {
+                        Debugger.Break();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 解析所有绑定项的最终结果，生成绑定结果字典。
+        /// </summary>
+        /// <returns>key为绑定项名，value为绑定结果（包含原始值、数值、格式化字符串）</returns>
+        private Dictionary<string, BindingResult> ParseBindingResults()
+        {
+            var result = new Dictionary<string, BindingResult>();
+
+            // 遍历所有绑定路径（即所有需要输出的字段）
+            foreach (var kvp in BindingPath)
+            {
+                var key = kvp.Key;         // 绑定项名
+                var bindings = kvp.Value;  // 该项下的所有多重绑定
+
+                // 初始化绑定结果（若已存在则复用）
+                if (!result.TryGetValue(key, out var resultBinding))
+                {
+                    resultBinding = new BindingResult();
+                }
+
+                object[] bindingResult = [];    // 存储本次绑定项的处理后结果（可为数值或字符串）
+                bool hasString = bindings.Any(x => !x.IsNumber); // 是否包含字符串类型
+
+                // 处理每个绑定项
+                foreach (var binding in bindings)
+                {
+                    // 只处理有采集到值的绑定
+                    if (binding.RawValues.Length > 0)
+                    {
+                        if (binding.IsNumber)
+                        {
+                            // 1. 数值类型先应用单位转换器
+                            binding.RawValues = ApplyConverter(binding.RawValues, binding.NumberConverter);
+
+                            // 2. 若为差值类型，计算差值
+                            if (binding.ValueType is ValueType.Diff
+                                or ValueType.DiffMin
+                                or ValueType.DiffMax)
+                            {
+                                binding.RawValues = CalcDiff(binding.RawValues, binding.DiffUnit);
+                            }
+
+                            // 3. 根据配置的统计类型（如平均、最大等）计算最终数值
+                            double number = GetNumber(binding.RawValues, binding.ValueType);
+                            bindingResult = [.. bindingResult, number];
+                        }
+                        else
+                        {
+                            // 字符串类型直接取最后一个值
+                            bindingResult = [.. bindingResult, binding.RawValues.Last()];
+                        }
+                    }
+
+                    // 累加原始值到结果，用于后续可能的调试或展示
+                    resultBinding.RawValues = [.. binding.RawValues, .. resultBinding.RawValues];
+                }
+
+                try
+                {
+                    if (bindingResult.Length > 0)
+                    {
+                        // 若有字符串参与，则数值为0，否则取第一个数值
+                        resultBinding.ParsedNumber = hasString ? 0 : (double)bindingResult.FirstOrDefault();
+
+                        // 格式化输出字符串，支持多值格式化
+                        resultBinding.FormattedString = string.Format(StringFormat, bindingResult);
+                    }
+                    else
+                    {
+                        // 没有任何结果时，给出默认值
+                        resultBinding.ParsedNumber = 0;
+                        int formatCount = StringFormat.Count(x => x is '{' and not '}');
+                        resultBinding.FormattedString = string.Format(StringFormat, new string[formatCount]);
+                    }
+                }
+                catch
+                {
+                    // 忽略格式化异常，避免影响主流程
+                }
+
+                // 保存本次绑定项的结果
+                result[key] = resultBinding;
+            }
+            return result;
+        }
+
+        private bool IsNumericType(Type type)
+        {
+            return type == typeof(int) || type == typeof(long) ||
+                   type == typeof(double) || type == typeof(float);
         }
 
         private void ClearLastBindResult()
@@ -395,15 +471,18 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
             Value = CallGetMetricsAndParseResult();
         }
 
-        public double GetNumber(object[] data, ValueType valueType) => data.Length == 0 ? 0 : valueType switch
+        public double GetNumber(object[] data, ValueType valueType)
         {
-            ValueType.DiffMax or ValueType.Max => data.Max(x => Convert.ToDouble(x)),
-            ValueType.DiffMin or ValueType.Min => data.Min(x => Convert.ToDouble(x)),
-            ValueType.Diff or ValueType.Avg => data.Average(x => Convert.ToDouble(x)),
-            ValueType.Sum => data.Sum(x => Convert.ToDouble(x)),
-            ValueType.Count => data.Count(),
-            _ => Convert.ToDouble(data.Last()),
-        };
+            return data.Length == 0 ? 0 : valueType switch
+            {
+                ValueType.DiffMax or ValueType.Max => data.Max(x => Convert.ToDouble(x)),
+                ValueType.DiffMin or ValueType.Min => data.Min(x => Convert.ToDouble(x)),
+                ValueType.Diff or ValueType.Avg => data.Average(x => Convert.ToDouble(x)),
+                ValueType.Sum => data.Sum(x => Convert.ToDouble(x)),
+                ValueType.Count => data.Count(),
+                _ => Convert.ToDouble(data.Last()),
+            };
+        }
 
         public object[] CalcDiff(object[] data, double diffUnit)
         {
@@ -467,11 +546,7 @@ namespace me.cqp.luohuaming.UnraidMonitor.PublicInfos.Drawing
 
         public override bool Equals(object obj)
         {
-            if (obj is not MultipleBinding other || other.Path == null)
-            {
-                return false;
-            }
-            return other.Path == Path;
+            return obj is MultipleBinding other && other.Path != null && other.Path == Path;
         }
 
         public override int GetHashCode()
